@@ -1,0 +1,588 @@
+/* ===========================================
+   ZELIFKUDOS - WINDOWS 95/98 RETRO UI
+   Chunky, boxy, nostalgic desktop aesthetic
+   =========================================== */
+
+/* --- BASE RESET --- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #008080 !important;
+    color: #000000 !important;
+    font-family: 'MS Sans Serif', 'Arial', 'Helvetica', sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- DESKTOP WALLPAPER PATTERN --- */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: #008080;
+}
+
+/* --- WINDOW (main container) --- */
+.win-window {
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    background: #c0c0c0;
+    margin: 20px auto;
+    max-width: 640px;
+    box-shadow: 1px 1px 0 #000000;
+}
+
+/* --- TITLE BAR --- */
+.win-titlebar {
+    background: linear-gradient(90deg, #000080, #1084d0);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 3px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+}
+
+.win-titlebar-text {
+    padding-left: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* --- WINDOW BODY --- */
+.win-body {
+    padding: 12px;
+}
+
+/* --- MENU BAR --- */
+.win-menubar {
+    background: #c0c0c0;
+    border-bottom: 1px solid #808080;
+    padding: 2px 0;
+    display: flex;
+    gap: 0;
+}
+
+.win-menubar a {
+    color: #000000 !important;
+    text-decoration: none !important;
+    padding: 2px 8px;
+    font-size: 13px;
+}
+
+.win-menubar a:hover {
+    background: #000080;
+    color: #ffffff !important;
+}
+
+/* --- HEADER (taskbar-style) --- */
+.win-taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: #c0c0c0;
+    border-top: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    z-index: 9999;
+}
+
+.win-start-btn {
+    font-family: 'MS Sans Serif', 'Arial', sans-serif !important;
+    font-size: 12px;
+    font-weight: bold;
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    padding: 1px 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 24px;
+    color: #000000;
+    text-decoration: none !important;
+}
+
+.win-start-btn:active {
+    border-color: #808080 #ffffff #ffffff #808080;
+}
+
+.win-start-icon {
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #ff0000 25%, #00ff00 25%, #00ff00 50%, #0000ff 50%, #0000ff 75%, #ffff00 75%);
+}
+
+.win-taskbar-clock {
+    margin-left: auto;
+    border: 1px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    padding: 2px 8px;
+    font-size: 12px;
+    color: #000000;
+}
+
+/* --- GROUPBOX (fieldset-style) --- */
+.win-groupbox {
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    padding: 12px;
+    margin: 8px 0;
+    position: relative;
+}
+
+.win-groupbox-title {
+    position: absolute;
+    top: -9px;
+    left: 8px;
+    background: #c0c0c0;
+    padding: 0 4px;
+    font-size: 13px;
+    color: #000000;
+}
+
+/* --- SUNKEN PANEL (inset area) --- */
+.win-sunken {
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    background: #ffffff;
+    padding: 8px;
+}
+
+/* --- BUTTONS --- */
+.win-btn {
+    font-family: 'MS Sans Serif', 'Arial', sans-serif !important;
+    font-size: 13px;
+    background: #c0c0c0;
+    color: #000000;
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    padding: 4px 16px;
+    cursor: pointer;
+    min-width: 80px;
+    text-align: center;
+    box-shadow: 1px 1px 0 #000000;
+    outline: none;
+}
+
+.win-btn:hover {
+    background: #d0d0d0;
+}
+
+.win-btn:active {
+    border-color: #808080 #ffffff #ffffff #808080;
+    box-shadow: none;
+    padding: 5px 15px 3px 17px;
+}
+
+.win-btn-primary {
+    font-weight: bold;
+    outline: 1px dotted #000000;
+    outline-offset: -4px;
+}
+
+.win-btn-sm {
+    min-width: auto;
+    padding: 2px 8px;
+    font-size: 12px;
+}
+
+/* --- DISABLED BUTTON --- */
+.win-btn:disabled {
+    color: #808080;
+    text-shadow: 1px 1px 0 #ffffff;
+    cursor: default;
+}
+
+/* --- INPUT FIELDS --- */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+.win-input {
+    font-family: 'MS Sans Serif', 'Arial', sans-serif !important;
+    font-size: 13px;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid !important;
+    border-color: #808080 #ffffff #ffffff #808080 !important;
+    padding: 3px 4px;
+    outline: none !important;
+    width: 100%;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+input:focus,
+textarea:focus {
+    outline: none !important;
+}
+
+::placeholder {
+    color: #808080 !important;
+    opacity: 1;
+}
+
+/* --- LABEL --- */
+label,
+.win-label {
+    color: #000000 !important;
+    font-family: 'MS Sans Serif', 'Arial', sans-serif !important;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* --- LINKS --- */
+a {
+    color: #0000ff !important;
+    text-decoration: underline !important;
+    font-family: 'MS Sans Serif', 'Arial', sans-serif !important;
+}
+
+a:hover {
+    color: #ff0000 !important;
+}
+
+/* --- LISTS (listview style) --- */
+.win-listview {
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    background: #ffffff;
+    padding: 0;
+    margin: 8px 0;
+    list-style: none;
+}
+
+.win-listview li {
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid #c0c0c0;
+    color: #000000;
+    font-size: 13px;
+}
+
+.win-listview li:last-child {
+    border-bottom: none;
+}
+
+.win-listview li:hover {
+    background: #000080;
+    color: #ffffff;
+}
+
+.win-listview li:hover a {
+    color: #ffffff !important;
+}
+
+.win-listview li:hover .win-tag {
+    color: #c0c0c0;
+}
+
+/* --- STATUS BAR --- */
+.win-statusbar {
+    border-top: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: #000000;
+    background: #c0c0c0;
+    display: flex;
+    gap: 4px;
+}
+
+.win-statusbar-panel {
+    border: 1px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    padding: 1px 8px;
+    flex: 1;
+}
+
+/* --- FLASH MESSAGES (message box style) --- */
+.win-msgbox {
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    background: #c0c0c0;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.win-msgbox-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.win-msgbox-error {
+    color: #000000;
+}
+
+/* --- SECTION TITLES --- */
+.win-section-title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #000000;
+    margin: 0 0 8px 0;
+    padding: 0;
+}
+
+/* --- DIVIDERS --- */
+.win-divider {
+    border: none;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #ffffff;
+    margin: 8px 0;
+}
+
+/* --- SCORE / STATS (in a sunken panel) --- */
+.win-stat {
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 4px;
+    color: #000000;
+}
+
+/* --- KUDOS LOG ENTRY --- */
+.win-log-entry {
+    padding: 3px 8px;
+    border-bottom: 1px solid #c0c0c0;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.win-log-entry:last-child {
+    border-bottom: none;
+}
+
+.win-log-sender {
+    color: #000080;
+    font-weight: bold;
+}
+
+.win-log-arrow {
+    color: #808080;
+}
+
+.win-log-receiver {
+    color: #800000;
+    font-weight: bold;
+}
+
+.win-log-date {
+    color: #808080;
+    font-size: 12px;
+    margin-left: auto;
+}
+
+/* --- INLINE FORM --- */
+.win-inline-form {
+    display: inline;
+    margin: 0;
+}
+
+/* --- TAG LABEL --- */
+.win-tag {
+    color: #808080;
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* --- INDEX NUMBER --- */
+.win-index {
+    color: #808080;
+    font-size: 12px;
+    min-width: 24px;
+}
+
+/* --- NOTE TEXT --- */
+.win-note {
+    color: #808080;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+/* --- HINT TEXT --- */
+.win-hint {
+    color: #000000;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+/* --- FORM FIELD --- */
+.win-field {
+    margin-bottom: 12px;
+}
+
+/* --- EMPTY STATE --- */
+.win-empty {
+    color: #808080;
+    text-align: center;
+    padding: 16px;
+    font-style: italic;
+}
+
+/* --- WAITING PAGE --- */
+.win-waiting-box {
+    text-align: center;
+    padding: 16px;
+}
+
+.win-hourglass {
+    font-size: 48px;
+    margin: 16px 0;
+    animation: hourglass-spin 2s steps(2) infinite;
+}
+
+@keyframes hourglass-spin {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.win-progress {
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    height: 20px;
+    background: #ffffff;
+    margin: 12px 0;
+    overflow: hidden;
+}
+
+.win-progress-bar {
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        #000080 0px,
+        #000080 8px,
+        transparent 8px,
+        transparent 10px
+    );
+    animation: progress-move 2s linear infinite;
+    width: 30%;
+}
+
+@keyframes progress-move {
+    0% { margin-left: -30%; }
+    100% { margin-left: 100%; }
+}
+
+.win-waiting-status {
+    font-size: 13px;
+    color: #000000;
+}
+
+/* --- VERIFIED PAGE --- */
+.win-verified-box {
+    text-align: center;
+    padding: 16px;
+}
+
+.win-checkmark {
+    font-size: 48px;
+    color: #008000;
+}
+
+/* --- ERROR TEXT --- */
+.win-error-text {
+    color: #000000;
+    font-size: 13px;
+}
+
+/* --- HIGHLIGHT --- */
+.win-highlight {
+    font-weight: bold;
+    color: #000080;
+}
+
+/* --- NAV LINKS --- */
+.win-nav {
+    margin-bottom: 8px;
+}
+
+.win-nav a {
+    font-size: 13px;
+}
+
+/* --- FOOTER (push down for taskbar) --- */
+body {
+    padding-bottom: 40px !important;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 700px) {
+    .win-window {
+        margin: 10px;
+    }
+
+    .win-listview li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}
+
+/* --- PAGER --- */
+.win-pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+    padding-top: 8px;
+}
+
+.win-pager-text {
+    font-size: 12px;
+    color: #000000;
+}
+
+.win-pager a.win-btn {
+    text-decoration: none !important;
+    color: #000000 !important;
+}
+
+/* --- RESET DIVIDER --- */
+.win-reset-divider {
+    border-top: 3px solid #000080;
+    border-bottom: 3px solid #000080;
+    background: #c0c0c0;
+    text-align: center;
+    padding: 4px 0;
+    margin: 4px 0;
+    font-size: 11px;
+    font-weight: bold;
+    color: #000080;
+    letter-spacing: 1px;
+}
+
+/* --- HIDE BOOTSTRAP DEFAULTS --- */
+.navbar, .bg-body-tertiary, footer.border-top {
+    display: none !important;
+}
