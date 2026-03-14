@@ -13,7 +13,7 @@ class KudosController {
         if (!kudos) {
             flash.message = "Invalid user"
         } else {
-            flash.message = "Kudos sent to ${kudos.receiver.name}!"
+            flash.message = "Kudos sent to ${kudos.receiver.name.capitalize()}!"
         }
 
         redirect(controller: "user", action: "list")
