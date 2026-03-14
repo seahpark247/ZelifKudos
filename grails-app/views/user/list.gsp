@@ -40,7 +40,7 @@
             <li>
                 <span>
                     <span class="win-index">${i+1}.</span>
-                    <g:encodeAs codec="HTML">${u.name}</g:encodeAs> (${kudosCounts[u.id] ?: 0})
+                    <g:encodeAs codec="HTML">${u.name}</g:encodeAs><g:if test="${isAdmin}"> (${kudosCounts[u.id] ?: 0})</g:if>
                 </span>
                 <g:if test="${session.userId != u.id}">
                     <g:form controller="kudos" action="send" method="POST" class="win-inline-form" name="kudos-form-${u.id}">
