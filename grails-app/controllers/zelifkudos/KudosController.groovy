@@ -9,12 +9,16 @@ class KudosController {
     def send() {
         Long receiverId = params.long('id')
         String message = params.message
-        Kudos kudos = kudosService.sendKudos(session.userId as Long, receiverId, message)
 
-        if (!kudos) {
-            flash.message = "Invalid user"
-        } else {
-            flash.message = "Kudos sent to ${kudos.receiver.name.capitalize()}!"
+        try {
+            Kudos kudos = kudosService.sendKudos(session.userId as Long, receiverId, message)
+            if (!kudos) {
+                flash.message = "Invalid user"
+            } else {
+                flash.message = "Kudos sent to ${kudos.receiver.name.capitalize()}!"
+            }
+        } catch (KudosLimitException e) {
+            flash.message = e.message
         }
 
         redirect(controller: "user", action: "list")

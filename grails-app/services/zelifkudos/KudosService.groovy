@@ -5,6 +5,9 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class KudosService {
 
+    static final int DAILY_LIMIT_PER_RECEIVER = 5
+    static final int COOLDOWN_MINUTES = 10
+
     Kudos sendKudos(Long senderId, Long receiverId, String message) {
         User sender = User.get(senderId)
         User receiver = User.get(receiverId)
@@ -13,7 +16,28 @@ class KudosService {
             return null
         }
 
+        String limitMsg = checkLimit(sender, receiver)
+        if (limitMsg) {
+            throw new KudosLimitException(limitMsg)
+        }
+
         new Kudos(sender: sender, receiver: receiver, message: message?.trim() ?: null).save(failOnError: true)
+    }
+
+    String checkLimit(User sender, User receiver) {
+        Date startOfDay = new Date().clearTime()
+        int dailyCount = Kudos.countBySenderAndReceiverAndDateCreatedGreaterThan(sender, receiver, startOfDay)
+        if (dailyCount >= DAILY_LIMIT_PER_RECEIVER) {
+            return "You've already sent ${DAILY_LIMIT_PER_RECEIVER} kudos to ${receiver.name.capitalize()} today. Send again tomorrow!"
+        }
+
+        Date cooldownTime = new Date(System.currentTimeMillis() - COOLDOWN_MINUTES * 60 * 1000)
+        int recentCount = Kudos.countBySenderAndReceiverAndDateCreatedGreaterThan(sender, receiver, cooldownTime)
+        if (recentCount > 0) {
+            return "Please wait a few minutes before sending kudos to ${receiver.name.capitalize()} again."
+        }
+
+        return null
     }
 
     int countKudosSinceLastReset() {
