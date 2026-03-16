@@ -16,8 +16,8 @@
         <span class="win-titlebar-text">ZelifKudos - Employee Recognition System</span>
     </div>
     <div class="win-menubar">
-        <a href="${createLink(controller:'user', action:'list')}">Users</a>
-        <a href="${createLink(controller:'kudos', action:'list')}">Kudos</a>
+        <a href="${createLink(controller:'user', action:'list')}" class="${controllerName == 'user' ? 'active' : ''}">Users</a>
+        <a href="${createLink(controller:'kudos', action:'list')}" class="${controllerName == 'kudos' ? 'active' : ''}">Kudos</a>
     </div>
     <div class="win-body">
         <g:layoutBody/>
