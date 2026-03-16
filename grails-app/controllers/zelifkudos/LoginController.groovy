@@ -82,7 +82,7 @@ class LoginController {
             return
         }
 
-        // Just show "verified" page — the original tab will pick it up via polling
-        render(view: "verified", model: [userName: user.name])
+        session.userId = user.id
+        redirect(controller: "user", action: "list")
     }
 }
