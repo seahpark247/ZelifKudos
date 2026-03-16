@@ -8,7 +8,8 @@ class KudosController {
 
     def send() {
         Long receiverId = params.long('id')
-        Kudos kudos = kudosService.sendKudos(session.userId as Long, receiverId)
+        String message = params.message
+        Kudos kudos = kudosService.sendKudos(session.userId as Long, receiverId, message)
 
         if (!kudos) {
             flash.message = "Invalid user"

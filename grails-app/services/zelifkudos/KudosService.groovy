@@ -5,7 +5,7 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class KudosService {
 
-    Kudos sendKudos(Long senderId, Long receiverId) {
+    Kudos sendKudos(Long senderId, Long receiverId, String message) {
         User sender = User.get(senderId)
         User receiver = User.get(receiverId)
 
@@ -13,7 +13,7 @@ class KudosService {
             return null
         }
 
-        new Kudos(sender: sender, receiver: receiver).save(failOnError: true)
+        new Kudos(sender: sender, receiver: receiver, message: message?.trim() ?: null).save(failOnError: true)
     }
 
     int countKudosSinceLastReset() {

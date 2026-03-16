@@ -401,6 +401,22 @@ a:hover {
     font-weight: bold;
 }
 
+.win-log-message {
+    color: #000080;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.win-input-sm {
+    font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 12px;
+    padding: 1px 4px;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    background: #ffffff;
+    width: 120px;
+}
+
 .win-log-date {
     color: #808080;
     font-size: 12px;
@@ -409,7 +425,9 @@ a:hover {
 
 /* --- INLINE FORM --- */
 .win-inline-form {
-    display: inline;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     margin: 0;
 }
 

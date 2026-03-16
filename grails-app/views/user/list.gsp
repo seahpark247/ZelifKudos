@@ -45,6 +45,7 @@
                 <g:if test="${session.userId != u.id}">
                     <g:form controller="kudos" action="send" method="POST" class="win-inline-form" name="kudos-form-${u.id}">
                         <input type="hidden" name="id" value="${u.id}" />
+                        <input type="text" name="message" placeholder="Why..." maxlength="200" class="win-input-sm" />
                         <button type="button"
                                 class="win-btn win-btn-sm"
                                 onclick="confirmKudos('${u.name.capitalize().encodeAsJavaScript()}', 'kudos-form-${u.id}')">

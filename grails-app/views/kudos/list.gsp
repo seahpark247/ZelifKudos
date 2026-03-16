@@ -30,6 +30,9 @@
                     <span class="win-log-sender">${k.sender.name.capitalize()}</span>
                     <span class="win-log-arrow">&rarr;</span>
                     <span class="win-log-receiver">${k.receiver.name.capitalize()}</span>
+                    <g:if test="${k.message}">
+                        <span class="win-log-message">"${k.message.encodeAsHTML()}"</span>
+                    </g:if>
                     <span class="win-log-date">
                         <g:formatDate date="${k.dateCreated}" format="yyyy-MM-dd HH:mm"/>
                     </span>
