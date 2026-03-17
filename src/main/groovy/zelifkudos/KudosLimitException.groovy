@@ -1,6 +1,6 @@
 package zelifkudos
 
-class KudosLimitException extends RuntimeException {
+class KudosLimitException extends Exception {
     KudosLimitException(String message) {
         super(message)
     }
