@@ -45,7 +45,7 @@ class KudosService {
         lastReset ? Kudos.countByDateCreatedGreaterThan(lastReset) : Kudos.count()
     }
 
-    void resetAllKudos(User resetBy) {
+    void markKudosReset(User resetBy) {
         new KudosReset(resetBy: resetBy).save(failOnError: true)
     }
 

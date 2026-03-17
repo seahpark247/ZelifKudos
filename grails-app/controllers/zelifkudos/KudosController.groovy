@@ -38,7 +38,7 @@ class KudosController {
             return
         }
 
-        kudosService.resetAllKudos(currentUser)
+        kudosService.markKudosReset(currentUser)
         flash.message = "All kudos have been reset."
         redirect(controller: "user", action: "list")
     }
