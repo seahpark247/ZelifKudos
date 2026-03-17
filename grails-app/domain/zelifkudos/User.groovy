@@ -4,6 +4,7 @@ class User {
     String email
     String name
     Boolean admin = false
+    Boolean activated = false
 
     Date dateCreated
 

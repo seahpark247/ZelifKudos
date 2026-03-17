@@ -89,7 +89,10 @@ class LoginService {
         if (!user) {
             String name = email.split("@")[0]
             boolean isAdmin = email.endsWith('@zelifcam.net') && ['brandon', 'josh', 'ryan', 'nathalia'].contains(name)
-            user = new User(email: email, name: name, admin: isAdmin).save(failOnError: true)
+            user = new User(email: email, name: name, admin: isAdmin, activated: true).save(failOnError: true)
+        } else if (!user.activated) {
+            user.activated = true
+            user.save(failOnError: true)
         }
         return user
     }
