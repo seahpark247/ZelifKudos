@@ -54,6 +54,7 @@ dependencies {
     implementation "org.apache.grails:grails-gsp"
     implementation "org.apache.groovy:groovy-dateutil"
     implementation "org.springframework.boot:spring-boot-starter-mail"
+    implementation "org.springframework.session:spring-session-jdbc"
     integrationTestImplementation testFixtures("org.apache.grails:grails-geb")
     profile "org.apache.grails.profiles:web"
     runtimeOnly "org.fusesource.jansi:jansi"

@@ -20,6 +20,10 @@ server:
             cookie:
                 max-age: 2592000
 spring:
+    session:
+        store-type: jdbc
+        jdbc:
+            initialize-schema: always
     jmx:
         unique-names: true
     main:
