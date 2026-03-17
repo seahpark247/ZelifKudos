@@ -143,5 +143,5 @@ environments:
             url: jdbc:postgresql://localhost:5432/zelifkudos
     production:
         dataSource:
-            dbCreate: update
+            dbCreate: none
             url: ${DB_URL:jdbc:postgresql://localhost:5432/zelifkudos}
