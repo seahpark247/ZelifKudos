@@ -13,7 +13,8 @@ class UserController {
             redirect(controller: "login")
             return
         }
-        [users: users, kudosCounts: kudosCounts, isAdmin: currentUser.admin]
+        int myKudosCount = kudosCounts[currentUser.id] ?: 0
+        [users: users, kudosCounts: kudosCounts, isAdmin: currentUser.admin, currentUserId: currentUser.id, myKudosCount: myKudosCount]
     }
 
     def index() { redirect(action: 'list') }

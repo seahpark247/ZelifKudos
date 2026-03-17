@@ -21,6 +21,13 @@
     </div>
 </g:if>
 
+<g:if test="${myKudosCount > 0}">
+    <div class="win-msgbox" style="margin-bottom:8px;">
+        <span class="win-msgbox-icon">i</span>
+        <span>You received <b>${myKudosCount}</b> kudos this week!</span>
+    </div>
+</g:if>
+
 <div class="win-groupbox" style="margin-top:0;">
     <span class="win-groupbox-title">Employee Roster (${users?.size() ?: 0})</span>
 
