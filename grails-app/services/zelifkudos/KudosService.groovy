@@ -24,7 +24,7 @@ class KudosService {
         new Kudos(sender: sender, receiver: receiver, message: message?.trim() ?: null).save(failOnError: true)
     }
 
-    String checkLimit(User sender, User receiver) {
+    private String checkLimit(User sender, User receiver) {
         Date startOfDay = new Date().clearTime()
         int dailyCount = Kudos.countBySenderAndReceiverAndDateCreatedGreaterThan(sender, receiver, startOfDay)
         if (dailyCount >= DAILY_LIMIT_PER_RECEIVER) {
