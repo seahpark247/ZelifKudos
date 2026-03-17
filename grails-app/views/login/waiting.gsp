@@ -25,6 +25,8 @@
         <p class="win-waiting-status" id="poll-status">
             Checking mailbox...
         </p>
+
+        <a href="https://outlook.cloud.microsoft/mail/inbox/" target="_blank" class="win-btn win-btn-primary" style="margin-top: 10px;">Open Inbox</a>
     </div>
 </div>
 
