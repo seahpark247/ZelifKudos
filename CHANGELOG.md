@@ -31,13 +31,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - User `activated` field to track first login status
 - Users seeded via database with `activated = false` until first login
+- `KudosLimitException` for structured rate limit error handling
 
 ## [1.3] - 2026-03-16
 
 ### Added
 - Optional message when sending kudos
 - Rate limiting: 5 kudos per person per day with 10-minute cooldown
-- `KudosLimitException` for structured rate limit error handling
 - Active button styling
 
 ### Changed
@@ -46,14 +46,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [1.2] - 2026-03-14
 
-### Changed
-- Capitalized user names in views
+### Fixed
+- Additional user name capitalization fix
 
 ## [1.1] - 2026-03-14
 
 ### Changed
 - Restricted kudos count visibility to admins only
 - Updated admin user list
+- Capitalized user names in views
 
 ## [1.0] - 2026-03-13
 
