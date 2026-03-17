@@ -11,6 +11,15 @@ class AuthInterceptor {
             redirect(controller: 'login')
             return false
         }
+
+        User currentUser = User.get(session.userId)
+        if (!currentUser) {
+            session.invalidate()
+            redirect(controller: 'login')
+            return false
+        }
+
+        request.currentUser = currentUser
         true
     }
 }

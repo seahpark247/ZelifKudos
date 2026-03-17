@@ -25,8 +25,8 @@ class KudosController {
     }
 
     def reset() {
-        User currentUser = User.get(session.userId)
-        if (!currentUser?.admin) {
+        User currentUser = request.currentUser
+        if (!currentUser.admin) {
             flash.error = "Access denied"
             redirect(controller: "user", action: "list")
             return
@@ -47,12 +47,7 @@ class KudosController {
         int max = 15
         int offset = Math.max(0, params.int('offset', 0))
 
-        User currentUser = User.get(session.userId)
-        if (!currentUser) {
-            session.invalidate()
-            redirect(controller: "login")
-            return
-        }
+        User currentUser = request.currentUser
         Map result = kudosService.listKudos(currentUser, max, offset)
         int total = result.total
         int totalPages = total ? (int) Math.ceil((double) total / max) : 0
