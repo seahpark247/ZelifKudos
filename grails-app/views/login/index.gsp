@@ -22,9 +22,16 @@
         </div>
     </g:if>
 
+    <g:if test="${flash.warning}">
+        <div class="win-msgbox">
+            <span class="win-msgbox-icon">!</span>
+            <span>${flash.warning}</span>
+        </div>
+    </g:if>
+
     <g:if test="${flash.error}">
-        <div class="win-msgbox win-msgbox-error">
-            <span class="win-msgbox-icon">⚠</span>
+        <div class="win-msgbox">
+            <span class="win-msgbox-icon">✕</span>
             <span>${flash.error}</span>
         </div>
     </g:if>

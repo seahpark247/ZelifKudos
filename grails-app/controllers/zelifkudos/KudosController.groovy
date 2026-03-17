@@ -13,12 +13,12 @@ class KudosController {
         try {
             Kudos kudos = kudosService.sendKudos(session.userId as Long, receiverId, message)
             if (!kudos) {
-                flash.message = "Invalid user"
+                flash.error = "Invalid user"
             } else {
                 flash.message = "Kudos sent to ${kudos.receiver.name.capitalize()}!"
             }
         } catch (KudosLimitException e) {
-            flash.message = e.message
+            flash.warning = e.message
         }
 
         redirect(controller: "user", action: "list")
@@ -27,13 +27,13 @@ class KudosController {
     def reset() {
         User currentUser = User.get(session.userId)
         if (!currentUser?.admin) {
-            flash.message = "Access denied"
+            flash.error = "Access denied"
             redirect(controller: "user", action: "list")
             return
         }
 
         if (kudosService.countKudosSinceLastReset() == 0) {
-            flash.message = "Nothing to reset, no kudos since the last reset."
+            flash.warning = "Nothing to reset, no kudos since the last reset."
             redirect(controller: "user", action: "list")
             return
         }

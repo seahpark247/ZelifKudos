@@ -21,6 +21,20 @@
     </div>
 </g:if>
 
+<g:if test="${flash.warning}">
+    <div class="win-msgbox">
+        <span class="win-msgbox-icon">!</span>
+        <span>${flash.warning}</span>
+    </div>
+</g:if>
+
+<g:if test="${flash.error}">
+    <div class="win-msgbox">
+        <span class="win-msgbox-icon">✕</span>
+        <span>${flash.error}</span>
+    </div>
+</g:if>
+
 <g:if test="${myKudosCount > 0}">
     <div class="win-msgbox" style="margin-bottom:8px;">
         <span class="win-msgbox-icon">i</span>

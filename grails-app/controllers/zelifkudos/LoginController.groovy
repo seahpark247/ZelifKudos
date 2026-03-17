@@ -19,13 +19,13 @@ class LoginController {
         String email = params.email
 
         if (!email?.endsWith("@zelifcam.net")) {
-            flash.message = "Please use our company email!"
+            flash.warning = "Please use our company email!"
             redirect(action: "index")
             return
         }
 
         if (loginService.hasRecentToken(email)) {
-            flash.message = "A login link was already sent. Please wait a moment before trying again."
+            flash.warning = "A login link was already sent. Please wait a moment before trying again."
             redirect(action: "index")
             return
         }
@@ -77,7 +77,7 @@ class LoginController {
         User user = loginService.markTokenVerified(params.token)
 
         if (!user) {
-            flash.message = "Invalid or expired token"
+            flash.error = "Invalid or expired token"
             redirect(action: "index")
             return
         }
