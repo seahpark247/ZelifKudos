@@ -57,6 +57,11 @@ class KudosService {
         KudosReset.executeQuery("select kr.dateCreated from KudosReset kr order by kr.dateCreated desc") as List<Date>
     }
 
+    Map<Long, Integer> countSentForAllUsers() {
+        List results = Kudos.executeQuery("select k.sender.id, count(k) from Kudos k group by k.sender.id")
+        results.collectEntries { [(it[0]): it[1] as int] }
+    }
+
     Map<Long, Integer> countKudosForAllUsers() {
         Date lastReset = getLastResetDate()
         List results = lastReset

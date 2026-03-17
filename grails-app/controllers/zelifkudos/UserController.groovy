@@ -5,8 +5,9 @@ class UserController {
     KudosService kudosService
 
     def list() {
-        List<User> users = User.list()
         Map<Long, Integer> kudosCounts = kudosService.countKudosForAllUsers()
+        Map<Long, Integer> sentCounts = kudosService.countSentForAllUsers()
+        List<User> users = User.list().sort { -(sentCounts[it.id] ?: 0) }
         User currentUser = User.get(session.userId)
         if (!currentUser) {
             session.invalidate()
