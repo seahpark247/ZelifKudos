@@ -50,7 +50,8 @@
 <hr class="win-divider"/>
 <p class="win-note">
     * A magic link will be sent to your email.<br/>
-    * The link expires in 15 minutes.
+    * The link expires in 15 minutes.<br/>
+    * <a href="https://outlook.cloud.microsoft/mail/inbox/" target="_blank">Open Inbox</a>
 </p>
 
 </body>
