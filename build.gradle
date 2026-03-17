@@ -52,6 +52,7 @@ dependencies {
     implementation "org.apache.grails:grails-scaffolding"
     implementation "org.apache.grails:grails-data-hibernate5"
     implementation "org.apache.grails:grails-gsp"
+    implementation "org.apache.groovy:groovy-dateutil"
     implementation "org.springframework.boot:spring-boot-starter-mail"
     integrationTestImplementation testFixtures("org.apache.grails:grails-geb")
     profile "org.apache.grails.profiles:web"
