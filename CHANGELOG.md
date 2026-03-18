@@ -7,7 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ## [2.2] - 2026-03-18
 
 ### Fixed
-- Session loss on redeploy: changed `spring.session.jdbc.initialize-schema` from `always` to `never`
+- remove dead code
 
 ## [2.1] - 2026-03-18
 

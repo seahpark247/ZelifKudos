@@ -104,18 +104,6 @@ class KudosService {
     }
 
     /**
-     * Count total kudos received by a user since last reset.
-     */
-    int countKudosForUser(Long userId) {
-        Date lastReset = getLastResetDate()
-        lastReset
-            ? Kudos.executeQuery("select count(k) from Kudos k where k.receiver.id = :uid and k.dateCreated > :reset",
-                [uid: userId, reset: lastReset])[0] as int
-            : Kudos.executeQuery("select count(k) from Kudos k where k.receiver.id = :uid",
-                [uid: userId])[0] as int
-    }
-
-    /**
      * List all kudos received by a user (all time, with pagination) for My Kudos page.
      */
     Map listReceivedKudos(User user, int max, int offset) {

@@ -344,30 +344,12 @@ a:hover {
 }
 
 
-/* --- SECTION TITLES --- */
-.win-section-title {
-    font-size: 13px;
-    font-weight: bold;
-    color: #000000;
-    margin: 0 0 8px 0;
-    padding: 0;
-}
-
 /* --- DIVIDERS --- */
 .win-divider {
     border: none;
     border-top: 1px solid #808080;
     border-bottom: 1px solid #ffffff;
     margin: 8px 0;
-}
-
-/* --- SCORE / STATS (in a sunken panel) --- */
-.win-stat {
-    text-align: center;
-    font-weight: bold;
-    font-size: 14px;
-    padding: 4px;
-    color: #000000;
 }
 
 /* --- KUDOS LOG ENTRY --- */
@@ -519,17 +501,6 @@ a:hover {
 .win-waiting-status {
     font-size: 13px;
     color: #000000;
-}
-
-/* --- VERIFIED PAGE --- */
-.win-verified-box {
-    text-align: center;
-    padding: 16px;
-}
-
-.win-checkmark {
-    font-size: 48px;
-    color: #008000;
 }
 
 /* --- ERROR TEXT --- */
