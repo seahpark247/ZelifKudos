@@ -55,4 +55,17 @@ class KudosController {
         [kudosList: result.list, total: total, resetDates: result.resetDates,
          max: max, offset: offset, totalPages: totalPages, currentPage: currentPage, currentUser: currentUser]
     }
+
+    def myKudos() {
+        int max = 15
+        int offset = Math.max(0, params.int('offset', 0))
+
+        User currentUser = request.currentUser
+        Map result = kudosService.listReceivedKudos(currentUser, max, offset)
+        int total = result.total
+        int totalPages = total ? (int) Math.ceil((double) total / max) : 0
+        int currentPage = (int)(offset / max) + 1
+        [kudosList: result.list, total: total, resetDates: result.resetDates,
+         max: max, offset: offset, totalPages: totalPages, currentPage: currentPage]
+    }
 }

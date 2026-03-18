@@ -40,10 +40,23 @@
         <span class="win-msgbox-icon">i</span>
         <span>You received <b>${myKudosCount}</b> kudos this week!</span>
     </div>
+    <g:if test="${recentMessages}">
+        <div class="win-sunken" style="margin-bottom:8px; padding:8px 12px;">
+            <g:each in="${recentMessages}" var="k">
+                <g:if test="${k.message}">
+                    <div style="font-size:12px; color:#555; margin:2px 0;">&bull; &ldquo;${k.message.encodeAsHTML()}&rdquo;</div>
+                </g:if>
+            </g:each>
+            <g:if test="${totalKudosForMe > 5}">
+                <div style="font-size:11px; color:#808080; margin-top:4px;">and ${totalKudosForMe - 5} more...</div>
+            </g:if>
+        </div>
+    </g:if>
 </g:if>
 
 <div class="win-groupbox" style="margin-top:0;">
     <span class="win-groupbox-title">Employee Roster (${users?.size() ?: 0})</span>
+    <p style="font-size:12px; color:#808080; margin:0 0 8px 0; font-style:italic;">Send kudos to climb the ranks!</p>
 
     <g:if test="${isAdmin}">
         <div style="text-align:right; margin-bottom:8px;">
@@ -58,7 +71,7 @@
 
     <ul class="win-listview">
         <g:each in="${users}" var="u" status="i">
-            <li>
+            <li class="${session.userId == u.id ? 'win-me' : ''}">
                 <span>
                     <span class="win-index">${i+1}.</span>
                     <g:encodeAs codec="HTML">${u.name.capitalize()}</g:encodeAs><g:if test="${isAdmin}"> (${kudosCounts[u.id] ?: 0})</g:if>

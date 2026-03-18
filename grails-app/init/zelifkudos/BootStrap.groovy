@@ -8,6 +8,7 @@ class BootStrap {
                 LoginToken.executeUpdate("delete from LoginToken where expiryDate < :now", [now: new Date()])
             }
         }
+
     }
 
     def destroy = {

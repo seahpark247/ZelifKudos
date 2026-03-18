@@ -6,6 +6,6 @@ class KudosReset {
     Date dateCreated
 
     static constraints = {
-        resetBy nullable: false
+        resetBy nullable: true
     }
 }

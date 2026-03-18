@@ -603,6 +603,15 @@ body {
     letter-spacing: 1px;
 }
 
+/* --- HIGHLIGHT CURRENT USER ROW --- */
+.win-listview li.win-me {
+    background: #ffffcc;
+}
+
+.win-listview li.win-me:hover {
+    background: #000080;
+}
+
 /* --- HIDE BOOTSTRAP DEFAULTS --- */
 .navbar, .bg-body-tertiary, footer.border-top {
     display: none !important;

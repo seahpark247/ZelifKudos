@@ -4,6 +4,21 @@ All notable changes to ZelifKudos will be documented in this file.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.0] - 2026-03-18
+
+### Added
+- **My Kudos page**: View all kudos you've received (all time) with pagination and reset dividers
+- **Recent messages on Users page**: Shows up to 5 recent kudos messages, with "and N more..." for overflow
+- **"Send kudos to climb the ranks!"** subtitle on Employee Roster
+- **Current user row highlight**: Your row is highlighted in yellow for quick rank identification
+- **Weekly email service** (`WeeklyEmailService`): Scheduled email infrastructure with `@EnableScheduling`
+- Top receivers query and per-user kudos count/message retrieval in `KudosService`
+
+### Changed
+- Menu renamed: **Kudos → History** | added **My Kudos** tab
+- `KudosReset.resetBy` now nullable to support system/automated resets
+- Version bumped to 2.0
+
 ## [1.5] - 2026-03-17
 
 ### Added

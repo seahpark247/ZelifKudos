@@ -70,6 +70,61 @@ class KudosService {
         results.collectEntries { [(it[0]): it[1] as int] }
     }
 
+    /**
+     * Returns list of [receiverId, count] pairs since last reset, ordered by count desc.
+     */
+    List<Map> getTopReceivers() {
+        Date lastReset = getLastResetDate()
+        List results = lastReset
+            ? Kudos.executeQuery("select k.receiver.id, count(k) from Kudos k where k.dateCreated > :reset group by k.receiver.id order by count(k) desc", [reset: lastReset])
+            : Kudos.executeQuery("select k.receiver.id, count(k) from Kudos k group by k.receiver.id order by count(k) desc")
+        results.collect { [userId: it[0], count: it[1] as int] }
+    }
+
+    /**
+     * Returns messages received by a user since last reset.
+     */
+    List<String> getMessagesForUser(Long userId, Date since) {
+        Kudos.executeQuery(
+            "select k.message from Kudos k where k.receiver.id = :uid and k.dateCreated > :since and k.message is not null",
+            [uid: userId, since: since]
+        ) as List<String>
+    }
+
+    /**
+     * Returns recent messages received by a user since last reset (for Users page, max 5).
+     */
+    List<Kudos> getRecentKudosForUser(Long userId, int max) {
+        Date lastReset = getLastResetDate()
+        lastReset
+            ? Kudos.executeQuery("from Kudos k where k.receiver.id = :uid and k.dateCreated > :reset order by k.dateCreated desc",
+                [uid: userId, reset: lastReset], [max: max])
+            : Kudos.executeQuery("from Kudos k where k.receiver.id = :uid order by k.dateCreated desc",
+                [uid: userId], [max: max])
+    }
+
+    /**
+     * Count total kudos received by a user since last reset.
+     */
+    int countKudosForUser(Long userId) {
+        Date lastReset = getLastResetDate()
+        lastReset
+            ? Kudos.executeQuery("select count(k) from Kudos k where k.receiver.id = :uid and k.dateCreated > :reset",
+                [uid: userId, reset: lastReset])[0] as int
+            : Kudos.executeQuery("select count(k) from Kudos k where k.receiver.id = :uid",
+                [uid: userId])[0] as int
+    }
+
+    /**
+     * List all kudos received by a user (all time, with pagination) for My Kudos page.
+     */
+    Map listReceivedKudos(User user, int max, int offset) {
+        List<Date> resetDates = getAllResetDates()
+        [list: Kudos.findAllByReceiver(user, [sort: "dateCreated", order: "desc", max: max, offset: offset]),
+         total: Kudos.countByReceiver(user),
+         resetDates: resetDates]
+    }
+
     Map listKudos(User user, int max, int offset) {
         List<Date> resetDates = getAllResetDates()
         if (user.admin) {

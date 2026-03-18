@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>Kudos | ZelifKudos</title>
+    <title>History | ZelifKudos</title>
 </head>
 
 <body>
