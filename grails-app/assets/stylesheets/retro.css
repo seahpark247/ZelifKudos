@@ -418,6 +418,8 @@ a:hover {
     color: #808080;
     font-size: 12px;
     margin-left: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* --- INLINE FORM --- */

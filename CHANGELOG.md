@@ -4,6 +4,21 @@ All notable changes to ZelifKudos will be documented in this file.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1] - 2026-03-18
+
+### Fixed
+- Self-esteem messages now read from database instead of hardcoded list
+- Recent messages on Users page limited to 3 (was 5), removed "and N more..." overflow
+- Messages section hidden when no messages exist
+- Date column no longer gets squished by long messages in History and My Kudos pages
+- Empty white box no longer shows when user has kudos but no messages
+
+### Changed
+- My Kudos page label: "received" → "total" for clarity
+- "Send kudos to climb the ranks!" now on the same line as Reset button
+- Message bullets changed to Windows 98 style (▪) with single-line truncation
+- My Kudos sender display: "Someone sent you kudos" → "Anonymous"
+
 ## [2.0] - 2026-03-18
 
 ### Added

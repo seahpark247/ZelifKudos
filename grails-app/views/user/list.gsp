@@ -40,12 +40,10 @@
         <span class="win-msgbox-icon">i</span>
         <span>You received <b>${myKudosCount}</b> kudos this week!</span>
     </div>
-    <g:if test="${recentMessages?.any { it.message }}">
+    <g:if test="${recentMessages}">
         <div class="win-sunken" style="margin-bottom:8px; padding:8px 12px;">
             <g:each in="${recentMessages}" var="k">
-                <g:if test="${k.message}">
-                    <div style="font-size:12px; color:#555; margin:2px 0;">&bull; &ldquo;${k.message.encodeAsHTML()}&rdquo;</div>
-                </g:if>
+                <div style="font-size:12px; color:#555; margin:2px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">&#9642; &ldquo;${k.message.encodeAsHTML()}&rdquo;</div>
             </g:each>
         </div>
     </g:if>
@@ -53,18 +51,17 @@
 
 <div class="win-groupbox" style="margin-top:0;">
     <span class="win-groupbox-title">Employee Roster (${users?.size() ?: 0})</span>
-    <p style="font-size:12px; color:#808080; margin:0 0 8px 0; font-style:italic;">Send kudos to climb the ranks!</p>
-
-    <g:if test="${isAdmin}">
-        <div style="text-align:right; margin-bottom:8px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <p style="font-size:12px; color:#808080; margin:0; font-style:italic;">Send kudos to climb the ranks!</p>
+        <g:if test="${isAdmin}">
             <g:form controller="kudos" action="reset" method="POST" class="win-inline-form">
                 <button type="button" class="win-btn win-btn-sm"
                         onclick="var total = ${kudosCounts.values().sum() ?: 0}; if(total === 0) { alert('Nothing to reset, no kudos since the last reset.'); } else if(confirm('Reset all kudos counts to 0? This action cannot be undone, but history will be preserved.')) { this.parentNode.submit(); }">
                     Reset All Kudos
                 </button>
             </g:form>
-        </div>
-    </g:if>
+        </g:if>
+    </div>
 
     <ul class="win-listview">
         <g:each in="${users}" var="u" status="i">
