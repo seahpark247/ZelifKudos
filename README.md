@@ -18,3 +18,6 @@ Try Me: http://zelifkudos.ddnsking.com/
 <img width="648" height="314" alt="Screenshot 2026-03-16 at 4 52 39 PM" src="https://github.com/user-attachments/assets/5c846c6d-343d-4203-9378-ca42760ed9f2" />
 <img width="648" height="228" alt="Screenshot 2026-03-16 at 4 44 19 PM" src="https://github.com/user-attachments/assets/6bb95a43-fbea-4611-a31c-a13e50eb5533" />
 <img width="649" height="375" alt="Screenshot 2026-03-17 at 6 14 59 PM" src="https://github.com/user-attachments/assets/69d03c46-ece7-4029-86cd-45384c1e7e1c" />
+<img width="648" height="479" alt="Screenshot 2026-03-18 at 4 37 57 PM" src="https://github.com/user-attachments/assets/5da13304-b634-4ffc-ac3e-7812444d3cb9" />
+<img width="647" height="389" alt="Screenshot 2026-03-18 at 4 42 14 PM" src="https://github.com/user-attachments/assets/167e69e6-03f2-4619-b883-c7586c8536a7" />
+<img width="646" height="250" alt="Screenshot 2026-03-18 at 4 42 24 PM" src="https://github.com/user-attachments/assets/e1eeb352-4779-44e6-8e67-0ac32f002161" />
