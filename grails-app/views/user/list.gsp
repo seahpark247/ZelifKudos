@@ -40,16 +40,13 @@
         <span class="win-msgbox-icon">i</span>
         <span>You received <b>${myKudosCount}</b> kudos this week!</span>
     </div>
-    <g:if test="${recentMessages}">
+    <g:if test="${recentMessages?.any { it.message }}">
         <div class="win-sunken" style="margin-bottom:8px; padding:8px 12px;">
             <g:each in="${recentMessages}" var="k">
                 <g:if test="${k.message}">
                     <div style="font-size:12px; color:#555; margin:2px 0;">&bull; &ldquo;${k.message.encodeAsHTML()}&rdquo;</div>
                 </g:if>
             </g:each>
-            <g:if test="${totalKudosForMe > 5}">
-                <div style="font-size:11px; color:#808080; margin-top:4px;">and ${totalKudosForMe - 5} more...</div>
-            </g:if>
         </div>
     </g:if>
 </g:if>

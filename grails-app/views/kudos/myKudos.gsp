@@ -8,7 +8,7 @@
 <body>
 
 <div class="win-groupbox" style="margin-top:0;">
-    <span class="win-groupbox-title">My Kudos (${total ?: 0} received)</span>
+    <span class="win-groupbox-title">My Kudos (${total ?: 0} total)</span>
 
     <g:if test="${kudosList}">
         <div class="win-sunken">
@@ -27,7 +27,7 @@
                 </g:each>
                 <div class="win-log-entry">
                     <span class="win-index">${String.format('%03d', offset + i + 1)}</span>
-                    <span style="color:#808080;">Someone sent you kudos</span>
+                    <span style="color:#808080;">Anonymous</span>
                     <g:if test="${k.message}">
                         <span class="win-log-message">"${k.message.encodeAsHTML()}"</span>
                     </g:if>

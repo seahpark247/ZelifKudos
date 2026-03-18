@@ -12,109 +12,6 @@ import groovy.util.logging.Slf4j
 @Transactional
 class WeeklyEmailService {
 
-    static final List<String> MESSAGES = [
-        "You know, you are amazing!",
-        "The world is better because you're in it.",
-        "You make a difference, every single day.",
-        "Someone out there is grateful for you right now.",
-        "You are enough, exactly as you are.",
-        "Your kindness matters more than you know.",
-        "Keep going — you're doing great things.",
-        "You bring out the best in people around you.",
-        "Don't forget: you're somebody's reason to smile.",
-        "You are stronger than you think.",
-        "Your hard work doesn't go unnoticed.",
-        "You deserve every good thing coming your way.",
-        "The effort you put in truly matters.",
-        "You light up every room you walk into.",
-        "Be proud of how far you've come.",
-        "You inspire people without even trying.",
-        "Your presence makes the team better.",
-        "You are doing better than you think you are.",
-        "Never underestimate your impact on others.",
-        "You are worthy of all the good things in life.",
-        "Your smile can change someone's whole day.",
-        "You handle tough things with grace.",
-        "The best is yet to come for you.",
-        "You are a gift to everyone around you.",
-        "Your energy is contagious — in the best way.",
-        "You should be proud of yourself today.",
-        "You bring so much value to everything you do.",
-        "Someone looked up to you this week.",
-        "You are braver than you believe.",
-        "Your voice matters. Don't ever forget that.",
-        "You turn ordinary moments into something special.",
-        "You are exactly where you need to be.",
-        "Great things are happening because of you.",
-        "You have a heart of gold.",
-        "The people around you are lucky to have you.",
-        "You've already overcome so much — keep going.",
-        "Your potential is limitless.",
-        "You make hard things look easy.",
-        "You are more loved than you realize.",
-        "Every step you take is progress.",
-        "You carry sunshine wherever you go.",
-        "Your creativity and ideas matter.",
-        "You are one of a kind — literally.",
-        "The way you care about others is beautiful.",
-        "You've got this. You always do.",
-        "Your courage inspires those around you.",
-        "You are a rockstar in ways you don't even see.",
-        "Today is yours. Own it.",
-        "You make the impossible feel possible.",
-        "Your thoughtfulness never goes unnoticed.",
-        "You are someone's favorite person.",
-        "Keep being you — the world needs it.",
-        "You radiate positivity.",
-        "Your dedication is truly admirable.",
-        "You have the power to make today amazing.",
-        "People genuinely enjoy being around you.",
-        "You are a walking reminder that good people exist.",
-        "Your laugh is someone's favorite sound.",
-        "You make even Mondays feel okay.",
-        "You are built for greatness.",
-        "The way you show up for others is remarkable.",
-        "You leave things better than you found them.",
-        "You are someone's answered prayer.",
-        "Your patience is a superpower.",
-        "You bring calm to the chaos.",
-        "You deserve a standing ovation for this week.",
-        "You are proof that good things take time.",
-        "Your warmth makes cold days bearable.",
-        "You have an incredible way of making people feel seen.",
-        "You are tougher than any challenge ahead.",
-        "Your positivity is a force of nature.",
-        "You are the type of person the world needs more of.",
-        "Everything you do has meaning.",
-        "You turn setbacks into comebacks.",
-        "Your spirit is unbreakable.",
-        "You make people feel like they belong.",
-        "You are a masterpiece in progress.",
-        "Your generosity changes lives.",
-        "You show up when it matters most.",
-        "You are someone's hero — believe it.",
-        "Your perspective is valuable and unique.",
-        "You have a way of making everything better.",
-        "You are the definition of resilience.",
-        "Your compassion makes the world softer.",
-        "You deserve all the kudos in the world.",
-        "You are living proof that hard work pays off.",
-        "Your optimism is inspiring.",
-        "You make people want to be better.",
-        "You are a breath of fresh air.",
-        "Your story is far from over — the best chapters are ahead.",
-        "You are worth celebrating every single day.",
-        "Your kindness creates ripples you'll never see.",
-        "You have an amazing ability to lift others up.",
-        "You are the secret ingredient to this team.",
-        "Your determination is something special.",
-        "You make the world a little brighter just by existing.",
-        "You are capable of extraordinary things.",
-        "Your heart is your greatest strength.",
-        "You are not just surviving — you are thriving.",
-        "Never forget: you are absolutely, undeniably awesome.",
-    ]
-
     @Autowired
     JavaMailSender javaMailSender
 
@@ -133,9 +30,11 @@ class WeeklyEmailService {
         // Build top 3 ranking (up to 3 distinct rank levels, dense ranking)
         List<Map> top3 = buildTop3(topReceivers)
 
-        // Self-esteem message based on reset count (cycles through 100 messages)
+        // Self-esteem message from DB (cycles through messages by reset count)
         int resetCount = KudosReset.count()
-        String selfEsteemMessage = MESSAGES[(int)(resetCount % MESSAGES.size())]
+        int totalMessages = SelfEsteemMessage.count() ?: 1
+        SelfEsteemMessage sem = SelfEsteemMessage.findBySortOrder((int)(resetCount % totalMessages))
+        String selfEsteemMessage = sem?.message ?: "You are awesome!"
 
         // Determine recipients: activated=true always, activated=false only if kudos >= 1
         List<User> allUsers = User.list()
