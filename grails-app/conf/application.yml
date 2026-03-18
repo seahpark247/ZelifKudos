@@ -23,7 +23,7 @@ spring:
     session:
         store-type: jdbc
         jdbc:
-            initialize-schema: always
+            initialize-schema: never
     jmx:
         unique-names: true
     main:
