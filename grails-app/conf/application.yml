@@ -23,7 +23,7 @@ spring:
     session:
         store-type: jdbc
         jdbc:
-            initialize-schema: always
+            initialize-schema: never
     jmx:
         unique-names: true
     main:
@@ -61,6 +61,10 @@ environments:
                     exposure:
                         include: '*'
     production:
+        spring:
+            session:
+                jdbc:
+                    initialize-schema: never
         management:
             endpoints:
                 enabled-by-default: false
