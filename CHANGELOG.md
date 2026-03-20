@@ -4,100 +4,103 @@ All notable changes to ZelifKudos will be documented in this file.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.3] - 2026-03-20
+
+### Added
+- show client local time.
+
+### Changed
+- update no Kudos week email text.
+
 ## [2.2] - 2026-03-18
 
 ### Fixed
-- remove dead code
+- remove dead code.
 
 ## [2.1] - 2026-03-18
 
 ### Fixed
-- Self-esteem messages now read from database instead of hardcoded list
-- Recent messages on Users page limited to 3 (was 5), removed "and N more..." overflow
-- Messages section hidden when no messages exist
-- Date column no longer gets squished by long messages in History and My Kudos pages
-- Empty white box no longer shows when user has kudos but no messages
+- Store self-esteem messages in database.
+- Limit recent messages on Users page to 3 (was 5), remove "and N more...".
+- Hide messages section when there are none.
+- Hide empty white box when user has kudos but no messages for better UX.
+- Fix date column getting squished by long messages in History and My Kudos.
 
 ### Changed
-- My Kudos page label: "received" → "total" for clarity
-- "Send kudos to climb the ranks!" now on the same line as Reset button
-- Message bullets changed to Windows 98 style (▪) with single-line truncation
-- My Kudos sender display: "Someone sent you kudos" → "Anonymous"
+- Rename My Kudos label: "received" → "total".
+- Move "Send kudos to climb the ranks!" to same line as Reset button.
+- Use Windows 98 style bullet (▪) with single-line truncation for messages.
+- Change My Kudos sender from "Someone sent you kudos" to "Anonymous".
 
 ## [2.0] - 2026-03-18
 
 ### Added
-- **My Kudos page**: View all kudos you've received (all time) with pagination and reset dividers
-- **Recent messages on Users page**: Shows up to 5 recent kudos messages, with "and N more..." for overflow
-- **"Send kudos to climb the ranks!"** subtitle on Employee Roster
-- **Current user row highlight**: Your row is highlighted in yellow for quick rank identification
-- **Weekly email service** (`WeeklyEmailService`): Scheduled email infrastructure with `@EnableScheduling`
-- Top receivers query and per-user kudos count/message retrieval in `KudosService`
+- Add My Kudos page: see all kudos you've received with pagination and reset dividers.
+- Show recent messages preview on Users page (up to 5).
+- Add "Send kudos to climb the ranks!" subtitle on Employee Roster.
+- Highlight your row in yellow on the list.
+- Set up weekly email service.
+- Add top receivers lookup and per-user kudos count/messages.
 
 ### Changed
-- Menu renamed: **Kudos → History** | added **My Kudos** tab
-- `KudosReset.resetBy` now nullable to support system/automated resets
-- Version bumped to 2.0
+- Rename menu: Kudos → History, add My Kudos tab.
+- Allow reset to happen automatically (not just by admin).
+- Bump version to 2.0.
 
 ## [1.5] - 2026-03-17
 
 ### Added
-- Kudos count notification for logged-in users ("You received N kudos this week!")
-- Login session persistence to database
-- Direct login link support for better UX
+- Show "You received N kudos this week!" notification on login.
+- Save login session to database (survives server restart).
+- Support direct login link.
 
 ### Changed
-- User list sorted by total kudos sent (most active users first)
-- Flash messages now use distinct icons by severity (`i` info, `!` warning, `✕` error)
-- Disabled automatic schema updates (`dbCreate: none`) in production for safety
-- Removed admin auto-detection logic; admin is now managed via database seeding
+- Sort user list by most kudos sent.
+- Show different icons for info, warning, and error messages.
+- Disable automatic database changes in production.
+- Set admin in database instead of auto-detecting.
 
 ### Refactored
-- Moved `KudosLimitException` to `src/main/groovy` to prevent service bean scanning
-- Changed `KudosLimitException` to checked exception to avoid unnecessary transaction rollback
-- Made `checkLimit` method private
-- Renamed `resetAllKudos` to `markKudosReset` to reflect actual behavior
-- Consolidated user validation into `AuthInterceptor` to eliminate duplicate null checks
-- Removed unused Bootstrap, Bootstrap Icons, and grails CSS imports
-- Removed auto-generated test stubs with no real test logic
+- Clean up error handling code.
+- Combine duplicate login checks into one place.
+- Remove unused CSS and empty test files.
 
 ## [1.4] - 2026-03-17
 
 ### Added
-- User `activated` field to track first login status
-- Users seeded via database with `activated = false` until first login
-- `KudosLimitException` for structured rate limit error handling
+- Track whether user has logged in before (activated status).
+- Show better error when hitting kudos send limit.
 
 ## [1.3] - 2026-03-16
 
 ### Added
-- Optional message when sending kudos
-- Rate limiting: 5 kudos per person per day with 10-minute cooldown
-- Active button styling
+- Add optional message when sending kudos.
+- Limit to 5 kudos per person per day with 10-minute cooldown.
+- Add active button styling.
 
 ### Changed
-- Extended login session to 30 days
-- Simplified login flow: removed login success page, direct redirect to user list
+- Extend login session to 30 days.
+- Go straight to user list after login (remove success page).
 
 ## [1.2] - 2026-03-14
 
 ### Fixed
-- Additional user name capitalization fix
+- Fix name capitalization.
 
 ## [1.1] - 2026-03-14
 
 ### Changed
-- Restricted kudos count visibility to admins only
-- Updated admin user list
-- Capitalized user names in views
+- Show kudos counts to admins only.
+- Update admin user list.
+- Capitalize user names.
 
 ## [1.0] - 2026-03-13
 
 ### Added
-- Initial release
-- Email-based magic link authentication (restricted to `@zelifcam.net`)
-- Send kudos to coworkers
-- Admin panel with kudos reset functionality
-- Windows 98 retro theme UI
-- PostgreSQL 16 database with Docker Compose
-- Deployed on Oracle Cloud VM
+- Initial release.
+- Add email magic link login (@zelifcam.net only).
+- Send kudos to coworkers.
+- Add admin panel with kudos reset.
+- Use Windows 98 retro theme.
+- Set up PostgreSQL 16 with Docker Compose.
+- Deploy on Oracle Cloud VM.
