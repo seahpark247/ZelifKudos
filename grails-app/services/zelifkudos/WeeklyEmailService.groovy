@@ -179,8 +179,8 @@ class WeeklyEmailService {
             // No kudos this week
             sb.append("""
     <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 16px; margin: 16px 0; text-align: center;">
-        <p style="color: #888;">No kudos were sent this week.</p>
-        <p style="color: #888;">Send some love next week!</p>
+        <p style="color: #888;">It was a quiet week for kudos...</p>
+        <p style="color: #888;">Maybe next week!</p>
     </div>
 """)
         }
