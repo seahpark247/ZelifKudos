@@ -16,12 +16,12 @@
                 <g:each in="${resetDates}" var="rd">
                     <g:if test="${i > 0 && kudosList[i-1].dateCreated > rd && k.dateCreated <= rd}">
                         <div class="win-reset-divider">
-                            <span>&#9632; RESET — <g:formatDate date="${rd}" format="yyyy-MM-dd HH:mm"/> &#9632;</span>
+                            <span>&#9632; RESET — <span data-utc="${rd.time}"></span> &#9632;</span>
                         </div>
                     </g:if>
                     <g:if test="${i == 0 && k.dateCreated <= rd}">
                         <div class="win-reset-divider">
-                            <span>&#9632; RESET — <g:formatDate date="${rd}" format="yyyy-MM-dd HH:mm"/> &#9632;</span>
+                            <span>&#9632; RESET — <span data-utc="${rd.time}"></span> &#9632;</span>
                         </div>
                     </g:if>
                 </g:each>
@@ -31,8 +31,7 @@
                     <g:if test="${k.message}">
                         <span class="win-log-message">"${k.message.encodeAsHTML()}"</span>
                     </g:if>
-                    <span class="win-log-date">
-                        <g:formatDate date="${k.dateCreated}" format="yyyy-MM-dd HH:mm"/>
+                    <span class="win-log-date" data-utc="${k.dateCreated.time}">
                     </span>
                 </div>
             </g:each>

@@ -49,6 +49,16 @@
     }
     updateClock();
     setInterval(updateClock, 30000);
+
+    document.querySelectorAll('[data-utc]').forEach(function(el) {
+        var d = new Date(parseInt(el.getAttribute('data-utc')));
+        var yyyy = d.getFullYear();
+        var mm = String(d.getMonth() + 1).padStart(2, '0');
+        var dd = String(d.getDate()).padStart(2, '0');
+        var hh = String(d.getHours()).padStart(2, '0');
+        var min = String(d.getMinutes()).padStart(2, '0');
+        el.textContent = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + min;
+    });
 </script>
 
 <div id="spinner" style="display:none;">Loading...</div>
