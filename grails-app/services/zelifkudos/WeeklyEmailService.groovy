@@ -5,7 +5,6 @@ import grails.gorm.transactions.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
-import org.springframework.scheduling.annotation.Scheduled
 import groovy.util.logging.Slf4j
 
 @Slf4j
@@ -18,7 +17,6 @@ class WeeklyEmailService {
     GrailsApplication grailsApplication
     KudosService kudosService
 
-    @Scheduled(cron = "0 0 18 ? * FRI", zone = "America/Chicago")
     void sendWeeklyEmails() {
         log.info("Starting weekly kudos email job")
 

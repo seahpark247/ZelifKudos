@@ -28,6 +28,9 @@ repositories {
     maven {
         url = 'https://repo.grails.org/grails/restricted'
     }
+    maven {
+        url = 'https://repo.grails.org/grails/core'
+    }
 }
 
 dependencies {
@@ -54,6 +57,8 @@ dependencies {
     implementation "org.apache.grails:grails-gsp"
     implementation "org.apache.groovy:groovy-dateutil"
     implementation "org.springframework.boot:spring-boot-starter-mail"
+    implementation 'org.grails.plugins:quartz:2.0.13'
+    implementation 'org.quartz-scheduler:quartz:2.3.2'
     implementation "org.springframework.session:spring-session-jdbc"
     integrationTestImplementation testFixtures("org.apache.grails:grails-geb")
     profile "org.apache.grails.profiles:web"
