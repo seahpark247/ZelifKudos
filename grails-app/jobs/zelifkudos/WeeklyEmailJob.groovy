@@ -8,8 +8,8 @@ class WeeklyEmailJob {
     WeeklyEmailService weeklyEmailService
 
     static triggers = {
-        // Every Friday at 11:50 PM Central Time
-        cron name: 'weeklyEmailTrigger', cronExpression: "0 50 23 ? * FRI", timeZone: TimeZone.getTimeZone('America/Chicago')
+        // Every Friday at 6:00 PM Central Time
+        cron name: 'weeklyEmailTrigger', cronExpression: "0 0 18 ? * FRI", timeZone: TimeZone.getTimeZone('America/Chicago')
     }
 
     def execute() {
