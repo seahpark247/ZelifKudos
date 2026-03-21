@@ -8,6 +8,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - show client local time.
+- secured URL as using https.
 
 ### Changed
 - update no Kudos week email text.
