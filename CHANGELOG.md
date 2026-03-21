@@ -11,6 +11,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 - update no Kudos week email text.
+- update email sending schedule job using Quartz plugin.
 
 ## [2.2] - 2026-03-18
 
