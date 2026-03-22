@@ -58,7 +58,10 @@ class KudosService {
     }
 
     Map<Long, Integer> countSentForAllUsers() {
-        List results = Kudos.executeQuery("select k.sender.id, count(k) from Kudos k group by k.sender.id")
+        Date lastReset = getLastResetDate()
+        List results = lastReset
+            ? Kudos.executeQuery("select k.sender.id, count(k) from Kudos k where k.dateCreated > :reset group by k.sender.id", [reset: lastReset])
+            : Kudos.executeQuery("select k.sender.id, count(k) from Kudos k group by k.sender.id")
         results.collectEntries { [(it[0]): it[1] as int] }
     }
 
