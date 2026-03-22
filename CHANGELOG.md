@@ -4,6 +4,11 @@ All notable changes to ZelifKudos will be documented in this file.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.4] - 2026-03-22
+
+### Added
+- add automatic reset feature of user list sorting.
+
 ## [2.3] - 2026-03-20
 
 ### Added
