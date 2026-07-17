@@ -10,6 +10,7 @@ Here's to a team that lifts each other up. Let's keep it going.
 
 With love,
 Seah
+
 <img width="1470" height="835" alt="Screenshot 2026-03-28 at 7 20 23 PM" src="https://github.com/user-attachments/assets/e03c2e4e-4730-4333-9066-7ecd4d9758d8" />
 <details>
 <summary>Screenshots</summary>
