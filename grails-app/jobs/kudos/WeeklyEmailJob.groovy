@@ -14,7 +14,7 @@ class WeeklyEmailJob {
         cron name: 'weeklyEmailTrigger',
              cronExpression: Holders.config.getProperty('app.schedule.weeklyEmailCron', String, '0 0 18 ? * FRI'),
              timeZone: TimeZone.getTimeZone(
-                 Holders.config.getProperty('app.schedule.timeZone', String, 'America/Detroit'))
+                 Holders.config.getProperty('app.schedule.timeZone', String, 'UTC'))
     }
 
     def execute() {

@@ -21,9 +21,9 @@ app:
         cooldownMs: ${CHAT_COOLDOWN_MS:3000}
         duplicateWindowMs: ${CHAT_DUPLICATE_WINDOW_MS:10000}
     schedule:
-        # IANA zone for both cron jobs. Michigan is Eastern time; the Upper
-        # Peninsula's western counties would be America/Menominee instead.
-        timeZone: ${APP_TIMEZONE:America/Detroit}
+        # IANA zone for both cron jobs, e.g. America/New_York. Defaults to UTC so
+        # an unset deployment runs on an absolute clock rather than guessing.
+        timeZone: ${APP_TIMEZONE:UTC}
         # Friday 18:00, and midnight, in the zone above.
         weeklyEmailCron: ${WEEKLY_EMAIL_CRON:0 0 18 ? * FRI}
         nicknameResetCron: ${NICKNAME_RESET_CRON:0 0 0 * * ?}

@@ -14,7 +14,7 @@ class DailyNicknameResetJob {
         cron name: 'dailyNicknameResetTrigger',
              cronExpression: Holders.config.getProperty('app.schedule.nicknameResetCron', String, '0 0 0 * * ?'),
              timeZone: TimeZone.getTimeZone(
-                 Holders.config.getProperty('app.schedule.timeZone', String, 'America/Detroit'))
+                 Holders.config.getProperty('app.schedule.timeZone', String, 'UTC'))
     }
 
     def execute() {
