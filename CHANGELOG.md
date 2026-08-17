@@ -10,38 +10,49 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 5. Fixed
 6. Security
 
+## [4.2] - 2026-08-17
+
+### Added
+- Add badges: nine collectible badges on their own page, locked ones greyed out.
+- Add `COFOUNDER_EMAILS` to assign the Cofounder badge.
+
+### Fixed
+- Reject path traversal in the PWA icon route.
+
 ## [4.1] - 2026-08-17
 
 ### Removed
-- Remove the Water Cooler chat: room, WebSocket transport, animal nicknames and the nightly nickname reset job. The team already lives in Teams, so a second chat with no notifications was never going to reach the critical mass a chat needs, and it carried the largest share of the code for the smallest return.
-- Remove `CHAT_COOLDOWN_MS`, `CHAT_DUPLICATE_WINDOW_MS` and `NICKNAME_RESET_CRON`.
-- Drop the jsdelivr CDN dependency that came with SockJS and STOMP; the app no longer loads anything from a third-party host.
+- Remove the Water Cooler chat, animal nicknames, and the nightly nickname reset job.
+- Remove `CHAT_COOLDOWN_MS`, `CHAT_DUPLICATE_WINDOW_MS`, and `NICKNAME_RESET_CRON`.
+- Drop the SockJS and STOMP CDN dependency.
 
 ### Changed
-- Stop the weekly and manual kudos resets clearing chat history, which no longer exists.
+- Make the kudos message and status fields resizable.
 
 ## [4.0] - 2026-08-17
 
 ### Added
-- Add Liquibase baseline for the five tables that predated Liquibase adoption (`app_user`, `kudos`, `kudos_reset`, `login_token`, `self_esteem_message`). A fresh database now builds its whole schema.
-- Add Liquibase changeset for the Spring Session tables, which `initialize-schema: never` never created.
-- Add `APP_NAME`, `COMPANY_EMAIL_DOMAIN`, `SUPER_ADMIN_EMAIL`, `SERVER_URL`, and `SERVER_PORT` environment variables.
-- Add an `<app:name/>` tag so the product name lives in one place instead of being spelled out across nine views, the manifest and two email templates.
-- Add `run.sh`, which exports `.env` before starting the app (Spring Boot does not read `.env` itself).
+- Add Liquibase baseline so an empty database builds its whole schema.
+- Add Liquibase changeset for the Spring Session tables.
+- Add `APP_NAME`, `APP_TIMEZONE`, `COMPANY_EMAIL_DOMAIN`, `SUPER_ADMIN_EMAIL`, `SERVER_URL`, and `SERVER_PORT`.
+- Add an `<app:name/>` tag so the product name lives in one place.
+- Add `run.sh`, `serve.sh`, and a systemd unit.
 
 ### Changed
 - Rename the Groovy package to `kudos`.
-- Read the allowed login email domain from config instead of hardcoding it.
-- Read the admin address from config instead of hardcoding it.
-- Read the production `serverURL` from `SERVER_URL` instead of hardcoding a host.
 - Replace the PWA and favicon icons.
-- Run the baseline before 2.5 in `changelog-master`, so the `feeling` → `app_user` foreign key actually applies.
-- Rewrite README: document every environment variable and how to bootstrap the first admin.
+- Default the schedule timezone to UTC.
+- Move the app to `SERVER_PORT` (default 7777).
 
 ### Fixed
-- Refuse login outright when no email domain is configured, instead of silently degrading to existing-users-only.
-- Stop the weekly email footer linking to a hardcoded host; it now uses `serverURL`, and is omitted when that is unset.
-- Serve the app on `SERVER_PORT` (default 7777) instead of hardcoded 8080, so it no longer fights other projects for the port.
+- Fix Spring Session JDBC never engaging, which logged everyone out on every restart.
+- Fix the waiting page spinning forever on a magic link that could never verify.
+- Fix the weekly email footer linking to a hardcoded host.
+- Fix the root logger hiding every log line the app writes.
+- Fix the login email being sent inside the request, costing 3.2s per attempt.
+- Fix scheduled jobs running an hour off from the intended timezone.
+- Fix case-sensitive config comparisons failing silently on mixed case.
+- Refuse login outright when no email domain is configured.
 
 ## [3.4] - 2026-05-01
 
