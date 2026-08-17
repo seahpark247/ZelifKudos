@@ -11,10 +11,9 @@ class BootStrap {
     def init = {
         // Log the resolved schedule so a wrong timezone is caught at boot rather
         // than a week later when the email lands an hour off.
-        log.info("Schedule: timeZone={} weeklyEmail='{}' nicknameReset='{}'",
+        log.info("Schedule: timeZone={} weeklyEmail='{}'",
                  grailsApplication.config.getProperty('app.schedule.timeZone'),
-                 grailsApplication.config.getProperty('app.schedule.weeklyEmailCron'),
-                 grailsApplication.config.getProperty('app.schedule.nicknameResetCron'))
+                 grailsApplication.config.getProperty('app.schedule.weeklyEmailCron'))
 
         LoginToken.withNewSession {
             LoginToken.withTransaction {

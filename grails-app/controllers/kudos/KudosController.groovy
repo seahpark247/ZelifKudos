@@ -5,7 +5,6 @@ class KudosController {
     static allowedMethods = [send: 'POST', reset: 'POST']
 
     KudosService kudosService
-    ChatService chatService
 
     def send() {
         Long receiverId = params.long('id')
@@ -40,7 +39,6 @@ class KudosController {
         }
 
         kudosService.markKudosReset(currentUser)
-        chatService.deleteAllMessages()
         flash.message = "All kudos have been reset."
         redirect(controller: "user", action: "list")
     }

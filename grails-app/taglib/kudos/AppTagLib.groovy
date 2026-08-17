@@ -20,16 +20,4 @@ class AppTagLib {
         out << (grailsApplication.config.getProperty('app.displayName') ?: 'Kudos')
     }
 
-    /**
-     * Chat rate limits, emitted as plain integers so the browser enforces the
-     * same windows the WebSocket controller does. Without this the client sends
-     * into a guard it cannot see and the user's text disappears.
-     */
-    def chatCooldownMs = { attrs ->
-        out << grailsApplication.config.getProperty('app.chat.cooldownMs', Integer, 3000)
-    }
-
-    def chatDuplicateWindowMs = { attrs ->
-        out << grailsApplication.config.getProperty('app.chat.duplicateWindowMs', Integer, 10000)
-    }
 }

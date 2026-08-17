@@ -16,7 +16,6 @@ class WeeklyEmailService {
 
     GrailsApplication grailsApplication
     KudosService kudosService
-    ChatService chatService
 
     void sendWeeklyEmails() {
         log.info("Starting weekly kudos email job")
@@ -86,7 +85,6 @@ class WeeklyEmailService {
 
         // All emails sent successfully — reset
         kudosService.markKudosReset(null)
-        chatService.deleteAllMessages()
         log.info("Weekly kudos reset complete (system)")
     }
 

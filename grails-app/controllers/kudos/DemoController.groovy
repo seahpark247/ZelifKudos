@@ -49,44 +49,19 @@ class DemoController {
         [-2L, -3L, null, 3600],
     ]
 
-    static final List<Map> SEED_CHAT = [
-        [content: 'morning ☕', nickname: 'Koala', color: '#A0E7A0', minutesAgo: 240],
-        [content: 'hey team!', nickname: 'Panda', color: '#7BC8F6', minutesAgo: 220],
-        [content: 'standup in 10', nickname: 'Koala', color: '#A0E7A0', minutesAgo: 215],
-        [content: 'on it 👍', nickname: 'Otter', color: '#F4A6A6', minutesAgo: 213],
-        [content: 'who broke main again 😅', nickname: 'Fox', color: '#E8C547', minutesAgo: 180],
-        [content: 'not me this time', nickname: 'Panda', color: '#7BC8F6', minutesAgo: 178],
-        [content: 'PR up: #142', nickname: 'Otter', color: '#F4A6A6', minutesAgo: 120],
-        [content: 'reviewing now', nickname: 'Fox', color: '#E8C547', minutesAgo: 110],
-        [content: 'lunch in 5?', nickname: 'Koala', color: '#A0E7A0', minutesAgo: 60],
-        [content: 'sounds good', nickname: 'Panda', color: '#7BC8F6', minutesAgo: 58],
-        [content: 'taco truck or pho?', nickname: 'Otter', color: '#F4A6A6', minutesAgo: 56],
-        [content: 'taco truck always', nickname: 'Fox', color: '#E8C547', minutesAgo: 54],
-        [content: 'deploy went green 🎉', nickname: 'Panda', color: '#7BC8F6', minutesAgo: 15],
-        [content: 'nice', nickname: 'Otter', color: '#F4A6A6', minutesAgo: 12],
-    ]
 
-    static final List<Map> DEMO_NICKNAMES = [
-        [name: 'Rabbit',  color: '#F08A5D'],
-        [name: 'Penguin', color: '#4D96FF'],
-        [name: 'Owl',     color: '#9D75CB'],
-        [name: 'Turtle',  color: '#6BCB77'],
-    ]
 
     def index() { redirect(action: 'list') }
 
     private Map getDemoState() {
         Map state = session.demoState as Map
-        if (!state || !state.myNickname) {
-            Map nick = DEMO_NICKNAMES[new Random().nextInt(DEMO_NICKNAMES.size())]
+        if (!state) {
             state = [
-                kudosCountDelta: state?.kudosCountDelta ?: [:],
-                sentCountDelta: state?.sentCountDelta ?: [:],
-                feelingOverrides: state?.feelingOverrides ?: [:],
-                sentKudos: state?.sentKudos ?: [],
-                resetAts: state?.resetAts ?: [],
-                myNickname: nick.name,
-                myColor: nick.color,
+                kudosCountDelta: [:],
+                sentCountDelta: [:],
+                feelingOverrides: [:],
+                sentKudos: [],
+                resetAts: [],
             ]
             session.demoState = state
         }
@@ -177,9 +152,6 @@ class DemoController {
             recentMessages: recentMessages,
             feelings: feelings,
             isDemo: true,
-            demoChatMessages: SEED_CHAT,
-            demoNickname: demoState.myNickname,
-            demoColor: demoState.myColor,
         ])
     }
 
@@ -202,9 +174,6 @@ class DemoController {
             currentPage: currentPage,
             currentUser: [name: 'you', admin: true],
             isDemo: true,
-            demoChatMessages: SEED_CHAT,
-            demoNickname: demoState.myNickname,
-            demoColor: demoState.myColor,
         ])
     }
 
@@ -226,9 +195,6 @@ class DemoController {
             totalPages: totalPages,
             currentPage: currentPage,
             isDemo: true,
-            demoChatMessages: SEED_CHAT,
-            demoNickname: demoState.myNickname,
-            demoColor: demoState.myColor,
         ])
     }
 

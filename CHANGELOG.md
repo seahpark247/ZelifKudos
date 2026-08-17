@@ -10,6 +10,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 5. Fixed
 6. Security
 
+## [4.1] - 2026-08-17
+
+### Removed
+- Remove the Water Cooler chat: room, WebSocket transport, animal nicknames and the nightly nickname reset job. The team already lives in Teams, so a second chat with no notifications was never going to reach the critical mass a chat needs, and it carried the largest share of the code for the smallest return.
+- Remove `CHAT_COOLDOWN_MS`, `CHAT_DUPLICATE_WINDOW_MS` and `NICKNAME_RESET_CRON`.
+- Drop the jsdelivr CDN dependency that came with SockJS and STOMP; the app no longer loads anything from a third-party host.
+
+### Changed
+- Stop the weekly and manual kudos resets clearing chat history, which no longer exists.
+
 ## [4.0] - 2026-08-17
 
 ### Added

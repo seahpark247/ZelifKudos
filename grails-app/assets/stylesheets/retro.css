@@ -694,85 +694,8 @@ body {
     position: relative;
 }
 
-.win-desktop-layout > .win-window:not(.win-chat-window) {
+.win-desktop-layout > .win-window {
     margin: 0;
-}
-
-/* --- CHAT WINDOW --- */
-.win-chat-window {
-    position: fixed;
-    /* Right-hand gutter beside the centred 640px column. Dragging overrides this
-       with inline left/top, and the mobile block resets both. */
-    right: 8px;
-    top: 20px;
-    width: calc((100vw - 640px) / 2 - 22px);
-    height: 460px;
-    min-width: 200px;
-    min-height: 200px;
-    max-width: 90vw;
-    max-height: calc(100vh - 60px);
-    z-index: 100;
-    margin: 0;
-    resize: both;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.win-chat-window .win-titlebar {
-    background: linear-gradient(90deg, #808080, #a0a0a0);
-}
-
-.win-chat-body {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    background: #1a1a2e;
-}
-
-.win-chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 6px;
-    font-size: 12px;
-    min-height: 0;
-    background: #0d0d1a;
-    color: #d0d0d0;
-    border: 2px solid;
-    border-color: #000000 #333333 #333333 #000000;
-    margin: 4px;
-}
-
-.win-chat-msg {
-    padding: 2px 0;
-    word-break: break-word;
-}
-
-.win-chat-time {
-    color: #666699;
-    font-size: 11px;
-}
-
-.win-chat-nick {
-    color: #00cc99;
-    font-weight: bold;
-    font-size: 12px;
-}
-
-.win-chat-input-area {
-    display: flex;
-    gap: 2px;
-    padding: 4px;
-    border-top: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    background: #c0c0c0;
-}
-
-.win-chat-input-area input {
-    flex: 1;
-    font-size: 12px;
 }
 
 .win-titlebar-btn {
@@ -794,34 +717,7 @@ body {
     border-color: #808080 #ffffff #ffffff #808080;
 }
 
-/* --- NARROW: chat on top ---
-   The floating chat sits in the gutter beside the 640px column and cannot go
-   below min-width: 200px, so it overlaps the roster once the gutter is thinner
-   than that — i.e. below (640 + 2*222) = 1084px. Stack instead until there is
-   real room. Keep this in sync with the innerWidth guards in the drag scripts. */
-@media (max-width: 1100px) {
-    .win-chat-window {
-        position: static !important;
-        width: 100% !important;
-        max-width: 640px;
-        height: auto !important;
-        left: auto !important;
-        top: auto !important;
-        right: auto !important;
-        margin-bottom: 8px;
-        resize: none;
-        overflow: visible;
-    }
-
-    .win-chat-window .win-titlebar {
-        cursor: default !important;
-    }
-
-    .win-chat-body {
-        height: 200px;
-        flex: none;
-    }
-
+@media (max-width: 768px) {
     .win-desktop-layout {
         margin: 10px auto;
     }

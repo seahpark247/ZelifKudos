@@ -14,19 +14,12 @@ app:
     displayName: ${APP_NAME:Kudos}
     # Only addresses on this domain may request a magic link.
     emailDomain: ${COMPANY_EMAIL_DOMAIN:}
-    chat:
-        # Minimum gap between two accepted messages from one connection, and how
-        # long an identical repeat stays blocked. The client reads both values so
-        # it can refuse early instead of dropping text the server would discard.
-        cooldownMs: ${CHAT_COOLDOWN_MS:3000}
-        duplicateWindowMs: ${CHAT_DUPLICATE_WINDOW_MS:10000}
     schedule:
         # IANA zone for both cron jobs, e.g. America/New_York. Defaults to UTC so
         # an unset deployment runs on an absolute clock rather than guessing.
         timeZone: ${APP_TIMEZONE:UTC}
-        # Friday 18:00, and midnight, in the zone above.
+        # Friday 18:00 in the zone above.
         weeklyEmailCron: ${WEEKLY_EMAIL_CRON:0 0 18 ? * FRI}
-        nicknameResetCron: ${NICKNAME_RESET_CRON:0 0 0 * * ?}
     # The one account allowed to toggle its own admin flag (bootstrap escape hatch).
     superAdminEmail: ${SUPER_ADMIN_EMAIL:}
 info:

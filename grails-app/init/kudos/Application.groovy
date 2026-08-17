@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync
 
 @CompileStatic
 @EnableAsync
-@Import([WebSocketConfig, SessionConfig])
+@Import(SessionConfig)
 class Application extends GrailsAutoConfiguration {
     static void main(String[] args) {
         GrailsApp.run(Application, args)

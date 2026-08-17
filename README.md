@@ -22,9 +22,6 @@ step.
 **Kudos**: Pick a teammate, write an optional message, send. There's a daily
 limit (5 per person) and a cooldown (10 min) to keep things genuine.
 
-**Chat**: Real-time team chat via WebSocket. Messages are rate-limited (3-second
-cooldown, duplicate blocking) to prevent spam.
-
 **Weekly Email**: Every Friday at 6 PM, a Quartz job sends each person an HTML
 email with:
 - Top 3 stars of the week (dense ranking, ties share the same spot)
@@ -43,16 +40,15 @@ Fridays, or an admin manually). Full audit trail.
 ┌─────────────┐     ┌──────────────┐     ┌─────────────┐
 │   Browser   │────>│  Controller  │────>│   Service   │
 │  (GSP+JS)   │<────│ + Interceptor│<────│ (@Transact) │
-└──────┬──────┘     └──────────────┘     └──────┬──────┘
-       │                                        │
-       │ WebSocket                    GORM/HQL  │
-       │ (SockJS+STOMP)                         │
-       v                                        v
-┌─────────────┐                        ┌─────────────┐
-│  ChatWS     │──────────────────────> │ PostgreSQL  │
-│  Controller │     ChatService        │ + Liquibase │
-└─────────────┘                        │ + Session   │
-                                       └─────────────┘
+└─────────────┘     └──────────────┘     └──────┬──────┘
+                                                │
+                                      GORM/HQL  │
+                                                v
+                                        ┌─────────────┐
+                                        │ PostgreSQL  │
+                                        │ + Liquibase │
+                                        │ + Session   │
+                                        └─────────────┘
        ┌─────────────┐
        │   Quartz    │──> WeeklyEmailService ──> SMTP
        │ (FRI 18:00) │
@@ -61,12 +57,11 @@ Fridays, or an admin manually). Full audit trail.
 
 ## Tech Stack
 
-Grails 7 (Groovy) on Spring Boot, PostgreSQL 16, WebSocket (SockJS + STOMP) for
-real-time chat, Quartz for scheduled jobs, Liquibase for DB migrations, Spring
-Session JDBC so sessions survive deploys.
+Grails 7 (Groovy) on Spring Boot, PostgreSQL 16, Quartz for scheduled jobs,
+Liquibase for DB migrations, Spring Session JDBC so sessions survive deploys.
 
 Deployable on a single small VM via Docker. The UI is a Windows 98 retro theme,
-800+ lines of pure CSS. Draggable chat window, mobile-responsive.
+800+ lines of pure CSS, mobile-responsive.
 
 ## Configuration
 
@@ -111,14 +106,14 @@ Use `run.sh` rather than `./gradlew bootRun` directly: Spring Boot resolves
 
 ```
 grails-app/
-├── controllers/    # Auth, kudos, chat, users (thin, logic lives in services)
-├── domain/         # 7 entities: User, Kudos, ChatMessage, Feeling, LoginToken, ...
-├── services/       # All business logic: kudos, login, email, chat, feeling
+├── controllers/    # Auth, kudos, users (thin, logic lives in services)
+├── domain/         # User, Kudos, KudosReset, Feeling, LoginToken, SelfEsteemMessage
+├── services/       # All business logic: kudos, login, email, feeling
 ├── jobs/           # Quartz jobs (weekly email + reset)
 ├── views/          # Server-rendered GSP templates
 └── conf/           # App config, interceptors
 
-src/main/groovy/    # WebSocket config, chat controller, auth interceptor
+src/main/groovy/    # Session configuration
 src/main/resources/ # Liquibase DB changelogs
 ```
 
