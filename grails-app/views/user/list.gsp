@@ -80,8 +80,8 @@
                             <span class="win-feeling win-feeling-mine" onclick="editFeeling(this)" title="${feelings[u.id].encodeAsHTML()}"><span class="win-feeling-text">${feelings[u.id].encodeAsHTML()}</span></span>
                         </g:if>
                         <g:form controller="${isDemo ? 'demo' : 'user'}" action="updateFeeling" method="POST" class="win-feeling-form" style="${feelings[u.id] ? 'display:none' : ''}">
-                            <input type="text" name="feeling" placeholder="What's on your mind?" maxlength="50" class="win-feeling-input"
-                                   value="${(feelings[u.id] ?: '').encodeAsHTML()}" />
+                            <textarea name="feeling" placeholder="What's on your mind?" maxlength="50" rows="1" class="win-feeling-input"
+                                      onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();this.form.submit();}">${(feelings[u.id] ?: '').encodeAsHTML()}</textarea>
                             <button type="submit" class="win-btn win-btn-sm">Set</button>
                         </g:form>
                     </g:if>

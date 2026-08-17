@@ -666,7 +666,8 @@ body {
 
 .win-feeling-form {
     display: inline-flex;
-    align-items: center;
+    /* Keep Set level with the field's first line once it has been dragged taller. */
+    align-items: flex-start;
     gap: 4px;
     margin-left: 6px;
     vertical-align: middle;
@@ -680,6 +681,14 @@ body {
     border-color: #808080 #ffffff #ffffff #808080;
     background: #ffffff;
     width: 140px;
+    /* A <textarea> so the bottom-right handle drags it taller, like the kudos
+       message field. Width stays fixed so the row keeps its shape. */
+    resize: vertical;
+    min-height: 18px;
+    height: 20px;
+    line-height: 14px;
+    overflow-x: hidden;
+    vertical-align: middle;
 }
 
 .win-listview li:hover .win-feeling {
