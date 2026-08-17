@@ -5,6 +5,7 @@ class KudosController {
     static allowedMethods = [send: 'POST', reset: 'POST']
 
     KudosService kudosService
+    BadgeService badgeService
 
     def send() {
         Long receiverId = params.long('id')
@@ -16,6 +17,9 @@ class KudosController {
                 flash.error = "Invalid user"
             } else {
                 flash.message = "Kudos sent to ${kudos.receiver.name.capitalize()}!"
+                // Both sides can cross a threshold on one kudo, so check both.
+                badgeService.evaluate(kudos.sender)
+                badgeService.evaluate(kudos.receiver)
             }
         } catch (KudosLimitException e) {
             flash.warning = e.message

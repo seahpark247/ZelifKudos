@@ -1,0 +1,58 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 4.1-0-create-user-badge
+      author: seah
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: user_badge
+      changes:
+        - createTable:
+            tableName: user_badge
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: version
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  type: VARCHAR(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_created
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+        # One row per user per badge; the service relies on this to make awarding
+        # idempotent rather than checking first and racing.
+        - addUniqueConstraint:
+            tableName: user_badge
+            columnNames: user_id, code
+            constraintName: uk_user_badge
+        - addForeignKeyConstraint:
+            baseTableName: user_badge
+            baseColumnNames: user_id
+            referencedTableName: app_user
+            referencedColumnNames: id
+            constraintName: fk_user_badge_user
+        - createIndex:
+            tableName: user_badge
+            indexName: idx_user_badge_user
+            columns:
+              - column:
+                  name: user_id

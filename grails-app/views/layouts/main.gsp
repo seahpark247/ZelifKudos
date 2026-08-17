@@ -34,6 +34,7 @@
                 <a href="${createLink(controller:'user', action:'list')}" class="${controllerName == 'user' ? 'active' : ''}">Users</a>
                 <a href="${createLink(controller:'kudos', action:'list')}" class="${controllerName == 'kudos' && actionName == 'list' ? 'active' : ''}">History</a>
                 <a href="${createLink(controller:'kudos', action:'myKudos')}" class="${controllerName == 'kudos' && actionName == 'myKudos' ? 'active' : ''}">My Kudos</a>
+                <a href="${createLink(controller:'badge', action:'list')}" class="${controllerName == 'badge' ? 'active' : ''}">Badges</a>
             </g:else>
         </div>
         <div class="win-body">

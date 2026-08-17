@@ -13,7 +13,7 @@ buildscript {
     }
 }
 
-version = "4.1"
+version = "4.2"
 group = "kudos"
 
 apply plugin:"eclipse"

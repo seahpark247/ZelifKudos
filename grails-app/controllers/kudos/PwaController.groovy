@@ -27,9 +27,22 @@ class PwaController {
         response.outputStream.flush()
     }
 
+    def badge() {
+        serveImage("static/badges", params.filename)
+    }
+
     def icon() {
-        String filename = params.filename
-        def resource = new ClassPathResource("static/icons/${filename}")
+        serveImage("static/icons", params.filename)
+    }
+
+    private void serveImage(String dir, String filename) {
+        // Reject anything with a path separator: params come from the URL, and
+        // "../../application.yml" would otherwise walk out of the image folder.
+        if (!filename || filename.contains('/') || filename.contains('\\') || filename.contains('..')) {
+            render status: 400
+            return
+        }
+        def resource = new ClassPathResource("${dir}/${filename}")
         if (!resource.exists()) {
             render status: 404
             return

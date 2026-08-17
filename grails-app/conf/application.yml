@@ -22,6 +22,10 @@ app:
         weeklyEmailCron: ${WEEKLY_EMAIL_CRON:0 0 18 ? * FRI}
     # The one account allowed to toggle its own admin flag (bootstrap escape hatch).
     superAdminEmail: ${SUPER_ADMIN_EMAIL:}
+    badges:
+        # Comma-separated addresses that receive the Cofounder badge. Everything
+        # else is earned from activity; this one has to be told.
+        cofounderEmails: ${COFOUNDER_EMAILS:}
 info:
     app:
         name: '@info.app.name@'
