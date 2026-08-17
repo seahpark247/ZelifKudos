@@ -393,14 +393,10 @@ a:hover {
     border: 2px solid;
     border-color: #808080 #ffffff #ffffff #808080;
     background: #ffffff;
-    /* Takes the row's spare width rather than a fixed 120px. min-width keeps it
-       usable when a long name squeezes the row. */
-    flex: 1;
-    width: auto;
-    min-width: 80px;
-    /* It's a <textarea>: drag the bottom-right handle to grow it. Only vertical —
-       the width already follows the row, and horizontal resize would fight the
-       flex layout. */
+    width: 120px;
+    /* It's a <textarea> so the bottom-right handle can drag it taller. Width
+       stays fixed: a field that fills the row loses the compact bordered box
+       the layout is built around. */
     resize: vertical;
     min-height: 18px;
     height: 20px;
@@ -425,14 +421,9 @@ a:hover {
     margin: 0;
 }
 
-/* Only the kudos form inside the roster grows. The admin "Reset All Kudos" form
-   uses the same class but sits outside the listview and holds just a button, so
-   stretching it would only add dead space. */
+/* Keep the Kudos! button level with the field's first line when the textarea
+   has been dragged taller. */
 .win-listview .win-inline-form {
-    flex: 1;
-    min-width: 0;
-    /* Keep the Kudos! button level with the field's first line when the textarea
-       has been dragged taller. */
     align-items: flex-start;
 }
 
@@ -565,12 +556,6 @@ body {
         gap: 4px;
     }
 
-    /* The row stacks vertically here, so the main axis is vertical: flex-grow
-       would stretch the field's height. Span the cross axis instead. */
-    .win-listview .win-inline-form {
-        flex: 0 0 auto;
-        align-self: stretch;
-    }
 }
 
 /* --- PAGER --- */
