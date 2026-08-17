@@ -1,4 +1,4 @@
-import zelifkudos.ChatWebSocketController
+import kudos.ChatWebSocketController
 
 // Place your Spring DSL code here
 beans = {

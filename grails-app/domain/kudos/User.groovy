@@ -1,0 +1,18 @@
+package kudos
+
+class User {
+    String email
+    String name
+    Boolean admin = false
+    Boolean activated = false
+
+    Date dateCreated
+
+    static constraints = {
+        email unique: true
+    }
+
+    static mapping = {
+        table 'app_user'
+    }
+}

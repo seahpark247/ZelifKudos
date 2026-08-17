@@ -13,8 +13,8 @@ buildscript {
     }
 }
 
-version = "3.4"
-group = "zelifkudos"
+version = "4.0"
+group = "kudos"
 
 apply plugin:"eclipse"
 apply plugin:"idea"
