@@ -11,3 +11,12 @@ out/
 .settings
 .classpath
 .env
+# Runtime logs — they record user email addresses. systemd logs to journald
+# instead; this directory only appears when running serve.sh by hand.
+logs/
+# Private copy of the WAR that serve.sh actually executes.
+run/
+# Brand source artwork kept at the repo root for reference. Assets the app
+# actually serves live under grails-app/assets/images/ and
+# src/main/resources/static/icons/ and stay tracked.
+/logo_*
