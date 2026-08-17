@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title><g:layoutTitle default="ZelifKudos"/></title>
+    <title><g:layoutTitle default="${app.name()}"/></title>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
     <link rel="manifest" href="/manifest.json"/>
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"/>
     <meta name="theme-color" content="#c0c0c0"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-    <meta name="apple-mobile-web-app-title" content="ZelifKudos"/>
+    <meta name="apple-mobile-web-app-title" content="${app.name()}"/>
     <asset:stylesheet src="application.css"/>
     <style>
         .win-chat-msg { cursor: default; }
@@ -50,13 +50,14 @@
                     <button class="win-btn win-btn-sm" onclick="sendChatMessage()">Send</button>
                 </g:else>
             </div>
+            <div id="chatNotice" style="display:none; padding:2px 6px; font-size:11px; color:#800000;"></div>
         </div>
     </div>
     </g:if>
 
     <div class="win-window">
         <div class="win-titlebar">
-            <span class="win-titlebar-text">ZelifKudos - Employee Recognition System</span>
+            <span class="win-titlebar-text"><app:name/> - Employee Recognition System</span>
         </div>
         <div class="win-menubar">
             <g:if test="${isDemo}">
@@ -80,7 +81,7 @@
         </div>
         <div class="win-statusbar">
             <span class="win-statusbar-panel">Ready</span>
-            <span class="win-statusbar-panel" style="flex:0; white-space:nowrap;">ZelifKudos v<g:meta name="info.app.version"/></span>
+            <span class="win-statusbar-panel" style="flex:0; white-space:nowrap;"><app:name/> v<g:meta name="info.app.version"/></span>
         </div>
     </div>
 
@@ -97,11 +98,13 @@
 <script>
     function onClockClick() {
         <g:if test="${isDemo}">return;</g:if>
-        var f = document.createElement('form');
-        f.method = 'POST';
-        f.action = '/user/toggleAdmin';
-        document.body.appendChild(f);
-        f.submit();
+        // Silent unless the toggle actually happened. Anyone else — logged out, or
+        // logged in without the privilege — sees nothing at all: no reload, no
+        // flicker, no hint that the clock is clickable.
+        fetch('/user/toggleAdmin', { method: 'POST', credentials: 'same-origin' })
+            .then(function(r) { return r.json(); })
+            .then(function(res) { if (res && res.toggled) { window.location.reload(); } })
+            .catch(function() { /* not logged in: the auth redirect returns HTML */ });
     }
 
     function updateClock() {
@@ -135,7 +138,7 @@
         var isDragging = false, offsetX, offsetY;
         if (header) header.addEventListener('mousedown', function(e) {
             if (e.target.closest('.win-titlebar-btn')) return;
-            if (window.innerWidth <= 768) return;
+            if (window.innerWidth <= 1100) return;   // stacked layout: no dragging
             isDragging = true;
             var rect = win.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
@@ -242,7 +245,7 @@
 
         header.addEventListener('mousedown', function(e) {
             if (e.target.closest('.win-titlebar-btn')) return;
-            if (window.innerWidth <= 768) return;
+            if (window.innerWidth <= 1100) return;   // stacked layout: no dragging
             isDragging = true;
             var rect = win.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
@@ -313,11 +316,42 @@
         });
     }
 
+    // Mirrors of the server-side guards in ChatWebSocketController.
+    var chatCooldownMs = <app:chatCooldownMs/>;
+    var chatDuplicateWindowMs = <app:chatDuplicateWindowMs/>;
+    var lastChatSentAt = 0;
+    var lastChatText = '';
+    var chatNoticeTimer = null;
+
+    function showChatNotice(text) {
+        var el = document.getElementById('chatNotice');
+        if (!el) return;
+        el.textContent = text;
+        el.style.display = '';
+        clearTimeout(chatNoticeTimer);
+        chatNoticeTimer = setTimeout(function() { el.style.display = 'none'; }, 2500);
+    }
+
     function sendChatMessage() {
         var input = document.getElementById('chatInput');
         var text = input.value.trim();
         if (!text || !stompClient || !stompClient.connected) return;
+
+        // The server drops anything inside these windows without replying, so
+        // check here first and keep the text in the box instead of losing it.
+        var since = Date.now() - lastChatSentAt;
+        if (lastChatSentAt && since < chatCooldownMs) {
+            showChatNotice('Slow down — ' + Math.ceil((chatCooldownMs - since) / 1000) + 's to go');
+            return;
+        }
+        if (text === lastChatText && lastChatSentAt && since < chatDuplicateWindowMs) {
+            showChatNotice('You just sent that.');
+            return;
+        }
+
         stompClient.send('/app/chat.send', {}, JSON.stringify({ content: text }));
+        lastChatSentAt = Date.now();
+        lastChatText = text;
         input.value = '';
     }
 

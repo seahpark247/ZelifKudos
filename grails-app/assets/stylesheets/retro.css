@@ -1,5 +1,5 @@
 /* ===========================================
-   ZELIFKUDOS - WINDOWS 95/98 RETRO UI
+   KUDOS - WINDOWS 95/98 RETRO UI
    Chunky, boxy, nostalgic desktop aesthetic
    =========================================== */
 
@@ -393,7 +393,20 @@ a:hover {
     border: 2px solid;
     border-color: #808080 #ffffff #ffffff #808080;
     background: #ffffff;
-    width: 120px;
+    /* Takes the row's spare width rather than a fixed 120px. min-width keeps it
+       usable when a long name squeezes the row. */
+    flex: 1;
+    width: auto;
+    min-width: 80px;
+    /* It's a <textarea>: drag the bottom-right handle to grow it. Only vertical —
+       the width already follows the row, and horizontal resize would fight the
+       flex layout. */
+    resize: vertical;
+    min-height: 18px;
+    height: 20px;
+    line-height: 14px;
+    overflow-x: hidden;
+    vertical-align: middle;
 }
 
 .win-log-date {
@@ -410,6 +423,17 @@ a:hover {
     align-items: center;
     gap: 4px;
     margin: 0;
+}
+
+/* Only the kudos form inside the roster grows. The admin "Reset All Kudos" form
+   uses the same class but sits outside the listview and holds just a button, so
+   stretching it would only add dead space. */
+.win-listview .win-inline-form {
+    flex: 1;
+    min-width: 0;
+    /* Keep the Kudos! button level with the field's first line when the textarea
+       has been dragged taller. */
+    align-items: flex-start;
 }
 
 /* --- TAG LABEL --- */
@@ -539,6 +563,13 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
+    }
+
+    /* The row stacks vertically here, so the main axis is vertical: flex-grow
+       would stretch the field's height. Span the cross axis instead. */
+    .win-listview .win-inline-form {
+        flex: 0 0 auto;
+        align-self: stretch;
     }
 }
 
@@ -685,7 +716,9 @@ body {
 /* --- CHAT WINDOW --- */
 .win-chat-window {
     position: fixed;
-    left: 8px;
+    /* Right-hand gutter beside the centred 640px column. Dragging overrides this
+       with inline left/top, and the mobile block resets both. */
+    right: 8px;
     top: 20px;
     width: calc((100vw - 640px) / 2 - 22px);
     height: 460px;
@@ -776,8 +809,12 @@ body {
     border-color: #808080 #ffffff #ffffff #808080;
 }
 
-/* --- MOBILE: chat on top --- */
-@media (max-width: 768px) {
+/* --- NARROW: chat on top ---
+   The floating chat sits in the gutter beside the 640px column and cannot go
+   below min-width: 200px, so it overlaps the roster once the gutter is thinner
+   than that — i.e. below (640 + 2*222) = 1084px. Stack instead until there is
+   real room. Keep this in sync with the innerWidth guards in the drag scripts. */
+@media (max-width: 1100px) {
     .win-chat-window {
         position: static !important;
         width: 100% !important;

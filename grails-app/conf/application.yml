@@ -2,18 +2,42 @@
 grails:
     profile: web
     codegen:
-        defaultPackage: zelifkudos
+        defaultPackage: kudos
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
+app:
+    # Product name shown in page titles, the window chrome, the PWA manifest and
+    # outbound email. Falls back to "Kudos" when APP_NAME is unset.
+    displayName: ${APP_NAME:Kudos}
+    # Only addresses on this domain may request a magic link.
+    emailDomain: ${COMPANY_EMAIL_DOMAIN:}
+    chat:
+        # Minimum gap between two accepted messages from one connection, and how
+        # long an identical repeat stays blocked. The client reads both values so
+        # it can refuse early instead of dropping text the server would discard.
+        cooldownMs: ${CHAT_COOLDOWN_MS:3000}
+        duplicateWindowMs: ${CHAT_DUPLICATE_WINDOW_MS:10000}
+    schedule:
+        # IANA zone for both cron jobs. Michigan is Eastern time; the Upper
+        # Peninsula's western counties would be America/Menominee instead.
+        timeZone: ${APP_TIMEZONE:America/Detroit}
+        # Friday 18:00, and midnight, in the zone above.
+        weeklyEmailCron: ${WEEKLY_EMAIL_CRON:0 0 18 ? * FRI}
+        nicknameResetCron: ${NICKNAME_RESET_CRON:0 0 0 * * ?}
+    # The one account allowed to toggle its own admin flag (bootstrap escape hatch).
+    superAdminEmail: ${SUPER_ADMIN_EMAIL:}
 info:
     app:
         name: '@info.app.name@'
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
 server:
+    # Keep SERVER_URL's port in sync with this, or magic links will point at the
+    # wrong port.
+    port: ${SERVER_PORT:7777}
     servlet:
         session:
             timeout: 30d
@@ -37,11 +61,22 @@ spring:
             mail:
                 smtp:
                     auth: true
+                    # Port 465 speaks TLS from the first byte; 587 negotiates it
+                    # with STARTTLS. Flip these together when changing SMTP_PORT,
+                    # or the handshake fails.
+                    ssl:
+                        enable: ${SMTP_SSL:false}
                     starttls:
-                        enable: true
+                        enable: ${SMTP_STARTTLS:true}
+                    # Without timeouts a stalled SMTP server pins the request
+                    # thread indefinitely — and the magic link is the only way
+                    # into the app, so that outage is total.
+                    connectiontimeout: 10000
+                    timeout: 10000
+                    writetimeout: 10000
     liquibase:
         change-log: classpath:db/changelog/changelog-master.yaml
-        url: ${DB_URL:jdbc:postgresql://localhost:5432/zelifkudos}
+        url: ${DB_URL:jdbc:postgresql://localhost:5432/kudos}
         user: ${DB_USERNAME:}
         password: ${DB_PASSWORD:}
     groovy:
@@ -67,7 +102,7 @@ environments:
                         include: '*'
     production:
         grails:
-            serverURL: https://zelifkudos.ddnsking.com
+            serverURL: ${SERVER_URL:http://localhost:7777}
         spring:
             session:
                 jdbc:
@@ -147,13 +182,13 @@ environments:
     development:
         dataSource:
             dbCreate: none
-            url: jdbc:postgresql://localhost:5432/zelifkudos
+            url: jdbc:postgresql://localhost:5432/kudos
     test:
         dataSource:
             dbCreate: none
-            url: jdbc:postgresql://localhost:5432/zelifkudos
+            url: jdbc:postgresql://localhost:5432/kudos
     production:
         dataSource:
             dbCreate: none
-            url: ${DB_URL:jdbc:postgresql://localhost:5432/zelifkudos}
+            url: ${DB_URL:jdbc:postgresql://localhost:5432/kudos}
 

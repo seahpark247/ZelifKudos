@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>Login | ZelifKudos</title>
+    <title>Login | <app:name/></title>
 </head>
 
 <body>
@@ -11,7 +11,7 @@
     <span class="win-groupbox-title">Log In</span>
 
     <p class="win-hint">
-        Enter your ZelifCam email address.<br/>
+        Enter your company email address<g:if test="${emailDomain}"> (@${emailDomain})</g:if>.<br/>
         A login link will be sent to your inbox.
     </p>
 
@@ -39,7 +39,7 @@
     <g:form controller="login" action="sendLink" method="post">
         <div class="win-field">
             <label class="win-label">Email address:</label>
-            <g:textField name="email" required="true" placeholder="you@zelifcam.net" class="win-input"/>
+            <g:textField name="email" required="true" placeholder="${emailDomain ? 'you@' + emailDomain : 'you@company.com'}" class="win-input"/>
         </div>
         <button type="submit" class="win-btn win-btn-primary">
             Send Login Link

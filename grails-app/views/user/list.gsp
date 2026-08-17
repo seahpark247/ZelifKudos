@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>Users | ZelifKudos</title>
+    <title>Users | <app:name/></title>
     <script>
         function confirmKudos(name, formName) {
             if(confirm('Send kudos to ' + name + '?')) {
@@ -92,7 +92,8 @@
                 <g:if test="${currentUserId != u.id}">
                     <g:form controller="${isDemo ? 'demo' : 'kudos'}" action="send" method="POST" class="win-inline-form" name="kudos-form-${u.id}">
                         <input type="hidden" name="id" value="${u.id}" />
-                        <input type="text" name="message" placeholder="Why..." maxlength="200" class="win-input-sm" />
+                        <textarea name="message" placeholder="Why..." maxlength="200" rows="1" class="win-input-sm"
+                                  onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();confirmKudos('${u.name.capitalize().encodeAsJavaScript()}', 'kudos-form-${u.id}');}"></textarea>
                         <button type="button"
                                 class="win-btn win-btn-sm"
                                 onclick="confirmKudos('${u.name.capitalize().encodeAsJavaScript()}', 'kudos-form-${u.id}')">

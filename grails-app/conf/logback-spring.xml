@@ -17,6 +17,11 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
+    <!-- The app's own INFO lines (magic link target, weekly email progress,
+         reset audit) are the only operational visibility there is; ERROR-only
+         root hid all of them. -->
+    <logger name="kudos" level="INFO"/>
+
     <springProfile name="development">
         <logger name="StackTrace" level="ERROR" />
 

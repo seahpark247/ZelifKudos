@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>Waiting | ZelifKudos</title>
+    <title>Waiting | <app:name/></title>
 </head>
 
 <body>
@@ -42,15 +42,23 @@
         xhr.open('POST', '${createLink(action: "checkToken")}');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
-            if (xhr.status === 200) {
-                var res = JSON.parse(xhr.responseText);
-                if (res.status === 'verified') {
-                    clearInterval(pollInterval);
-                    document.getElementById('poll-status').textContent = 'Access granted!';
-                    setTimeout(function() {
-                        window.location.href = '${createLink(controller: "user", action: "list")}';
-                    }, 1000);
-                }
+            if (xhr.status !== 200) { return; }
+            var res = JSON.parse(xhr.responseText);
+            var status = document.getElementById('poll-status');
+            if (res.status === 'verified') {
+                clearInterval(pollInterval);
+                status.textContent = 'Access granted!';
+                setTimeout(function() {
+                    window.location.href = '${createLink(controller: "user", action: "list")}';
+                }, 1000);
+            } else if (res.status === 'expired' || res.status === 'no_token') {
+                // Never leave the hourglass spinning on a link that can no
+                // longer verify — say so and send them back to request another.
+                clearInterval(pollInterval);
+                status.textContent = 'That link expired. Taking you back...';
+                setTimeout(function() {
+                    window.location.href = '${createLink(controller: "login", action: "index")}';
+                }, 2500);
             }
         };
         xhr.send();
