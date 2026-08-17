@@ -1,4 +1,10 @@
 databaseChangeLog:
+  # Baseline first: changelog-2.5 preconditions its feeling -> app_user foreign
+  # key on app_user already existing, so app_user has to be created before it.
+  - include:
+      file: db/changelog/changelog-1.0-baseline.yaml
+  - include:
+      file: db/changelog/changelog-session.yaml
   - include:
       file: db/changelog/changelog-2.5.yaml
   - include:
