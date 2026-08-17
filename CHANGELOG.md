@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to ZelifKudos will be documented in this file.
+All notable changes to Kudos will be documented in this file.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 1. Added
@@ -9,6 +9,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 4. Removed
 5. Fixed
 6. Security
+
+## [4.0] - 2026-08-17
+
+### Added
+- Add Liquibase baseline for the five tables that predated Liquibase adoption (`app_user`, `kudos`, `kudos_reset`, `login_token`, `self_esteem_message`). A fresh database now builds its whole schema.
+- Add Liquibase changeset for the Spring Session tables, which `initialize-schema: never` never created.
+- Add `APP_NAME`, `COMPANY_EMAIL_DOMAIN`, `SUPER_ADMIN_EMAIL`, `SERVER_URL`, and `SERVER_PORT` environment variables.
+- Add an `<app:name/>` tag so the product name lives in one place instead of being spelled out across nine views, the manifest and two email templates.
+- Add `run.sh`, which exports `.env` before starting the app (Spring Boot does not read `.env` itself).
+
+### Changed
+- Rename the Groovy package to `kudos`.
+- Read the allowed login email domain from config instead of hardcoding it.
+- Read the admin address from config instead of hardcoding it.
+- Read the production `serverURL` from `SERVER_URL` instead of hardcoding a host.
+- Replace the PWA and favicon icons.
+- Run the baseline before 2.5 in `changelog-master`, so the `feeling` → `app_user` foreign key actually applies.
+- Rewrite README: document every environment variable and how to bootstrap the first admin.
+
+### Fixed
+- Refuse login outright when no email domain is configured, instead of silently degrading to existing-users-only.
+- Stop the weekly email footer linking to a hardcoded host; it now uses `serverURL`, and is omitted when that is unset.
+- Serve the app on `SERVER_PORT` (default 7777) instead of hardcoded 8080, so it no longer fights other projects for the port.
 
 ## [3.4] - 2026-05-01
 
@@ -28,7 +51,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ## [3.2] - 2026-04-06
 
 ### Added
-- Add PWA support with pixel-art Z icon.
+- Add PWA support with a pixel-art icon.
 - Add random animal nicknames with colors to chat.
 - Reset thought bubbles on weekly email and manual reset.
 
@@ -155,7 +178,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - Initial release.
-- Add email magic link login (@zelifcam.net only).
+- Add email magic link login (company email domain only).
 - Send kudos to coworkers.
 - Add admin panel with kudos reset.
 - Use Windows 98 retro theme.
