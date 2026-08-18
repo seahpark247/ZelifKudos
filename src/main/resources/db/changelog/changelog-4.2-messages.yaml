@@ -1,0 +1,716 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 4.2-0-seed-self-esteem-messages
+      author: seah
+      preConditions:
+        # Only seed an empty table: a database that already has messages keeps
+        # them, and re-running never duplicates.
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from self_esteem_message
+      comment: >
+        The weekly email rotates a message by reset count, but the table was
+        never seeded, so every email fell back to the same hardcoded line.
+      changes:
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 0}
+              - column: {name: message, value: "Your work has real value, and it shows."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 1}
+              - column: {name: message, value: "You make a bigger impact than you probably realize."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 2}
+              - column: {name: message, value: "Your effort never goes unnoticed."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 3}
+              - column: {name: message, value: "The way you handle challenges is truly impressive."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 4}
+              - column: {name: message, value: "You have a unique way of solving problems, and it makes a difference."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 5}
+              - column: {name: message, value: "Having you on the team makes a real difference."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 6}
+              - column: {name: message, value: "Your experience and skills are valuable assets to the team."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 7}
+              - column: {name: message, value: "You consistently show ownership and responsibility."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 8}
+              - column: {name: message, value: "Your perspective is worth hearing."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 9}
+              - column: {name: message, value: "You are capable of more than you give yourself credit for."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 10}
+              - column: {name: message, value: "Your growth is clear, and it's great to see."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 11}
+              - column: {name: message, value: "Take a moment to recognize how far you've come."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 12}
+              - column: {name: message, value: "The way you bounce back from challenges says a lot about your strength."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 13}
+              - column: {name: message, value: "Your decisions and choices have brought you a long way."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 14}
+              - column: {name: message, value: "Your willingness to learn is one of your greatest strengths."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 15}
+              - column: {name: message, value: "Consistency is one of your superpowers."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 16}
+              - column: {name: message, value: "You don't just see problems - you look for ways to solve them."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 17}
+              - column: {name: message, value: "You have so much potential still ahead of you."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 18}
+              - column: {name: message, value: "You've done well so far, and there's so much more ahead."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 19}
+              - column: {name: message, value: "Your growth is your own journey - no comparison needed."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 20}
+              - column: {name: message, value: "You're better at what you do than you probably realize."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 21}
+              - column: {name: message, value: "Trust your judgment - you've earned it."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 22}
+              - column: {name: message, value: "Your perspective brings something valuable to the team."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 23}
+              - column: {name: message, value: "Your voice deserves to be heard."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 24}
+              - column: {name: message, value: "Your expertise is noticed and appreciated."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 25}
+              - column: {name: message, value: "What you know and what you've learned can make a real difference to others."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 26}
+              - column: {name: message, value: "Don't forget to recognize your own strengths."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 27}
+              - column: {name: message, value: "You've already overcome more than you give yourself credit for."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 28}
+              - column: {name: message, value: "You have what it takes to work through tough challenges."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 29}
+              - column: {name: message, value: "Your presence has more impact than you realize."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 30}
+              - column: {name: message, value: "Your sense of ownership is truly admirable."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 31}
+              - column: {name: message, value: "You can always be counted on to follow through."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 32}
+              - column: {name: message, value: "Your dedication becomes more valuable every day."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 33}
+              - column: {name: message, value: "The work you do behind the scenes matters, too."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 34}
+              - column: {name: message, value: "The small efforts you make consistently have built something meaningful."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 35}
+              - column: {name: message, value: "You bring value not just through results, but through the way you work."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 36}
+              - column: {name: message, value: "Your focus and persistence are real strengths."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 37}
+              - column: {name: message, value: "Your ability to keep going through difficult moments is inspiring."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 38}
+              - column: {name: message, value: "You have the courage to try one more time."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 39}
+              - column: {name: message, value: "Your consistency sets a great example for the team."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 40}
+              - column: {name: message, value: "Things seem to move more smoothly when we work with you."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 41}
+              - column: {name: message, value: "You create an environment where people feel comfortable sharing ideas."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 42}
+              - column: {name: message, value: "Your positive energy has a great effect on the team."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 43}
+              - column: {name: message, value: "Sometimes, your words give others the confidence they need."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 44}
+              - column: {name: message, value: "You have a great ability to recognize the strengths in others."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 45}
+              - column: {name: message, value: "The positive environment you help create has real value."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 46}
+              - column: {name: message, value: "Your thoughtfulness makes a difference to the people around you."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 47}
+              - column: {name: message, value: "You are someone people can genuinely rely on."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 48}
+              - column: {name: message, value: "You help the team move forward in meaningful ways."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 49}
+              - column: {name: message, value: "You make the team a better place simply by being part of it."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 50}
+              - column: {name: message, value: "You don't have to be perfect to be doing a great job."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 51}
+              - column: {name: message, value: "You don't need to have every answer - you're great at figuring things out."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 52}
+              - column: {name: message, value: "One mistake does not define your value or ability."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 53}
+              - column: {name: message, value: "Having the courage to learn is a strength in itself."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 54}
+              - column: {name: message, value: "It's okay to pause. Pausing doesn't mean you're falling behind."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 55}
+              - column: {name: message, value: "You don't have to be great at everything to be great at what you do."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 56}
+              - column: {name: message, value: "Give yourself the same patience you give to others."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 57}
+              - column: {name: message, value: "The person you are today is already worthy of recognition."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 58}
+              - column: {name: message, value: "One outcome never defines your overall ability."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 59}
+              - column: {name: message, value: "If you gave it your best, that effort is worth recognizing."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 60}
+              - column: {name: message, value: "Your confidence comes from real experience, and it shows."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 61}
+              - column: {name: message, value: "You have the skills to take on challenging work."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 62}
+              - column: {name: message, value: "There's a reason people trust you with opportunities."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 63}
+              - column: {name: message, value: "Your contributions speak for themselves."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 64}
+              - column: {name: message, value: "You are more than ready to take on bigger challenges."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 65}
+              - column: {name: message, value: "The more you trust yourself, the more your potential can grow."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 66}
+              - column: {name: message, value: "Your decisions are backed by experience and thoughtful judgment."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 67}
+              - column: {name: message, value: "Try trusting your own instincts a little more."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 68}
+              - column: {name: message, value: "You've built a strong foundation through everything you've learned."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 69}
+              - column: {name: message, value: "You're ready for the next step."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 70}
+              - column: {name: message, value: "Everything you do today is helping build a stronger version of you."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 71}
+              - column: {name: message, value: "Small progress is still progress."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 72}
+              - column: {name: message, value: "Your growth doesn't become less meaningful just because no one sees every step."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 73}
+              - column: {name: message, value: "The experience you're gaining today will pay off in the future."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 74}
+              - column: {name: message, value: "Consistent progress always adds up."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 75}
+              - column: {name: message, value: "Everything you're learning is preparing you for what comes next."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 76}
+              - column: {name: message, value: "Your challenges can be part of your growth story."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 77}
+              - column: {name: message, value: "You continue to show new strengths and capabilities."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 78}
+              - column: {name: message, value: "You deserve to be the first person to believe in your own potential."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 79}
+              - column: {name: message, value: "Don't forget how far you've already come."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 80}
+              - column: {name: message, value: "Your effort is creating more impact than you may see."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 81}
+              - column: {name: message, value: "Every problem you solve contributes to the team's success."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 82}
+              - column: {name: message, value: "Your contribution can't always be measured by numbers."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 83}
+              - column: {name: message, value: "The changes you create are helping someone, somewhere."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 84}
+              - column: {name: message, value: "There are outcomes that would have been different without your contribution."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 85}
+              - column: {name: message, value: "Your expertise and effort help the whole team grow."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 86}
+              - column: {name: message, value: "You play a more important role than you may realize."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 87}
+              - column: {name: message, value: "Your work makes other people's work easier."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 88}
+              - column: {name: message, value: "You should be proud of the value you bring."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 89}
+              - column: {name: message, value: "Don't take your own contributions for granted."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 90}
+              - column: {name: message, value: "You're doing a great job in your own way."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 91}
+              - column: {name: message, value: "You're growing every day, and that alone is something to be proud of."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 92}
+              - column: {name: message, value: "Today is a good day to tell yourself, \"I'm doing well.\""}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 93}
+              - column: {name: message, value: "Your effort deserves to be recognized."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 94}
+              - column: {name: message, value: "Take a moment to look back - you've got plenty to be proud of."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 95}
+              - column: {name: message, value: "You are stronger and more capable than you think."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 96}
+              - column: {name: message, value: "Your way of doing things has its own strengths."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 97}
+              - column: {name: message, value: "Don't underestimate what you're capable of."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 98}
+              - column: {name: message, value: "Getting this far is already something worth celebrating."}
+        - insert:
+            tableName: self_esteem_message
+            columns:
+              - column: {name: id, valueComputed: "nextval('hibernate_sequence')"}
+              - column: {name: version, valueNumeric: 0}
+              - column: {name: sort_order, valueNumeric: 99}
+              - column: {name: message, value: "You're doing better than you think. Keep believing in yourself."}
