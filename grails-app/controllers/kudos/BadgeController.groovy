@@ -14,8 +14,11 @@ class BadgeController {
         // look instead of whenever a job happens to run.
         badgeService.evaluate(currentUser)
 
-        [catalog: BadgeService.CATALOG,
-         earned: badgeService.earnedCodes(currentUser),
-         earnedDates: badgeService.earnedDates(currentUser)]
+        Set<String> earned = badgeService.earnedCodes(currentUser)
+
+        [catalog: badgeService.visibleCatalogue(earned),
+         earned: earned,
+         earnedDates: badgeService.earnedDates(currentUser),
+         progress: badgeService.progress(currentUser)]
     }
 }

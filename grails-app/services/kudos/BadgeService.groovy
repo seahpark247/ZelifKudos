@@ -20,6 +20,9 @@ class BadgeService {
      *
      * `icon` names a file under src/main/resources/static/badges/.
      */
+    /** Given, not earned. Hidden from anyone who does not hold them. */
+    static final Set<String> GRANTED = ['cofounder', 'staff'] as Set
+
     static final List<Map> CATALOG = [
         [code: 'cofounder',      name: 'Cofounder',   description: 'Here from the beginning',        icon: 'cofounder.png'],
         [code: 'staff',          name: 'Staff',       description: 'Keeps the lights on',            icon: 'staff.png'],
@@ -35,6 +38,18 @@ class BadgeService {
     @Transactional(readOnly = true)
     Set<String> earnedCodes(User user) {
         user ? UserBadge.findAllByUser(user)*.code as Set : [] as Set
+    }
+
+    /**
+     * The catalogue as this user should see it: granted badges appear only once
+     * held.
+     *
+     * A badge nobody outside the admins can ever win is a locked box with no
+     * keyhole — it contradicts the point of showing locked badges at all, and it
+     * drags everyone's denominator down for something they cannot act on.
+     */
+    List<Map> visibleCatalogue(Set<String> earned) {
+        CATALOG.findAll { !(it.code in GRANTED) || it.code in earned }
     }
 
     /** code -> when it was earned, for the tooltip on the badge wall. */
@@ -68,6 +83,37 @@ class BadgeService {
                 log.debug("Badge '{}' already held by {}", code, user.email)
             }
         }
+    }
+
+    /**
+     * How close each countable badge is, as [current, target].
+     *
+     * Cofounder and Staff are absent on purpose: they are given, not counted, and
+     * a bar that can only read 0% or 100% tells nobody anything.
+     */
+    @Transactional(readOnly = true)
+    Map<String, Map> progress(User user) {
+        if (!user) return [:]
+
+        int sent = Kudos.countBySender(user)
+        int received = Kudos.countByReceiver(user)
+
+        int teammates = User.executeQuery(
+            "select count(u) from User u where u.activated = true and u.id != :id",
+            [id: user.id])[0] as int
+        int reached = Kudos.executeQuery(
+            "select count(distinct k.receiver.id) from Kudos k where k.sender = :u",
+            [u: user])[0] as int
+
+        [
+            first_sent    : [current: Math.min(sent, 1),     target: 1],
+            generous      : [current: Math.min(sent, 10),    target: 10],
+            patron        : [current: Math.min(sent, 50),    target: 50],
+            first_received: [current: Math.min(received, 1), target: 1],
+            beloved       : [current: Math.min(received, 10), target: 10],
+            star          : [current: Math.min(received, 50), target: 50],
+            all_hands     : [current: Math.min(reached, teammates), target: Math.max(teammates, 1)],
+        ]
     }
 
     @Transactional(readOnly = true)

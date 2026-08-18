@@ -19,6 +19,7 @@
 
 <div class="win-desktop-layout">
 
+    <g:if test="${session.userId && !isDemo}"><badge:panel/></g:if>
 
     <div class="win-window">
         <div class="win-titlebar">
@@ -97,7 +98,6 @@
 </script>
 
 
-<div id="spinner" style="display:none;">Loading...</div>
 <asset:javascript src="application.js"/>
 <script>
 if ('serviceWorker' in navigator) {
