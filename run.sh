@@ -4,8 +4,12 @@
 # Spring Boot resolves ${VAR} placeholders from real environment variables, not
 # from a .env file, so .env has to be exported before the JVM starts.
 #
-#   ./run.sh              # development profile (default)
-#   ./run.sh production   # production profile
+#   ./run.sh                        # development profile (default)
+#   ./run.sh production             # production profile
+#   ./run.sh development 7778       # dev instance beside the systemd service
+#
+# Development mode reloads changed classes and GSPs without a restart, which the
+# packaged WAR the service runs cannot do — its contents are sealed at build time.
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -20,5 +24,13 @@ source ./.env
 set +a
 
 ENV="${1:-development}"
-echo "starting Kudos [${ENV}] — db=${DB_URL}"
+
+# Optional port override so a hot-reloading dev instance can run alongside the
+# systemd service without fighting it for the port:
+#     ./run.sh development 7778
+if [[ -n "${2:-}" ]]; then
+    export SERVER_PORT="$2"
+fi
+
+echo "starting Kudos [${ENV}] on port ${SERVER_PORT} — db=${DB_URL}"
 exec ./gradlew bootRun -Dgrails.env="${ENV}"
