@@ -1,20 +1,8 @@
-// This is a manifest file that'll be compiled into application.js.
+// Manifest for application.js.
 //
-// Any JavaScript file within this directory can be referenced here using a relative path.
+// jQuery and Bootstrap used to be required here. They came to 256KB on every
+// page and powered exactly one thing — an ajaxStart/ajaxStop spinner — which
+// never fired, because nothing in this app uses jQuery.ajax. The app's own
+// scripts are vanilla.
 //
-// You're free to add application-wide JavaScript to this file, but it's generally better
-// to create separate JavaScript files as needed.
-//
-//= require webjars/jquery/%/dist/jquery.js
-//= require webjars/bootstrap/%/dist/js/bootstrap.bundle.js
 //= require_self
-
-if (typeof jQuery !== 'undefined') {
-    (function($) {
-        $('#spinner').ajaxStart(function() {
-            $(this).fadeIn();
-        }).ajaxStop(function() {
-            $(this).fadeOut();
-        });
-    })(jQuery);
-}

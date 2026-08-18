@@ -66,9 +66,6 @@ dependencies {
     runtimeOnly "org.postgresql:postgresql"
     runtimeOnly "com.zaxxer:HikariCP"
     runtimeOnly "cloud.wondrify:asset-pipeline-grails"
-    testAndDevelopmentOnly "org.webjars.npm:bootstrap"
-    testAndDevelopmentOnly "org.webjars.npm:bootstrap-icons"
-    testAndDevelopmentOnly "org.webjars.npm:jquery"
     testImplementation "org.apache.grails:grails-testing-support-datamapping"
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.apache.grails:grails-testing-support-web"
@@ -85,19 +82,4 @@ tasks.withType(GroovyCompile).configureEach {
     groovyOptions.optimizationOptions.indy = false
 }
 
-
-assets {
-    excludes = [
-            'webjars/jquery/**',
-            'webjars/bootstrap/**',
-            'webjars/bootstrap-icons/**'
-    ]
-    includes = [
-            'webjars/jquery/*/dist/jquery.js',
-            'webjars/bootstrap/*/dist/js/bootstrap.bundle.js',
-            'webjars/bootstrap/*/dist/css/bootstrap.css',
-            'webjars/bootstrap-icons/*/font/bootstrap-icons.css',
-            'webjars/bootstrap-icons/*/font/fonts/*',
-    ]
-}
 
