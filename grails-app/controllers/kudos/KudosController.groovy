@@ -17,7 +17,11 @@ class KudosController {
                 flash.error = "Invalid user"
             } else {
                 flash.message = "Kudos sent to ${kudos.receiver.name.capitalize()}!"
-                // Both sides can cross a threshold on one kudo, so check both.
+
+                // Both sides can cross a threshold on one kudo. Announcing is not
+                // this controller's job: whatever is awarded here lands unseen and
+                // the badge panel claims it on the holder's next page, which is
+                // the only path that also works for the receiver.
                 badgeService.evaluate(kudos.sender)
                 badgeService.evaluate(kudos.receiver)
             }

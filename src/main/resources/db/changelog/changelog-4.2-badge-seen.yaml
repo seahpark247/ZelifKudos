@@ -1,0 +1,37 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 4.2-1-user-badge-seen
+      author: seah
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: user_badge
+                columnName: seen
+      changes:
+        - addColumn:
+            tableName: user_badge
+            columns:
+              - column:
+                  name: seen
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+        # Badges that already existed were never announced and never will be —
+        # mark them seen so nobody gets a retroactive pile of alerts.
+        - update:
+            tableName: user_badge
+            columns:
+              - column:
+                  name: seen
+                  valueBoolean: true
+        - createIndex:
+            tableName: user_badge
+            indexName: idx_user_badge_unseen
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: seen

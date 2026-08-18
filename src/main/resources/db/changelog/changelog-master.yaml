@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/changelog-4.1-badges.yaml
   - include:
       file: db/changelog/changelog-4.2-messages.yaml
+  - include:
+      file: db/changelog/changelog-4.2-badge-seen.yaml

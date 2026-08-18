@@ -10,6 +10,9 @@ class BadgeService {
 
     GrailsApplication grailsApplication
 
+    /** Given, not earned. Hidden from anyone who does not hold them. */
+    static final Set<String> GRANTED = ['cofounder', 'staff'] as Set
+
     /**
      * The badge catalogue, in display order: the two you are given, then the ones
      * you earn, roughly by difficulty.
@@ -20,9 +23,6 @@ class BadgeService {
      *
      * `icon` names a file under src/main/resources/static/badges/.
      */
-    /** Given, not earned. Hidden from anyone who does not hold them. */
-    static final Set<String> GRANTED = ['cofounder', 'staff'] as Set
-
     static final List<Map> CATALOG = [
         [code: 'cofounder',      name: 'Cofounder',   description: 'Here from the beginning',        icon: 'cofounder.png'],
         [code: 'staff',          name: 'Staff',       description: 'Keeps the lights on',            icon: 'staff.png'],
@@ -66,16 +66,18 @@ class BadgeService {
      * everything else in this app resets on Friday, so badges are the only thing
      * that accumulates.
      */
-    void evaluate(User user) {
-        if (!user) return
+    Set<String> evaluate(User user) {
+        if (!user) return [] as Set
 
         Set<String> have = earnedCodes(user)
         Set<String> missing = qualifyingCodes(user) - have
-        if (!missing) return
+        if (!missing) return [] as Set
 
+        Set<String> awarded = [] as Set
         missing.each { String code ->
             try {
                 new UserBadge(user: user, code: code).save(failOnError: true, flush: true)
+                awarded << code
                 log.info("Badge '{}' earned by {}", code, user.email)
             } catch (Exception e) {
                 // The unique constraint is the arbiter: a concurrent request got
@@ -83,6 +85,32 @@ class BadgeService {
                 log.debug("Badge '{}' already held by {}", code, user.email)
             }
         }
+
+        awarded
+    }
+
+    /** Display names for a set of codes, in catalogue order. */
+    List<String> namesFor(Collection<String> codes) {
+        CATALOG.findAll { it.code in codes }*.name
+    }
+
+    /**
+     * Names of badges the holder has not been congratulated for, marked seen in
+     * the same call.
+     *
+     * A read that writes, on purpose. It runs wherever the holder happens to be,
+     * which is the only way to catch a badge someone else's kudo earned them —
+     * they were not in that request to be told. Marking seen here is what keeps
+     * it to exactly once.
+     */
+    List<String> claimUnseen(User user) {
+        if (!user) return []
+
+        List<UserBadge> fresh = UserBadge.findAllByUserAndSeen(user, false)
+        if (!fresh) return []
+
+        fresh.each { it.seen = true; it.save(failOnError: true) }
+        namesFor(fresh*.code)
     }
 
     /**
