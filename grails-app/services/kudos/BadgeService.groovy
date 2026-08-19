@@ -11,7 +11,7 @@ class BadgeService {
     GrailsApplication grailsApplication
 
     /** Given, not earned. Hidden from anyone who does not hold them. */
-    static final Set<String> GRANTED = ['cofounder', 'staff'] as Set
+    static final Set<String> GRANTED = ['founder', 'staff'] as Set
 
     /**
      * The badge catalogue, in display order: the two you are given, then the ones
@@ -24,7 +24,7 @@ class BadgeService {
      * `icon` names a file under src/main/resources/static/badges/.
      */
     static final List<Map> CATALOG = [
-        [code: 'cofounder',      name: 'Cofounder',   description: 'Here from the beginning',        icon: 'cofounder.png'],
+        [code: 'founder',        name: 'Founder',     description: 'Founded the company',            icon: 'founder.png'],
         [code: 'staff',          name: 'Staff',       description: 'Keeps the lights on',            icon: 'staff.png'],
         [code: 'first_sent',     name: 'First Words', description: 'Send your first kudo',           icon: 'first_sent.png'],
         [code: 'first_received', name: 'Noticed',     description: 'Receive your first kudo',        icon: 'first_received.png'],
@@ -116,7 +116,7 @@ class BadgeService {
     /**
      * How close each countable badge is, as [current, target].
      *
-     * Cofounder and Staff are absent on purpose: they are given, not counted, and
+     * Founder and Staff are absent on purpose: they are given, not counted, and
      * a bar that can only read 0% or 100% tells nobody anything.
      */
     @Transactional(readOnly = true)
@@ -148,7 +148,7 @@ class BadgeService {
     protected Set<String> qualifyingCodes(User user) {
         Set<String> codes = [] as Set
 
-        if (user.email?.toLowerCase() in cofounderEmails()) codes << 'cofounder'
+        if (user.email?.toLowerCase() in founderEmails()) codes << 'founder'
         if (user.admin) codes << 'staff'
 
         // All-time, deliberately: every other count in this app is "since the
@@ -187,8 +187,8 @@ class BadgeService {
         reached >= teammates
     }
 
-    private Set<String> cofounderEmails() {
-        String raw = grailsApplication.config.getProperty('app.badges.cofounderEmails') ?: ''
+    private Set<String> founderEmails() {
+        String raw = grailsApplication.config.getProperty('app.badges.founderEmails') ?: ''
         raw.split(',').collect { it.trim().toLowerCase() }.findAll { it } as Set
     }
 }
