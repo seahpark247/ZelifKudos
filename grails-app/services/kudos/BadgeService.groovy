@@ -2,6 +2,7 @@ package kudos
 
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
+import org.springframework.dao.DataIntegrityViolationException
 import groovy.util.logging.Slf4j
 
 @Slf4j
@@ -79,9 +80,10 @@ class BadgeService {
                 new UserBadge(user: user, code: code).save(failOnError: true, flush: true)
                 awarded << code
                 log.info("Badge '{}' earned by {}", code, user.email)
-            } catch (Exception e) {
+            } catch (DataIntegrityViolationException e) {
                 // The unique constraint is the arbiter: a concurrent request got
-                // there first. Nothing to do.
+                // there first. Anything else is a real failure and belongs in the
+                // caller's lap rather than in a debug line claiming otherwise.
                 log.debug("Badge '{}' already held by {}", code, user.email)
             }
         }
