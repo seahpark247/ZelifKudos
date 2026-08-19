@@ -2,6 +2,7 @@ package kudos
 
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
+import org.springframework.dao.DataIntegrityViolationException
 import groovy.util.logging.Slf4j
 
 @Slf4j
@@ -73,15 +74,22 @@ class BadgeService {
         Set<String> missing = qualifyingCodes(user) - have
         if (!missing) return [] as Set
 
+        // One transaction per badge. The unique constraint is the arbiter rather
+        // than a check-then-insert that races, and a violation leaves the session
+        // it happened in unusable — so it has to be a session this method is done
+        // with, not the one the remaining badges still need.
+        Long userId = user.id
         Set<String> awarded = [] as Set
         missing.each { String code ->
             try {
-                new UserBadge(user: user, code: code).save(failOnError: true, flush: true)
+                UserBadge.withNewTransaction {
+                    new UserBadge(user: User.load(userId), code: code).save(failOnError: true, flush: true)
+                }
                 awarded << code
                 log.info("Badge '{}' earned by {}", code, user.email)
-            } catch (Exception e) {
-                // The unique constraint is the arbiter: a concurrent request got
-                // there first. Nothing to do.
+            } catch (DataIntegrityViolationException e) {
+                // A concurrent request got there first. Anything else is a real
+                // failure and belongs in the caller's lap.
                 log.debug("Badge '{}' already held by {}", code, user.email)
             }
         }
@@ -125,7 +133,8 @@ class BadgeService {
             "select count(u) from User u where u.activated = true and u.id != :id",
             [id: user.id])[0] as int
         int reached = Kudos.executeQuery(
-            "select count(distinct k.receiver.id) from Kudos k where k.sender = :u",
+            "select count(distinct k.receiver.id) from Kudos k " +
+            "where k.sender = :u and k.receiver.activated = true",
             [u: user])[0] as int
 
         [
@@ -172,7 +181,8 @@ class BadgeService {
     /**
      * "Everyone" means every activated teammate other than yourself, measured
      * now — so the badge gets harder as the team grows, and someone who earned it
-     * keeps it.
+     * keeps it. Kudos to teammates who have since left do not count towards it,
+     * or a shrinking roster would hand it out for work nobody did.
      */
     private boolean hasSentToEveryone(User user) {
         int teammates = User.executeQuery(
@@ -181,7 +191,8 @@ class BadgeService {
         if (teammates < 1) return false
 
         int reached = Kudos.executeQuery(
-            "select count(distinct k.receiver.id) from Kudos k where k.sender = :u",
+            "select count(distinct k.receiver.id) from Kudos k " +
+            "where k.sender = :u and k.receiver.activated = true",
             [u: user])[0] as int
 
         reached >= teammates

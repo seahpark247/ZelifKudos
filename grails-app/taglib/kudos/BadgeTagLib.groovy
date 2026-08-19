@@ -28,9 +28,9 @@ class BadgeTagLib {
         List<Map> fresh = BadgeService.CATALOG.findAll { it.code in freshCodes }
 
         Set<String> earned = badgeService.earnedCodes(user)
-        if (!earned) return
-
         List<Map> held = BadgeService.CATALOG.findAll { it.code in earned }
+        if (!held) return
+
         out << render(template: '/badge/panel',
                       model: [catalog: held,
                               earnedDates: badgeService.earnedDates(user),
