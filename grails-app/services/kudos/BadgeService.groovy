@@ -99,7 +99,7 @@ class BadgeService {
      * A read that writes, on purpose. It runs wherever the holder happens to be,
      * which is the only way to catch a badge someone else's kudo earned them —
      * they were not in that request to be told. Marking seen here is what keeps
-     * it to exactly once.
+     * it from repeating.
      */
     List<String> claimUnseen(User user) {
         if (!user) return []
@@ -107,7 +107,8 @@ class BadgeService {
         List<UserBadge> fresh = UserBadge.findAllByUserAndSeen(user, false)
         if (!fresh) return []
 
-        fresh.each { it.seen = true; it.save(failOnError: true) }
+        UserBadge.executeUpdate(
+            "update UserBadge set seen = true where id in (:ids)", [ids: fresh*.id])
         fresh*.code
     }
 
