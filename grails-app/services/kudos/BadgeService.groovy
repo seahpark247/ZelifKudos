@@ -10,6 +10,7 @@ import groovy.util.logging.Slf4j
 class BadgeService {
 
     GrailsApplication grailsApplication
+    UserService userService
 
     /** Given, not earned. Hidden from anyone who does not hold them. */
     static final Set<String> GRANTED = ['founder', 'staff'] as Set
@@ -148,11 +149,7 @@ class BadgeService {
 
         if (user.email?.toLowerCase() in founderEmails()) codes << 'founder'
 
-        // The super admin is excluded: that account can flip its own admin flag
-        // from the taskbar clock, so a momentary toggle for maintenance would
-        // otherwise buy a permanent badge. Staff should mean somebody was made an
-        // admin, not that they switched it on themselves.
-        if (user.admin && !isSuperAdmin(user)) codes << 'staff'
+        if (user.admin && !userService.isSuperAdmin(user)) codes << 'staff'
 
         // All-time, deliberately: every other count in this app is "since the
         // last reset", which would make cumulative badges unwinnable.
@@ -190,11 +187,6 @@ class BadgeService {
             [u: user])[0] as int
 
         reached >= teammates
-    }
-
-    private boolean isSuperAdmin(User user) {
-        String superAdmin = grailsApplication.config.getProperty('app.superAdminEmail')?.trim()
-        superAdmin && user.email?.equalsIgnoreCase(superAdmin)
     }
 
     private Set<String> founderEmails() {

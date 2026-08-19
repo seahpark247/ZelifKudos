@@ -1,7 +1,6 @@
 package kudos
 
 import grails.converters.JSON
-import grails.core.GrailsApplication
 
 class UserController {
 
@@ -10,7 +9,6 @@ class UserController {
     KudosService kudosService
     FeelingService feelingService
     UserService userService
-    GrailsApplication grailsApplication
 
     def list() {
         User currentUser = request.currentUser
@@ -37,11 +35,8 @@ class UserController {
 
     def toggleAdmin() {
         User currentUser = request.currentUser
-        // Compare case-insensitively: stored emails are normalised to lowercase,
-        // so a mixed-case SUPER_ADMIN_EMAIL would silently never match.
-        String superAdminEmail = grailsApplication.config.getProperty('app.superAdminEmail')?.trim()
         boolean toggled = false
-        if (superAdminEmail && currentUser.email.equalsIgnoreCase(superAdminEmail)) {
+        if (userService.isSuperAdmin(currentUser)) {
             userService.toggleAdmin(currentUser)
             toggled = true
         }
