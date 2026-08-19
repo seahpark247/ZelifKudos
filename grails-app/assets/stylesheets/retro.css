@@ -926,13 +926,56 @@ body {
     display: flow-root;
 }
 
-/* A badge is worth more than a status line, so it gets the gold treatment
-   rather than the plain grey message box. */
-.win-msgbox-badge {
-    background: #fffacd;
-    border-color: #ffffff #b8a000 #b8a000 #ffffff;
+
+/* --- MODAL ---
+   Window chrome comes from .win-window; only the backdrop and centring are new.
+   Above the taskbar's 9999 so nothing overlaps it. */
+.win-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
 }
 
-.win-msgbox-badge .win-msgbox-icon {
-    color: #b8860b;
+.win-modal {
+    width: 100%;
+    max-width: 300px;
+    margin: 0;
+    box-shadow: 2px 2px 0 #000000;
+}
+
+.win-modal-body {
+    background: #c0c0c0;
+    padding: 16px;
+    text-align: center;
+    /* Several badges can land at once. Cap the stack and scroll rather than
+       letting the window run off the screen with the OK button below the fold. */
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+}
+
+.win-modal-badge + .win-modal-badge {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #808080;
+}
+
+.win-modal-badge-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000080;
+}
+
+.win-modal-badge-desc {
+    font-size: 11px;
+    color: #404040;
+    margin-top: 2px;
+}
+
+.win-modal-actions {
+    margin-top: 16px;
 }

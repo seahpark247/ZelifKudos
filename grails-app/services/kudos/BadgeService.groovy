@@ -89,14 +89,9 @@ class BadgeService {
         awarded
     }
 
-    /** Display names for a set of codes, in catalogue order. */
-    List<String> namesFor(Collection<String> codes) {
-        CATALOG.findAll { it.code in codes }*.name
-    }
-
     /**
-     * Names of badges the holder has not been congratulated for, marked seen in
-     * the same call.
+     * Codes of badges the holder has not been congratulated for, marked seen in
+     * the same call. Codes rather than names because the caller draws the icon.
      *
      * A read that writes, on purpose. It runs wherever the holder happens to be,
      * which is the only way to catch a badge someone else's kudo earned them —
@@ -110,7 +105,7 @@ class BadgeService {
         if (!fresh) return []
 
         fresh.each { it.seen = true; it.save(failOnError: true) }
-        namesFor(fresh*.code)
+        fresh*.code
     }
 
     /**

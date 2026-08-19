@@ -24,7 +24,8 @@ class BadgeTagLib {
 
         // Claimed before the panel renders so a badge earned by someone else's
         // kudo is announced on whatever page its holder loads next.
-        List<String> fresh = badgeService.claimUnseen(user)
+        List<String> freshCodes = badgeService.claimUnseen(user)
+        List<Map> fresh = BadgeService.CATALOG.findAll { it.code in freshCodes }
 
         Set<String> earned = badgeService.earnedCodes(user)
         if (!earned) return
