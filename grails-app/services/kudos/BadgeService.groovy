@@ -2,7 +2,6 @@ package kudos
 
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
-import org.springframework.dao.DataIntegrityViolationException
 import groovy.util.logging.Slf4j
 
 @Slf4j
@@ -74,22 +73,15 @@ class BadgeService {
         Set<String> missing = qualifyingCodes(user) - have
         if (!missing) return [] as Set
 
-        // One transaction per badge. The unique constraint is the arbiter rather
-        // than a check-then-insert that races, and a violation leaves the session
-        // it happened in unusable — so it has to be a session this method is done
-        // with, not the one the remaining badges still need.
-        Long userId = user.id
         Set<String> awarded = [] as Set
         missing.each { String code ->
             try {
-                UserBadge.withNewTransaction {
-                    new UserBadge(user: User.load(userId), code: code).save(failOnError: true, flush: true)
-                }
+                new UserBadge(user: user, code: code).save(failOnError: true, flush: true)
                 awarded << code
                 log.info("Badge '{}' earned by {}", code, user.email)
-            } catch (DataIntegrityViolationException e) {
-                // A concurrent request got there first. Anything else is a real
-                // failure and belongs in the caller's lap.
+            } catch (Exception e) {
+                // The unique constraint is the arbiter: a concurrent request got
+                // there first. Nothing to do.
                 log.debug("Badge '{}' already held by {}", code, user.email)
             }
         }
