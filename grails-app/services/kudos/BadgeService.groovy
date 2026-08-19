@@ -149,7 +149,12 @@ class BadgeService {
         Set<String> codes = [] as Set
 
         if (user.email?.toLowerCase() in founderEmails()) codes << 'founder'
-        if (user.admin) codes << 'staff'
+
+        // The super admin is excluded: that account can flip its own admin flag
+        // from the taskbar clock, so a momentary toggle for maintenance would
+        // otherwise buy a permanent badge. Staff should mean somebody was made an
+        // admin, not that they switched it on themselves.
+        if (user.admin && !isSuperAdmin(user)) codes << 'staff'
 
         // All-time, deliberately: every other count in this app is "since the
         // last reset", which would make cumulative badges unwinnable.
@@ -185,6 +190,11 @@ class BadgeService {
             [u: user])[0] as int
 
         reached >= teammates
+    }
+
+    private boolean isSuperAdmin(User user) {
+        String superAdmin = grailsApplication.config.getProperty('app.superAdminEmail')?.trim()
+        superAdmin && user.email?.equalsIgnoreCase(superAdmin)
     }
 
     private Set<String> founderEmails() {
