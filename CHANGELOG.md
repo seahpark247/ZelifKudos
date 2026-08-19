@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to ZelifKudos will be documented in this file.
+All notable changes to Kudos will be documented in this file.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 1. Added
@@ -9,6 +9,62 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 4. Removed
 5. Fixed
 6. Security
+
+## [4.3] - 2026-08-19
+
+### Added
+- Surface badges in the app: a panel beside the roster, and a modal when one lands.
+- Seed the weekly email's rotating messages.
+
+### Changed
+- Rename the Cofounder badge to Founder, and `COFOUNDER_EMAILS` to `FOUNDER_EMAILS`.
+
+### Removed
+- Drop jQuery and Bootstrap.
+
+## [4.2] - 2026-08-17
+
+### Added
+- Add badges: nine collectible badges on their own page, locked ones greyed out.
+- Add `COFOUNDER_EMAILS` to assign the Cofounder badge.
+
+### Fixed
+- Reject path traversal in the PWA icon route.
+
+## [4.1] - 2026-08-17
+
+### Removed
+- Remove the Water Cooler chat, animal nicknames, and the nightly nickname reset job.
+- Remove `CHAT_COOLDOWN_MS`, `CHAT_DUPLICATE_WINDOW_MS`, and `NICKNAME_RESET_CRON`.
+- Drop the SockJS and STOMP CDN dependency.
+
+### Changed
+- Make the kudos message and status fields resizable.
+
+## [4.0] - 2026-08-17
+
+### Added
+- Add Liquibase baseline so an empty database builds its whole schema.
+- Add Liquibase changeset for the Spring Session tables.
+- Add `APP_NAME`, `APP_TIMEZONE`, `COMPANY_EMAIL_DOMAIN`, `SUPER_ADMIN_EMAIL`, `SERVER_URL`, and `SERVER_PORT`.
+- Add an `<app:name/>` tag so the product name lives in one place.
+- Add `run.sh`, `serve.sh`, and a systemd unit.
+
+### Changed
+- Rename the Groovy package to `kudos`.
+- Replace the PWA and favicon icons.
+- Default the schedule timezone to UTC.
+- Move the app to `SERVER_PORT` (default 7777).
+
+### Fixed
+- Fix Spring Session JDBC never engaging, which logged everyone out on every restart.
+- Fix the waiting page spinning forever on a magic link that could never verify.
+- Fix the weekly email footer linking to a hardcoded host.
+- Fix the root logger hiding every log line the app writes.
+- Fix the login email being sent inside the request, costing 3.2s per attempt.
+- Fix scheduled jobs running an hour off from the intended timezone.
+- Fix case-sensitive config comparisons failing silently on mixed case.
+- Refuse login outright when no email domain is configured.
 
 ## [3.4] - 2026-05-01
 
@@ -28,7 +84,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ## [3.2] - 2026-04-06
 
 ### Added
-- Add PWA support with pixel-art Z icon.
+- Add PWA support with a pixel-art icon.
 - Add random animal nicknames with colors to chat.
 - Reset thought bubbles on weekly email and manual reset.
 
@@ -155,7 +211,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - Initial release.
-- Add email magic link login (@zelifcam.net only).
+- Add email magic link login (company email domain only).
 - Send kudos to coworkers.
 - Add admin panel with kudos reset.
 - Use Windows 98 retro theme.

@@ -3,18 +3,15 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title><g:layoutTitle default="ZelifKudos"/></title>
+    <title><g:layoutTitle default="${app.name()}"/></title>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
     <link rel="manifest" href="/manifest.json"/>
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"/>
     <meta name="theme-color" content="#c0c0c0"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-    <meta name="apple-mobile-web-app-title" content="ZelifKudos"/>
+    <meta name="apple-mobile-web-app-title" content="${app.name()}"/>
     <asset:stylesheet src="application.css"/>
-    <style>
-        .win-chat-msg { cursor: default; }
-    </style>
     <g:layoutHead/>
 </head>
 
@@ -22,41 +19,11 @@
 
 <div class="win-desktop-layout">
 
-    <g:if test="${session.userId || isDemo}">
-    <div class="win-window win-chat-window" id="chatWindow">
-        <div class="win-titlebar" id="chatTitlebar" style="cursor:grab;">
-            <span class="win-titlebar-text">Random Chat</span>
-            <button class="win-titlebar-btn" onclick="toggleChat()" title="Minimize">&minus;</button>
-        </div>
-        <div class="win-chat-body" id="chatBody">
-            <div class="win-sunken win-chat-messages" id="chatMessages">
-                <g:if test="${isDemo}">
-                    <g:each in="${demoChatMessages}" var="m">
-                        <div class="win-chat-msg" data-chat-ts="${System.currentTimeMillis() - (m.minutesAgo as long) * 60000}">
-                            <span class="win-chat-nick" style="color:${m.color}">${m.nickname.encodeAsHTML()}</span>: ${m.content.encodeAsHTML()}
-                        </div>
-                    </g:each>
-                </g:if>
-            </div>
-            <div class="win-chat-input-area">
-                <g:if test="${isDemo}">
-                    <input type="text" id="chatInput" placeholder="Type a message..." maxlength="500"
-                           onkeydown="if(event.key==='Enter'&&!event.isComposing)sendDemoMessage()" />
-                    <button class="win-btn win-btn-sm" onclick="sendDemoMessage()">Send</button>
-                </g:if>
-                <g:else>
-                    <input type="text" id="chatInput" placeholder="Type a message..." maxlength="500"
-                           onkeydown="if(event.key==='Enter'&&!event.isComposing)sendChatMessage()" />
-                    <button class="win-btn win-btn-sm" onclick="sendChatMessage()">Send</button>
-                </g:else>
-            </div>
-        </div>
-    </div>
-    </g:if>
+    <g:if test="${session.userId && !isDemo}"><badge:panel/></g:if>
 
     <div class="win-window">
         <div class="win-titlebar">
-            <span class="win-titlebar-text">ZelifKudos - Employee Recognition System</span>
+            <span class="win-titlebar-text"><app:name/> - Employee Recognition System</span>
         </div>
         <div class="win-menubar">
             <g:if test="${isDemo}">
@@ -68,6 +35,7 @@
                 <a href="${createLink(controller:'user', action:'list')}" class="${controllerName == 'user' ? 'active' : ''}">Users</a>
                 <a href="${createLink(controller:'kudos', action:'list')}" class="${controllerName == 'kudos' && actionName == 'list' ? 'active' : ''}">History</a>
                 <a href="${createLink(controller:'kudos', action:'myKudos')}" class="${controllerName == 'kudos' && actionName == 'myKudos' ? 'active' : ''}">My Kudos</a>
+                <a href="${createLink(controller:'badge', action:'list')}" class="${controllerName == 'badge' ? 'active' : ''}">Badges</a>
             </g:else>
         </div>
         <div class="win-body">
@@ -80,7 +48,7 @@
         </div>
         <div class="win-statusbar">
             <span class="win-statusbar-panel">Ready</span>
-            <span class="win-statusbar-panel" style="flex:0; white-space:nowrap;">ZelifKudos v<g:meta name="info.app.version"/></span>
+            <span class="win-statusbar-panel" style="flex:0; white-space:nowrap;"><app:name/> v<g:meta name="info.app.version"/></span>
         </div>
     </div>
 
@@ -97,11 +65,13 @@
 <script>
     function onClockClick() {
         <g:if test="${isDemo}">return;</g:if>
-        var f = document.createElement('form');
-        f.method = 'POST';
-        f.action = '/user/toggleAdmin';
-        document.body.appendChild(f);
-        f.submit();
+        // Silent unless the toggle actually happened. Anyone else — logged out, or
+        // logged in without the privilege — sees nothing at all: no reload, no
+        // flicker, no hint that the clock is clickable.
+        fetch('/user/toggleAdmin', { method: 'POST', credentials: 'same-origin' })
+            .then(function(r) { return r.json(); })
+            .then(function(res) { if (res && res.toggled) { window.location.reload(); } })
+            .catch(function() { /* not logged in: the auth redirect returns HTML */ });
     }
 
     function updateClock() {
@@ -127,220 +97,7 @@
     });
 </script>
 
-<g:if test="${isDemo}">
-<script>
-    (function() {
-        var win = document.getElementById('chatWindow');
-        var header = document.getElementById('chatTitlebar');
-        var isDragging = false, offsetX, offsetY;
-        if (header) header.addEventListener('mousedown', function(e) {
-            if (e.target.closest('.win-titlebar-btn')) return;
-            if (window.innerWidth <= 768) return;
-            isDragging = true;
-            var rect = win.getBoundingClientRect();
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
-            win.style.left = rect.left + 'px';
-            win.style.top = rect.top + 'px';
-            win.style.right = 'auto';
-            win.style.bottom = 'auto';
-            header.style.cursor = 'grabbing';
-        });
-        document.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            var x = e.clientX - offsetX, y = e.clientY - offsetY;
-            var rect = win.getBoundingClientRect();
-            x = Math.max(0, Math.min(x, window.innerWidth - rect.width));
-            y = Math.max(0, Math.min(y, window.innerHeight - rect.height));
-            win.style.left = x + 'px'; win.style.top = y + 'px';
-        });
-        document.addEventListener('mouseup', function() { isDragging = false; if (header) header.style.cursor = 'grab'; });
-    })();
 
-    function escapeHtml(text) { var div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
-
-    function toggleChat() {
-        var win = document.getElementById('chatWindow');
-        var body = document.getElementById('chatBody');
-        var btn = document.querySelector('#chatWindow .win-titlebar-btn');
-        var collapsed = body.style.display !== 'none';
-        body.style.display = collapsed ? 'none' : '';
-        win.style.minHeight = collapsed ? '0' : '';
-        win.style.height = collapsed ? 'auto' : '';
-        win.style.resize = collapsed ? 'none' : '';
-        btn.innerHTML = collapsed ? '+' : '&minus;';
-        btn.title = collapsed ? 'Restore' : 'Minimize';
-    }
-
-    // Demo chat — sessionStorage so user-typed messages persist across page navigation
-    var DEMO_NICKNAMES = [
-        { name: 'Rabbit',  color: '#F08A5D' },
-        { name: 'Penguin', color: '#4D96FF' },
-        { name: 'Owl',     color: '#9D75CB' },
-        { name: 'Turtle',  color: '#6BCB77' }
-    ];
-    function getDemoChatId() {
-        var raw = sessionStorage.getItem('demoChatId');
-        if (raw) { try { return JSON.parse(raw); } catch (e) {} }
-        var n = DEMO_NICKNAMES[Math.floor(Math.random() * DEMO_NICKNAMES.length)];
-        sessionStorage.setItem('demoChatId', JSON.stringify(n));
-        return n;
-    }
-
-    function appendDemoChatRow(nickname, color, text, ts) {
-        var div = document.createElement('div');
-        div.className = 'win-chat-msg';
-        if (ts) {
-            var d = new Date(ts);
-            var pad = function(n){ return String(n).padStart(2,'0'); };
-            div.title = pad(d.getMonth()+1)+'-'+pad(d.getDate())+'-'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-        }
-        div.innerHTML = '<span class="win-chat-nick" style="color:' + color + '">' + escapeHtml(nickname) + '</span>: ' + escapeHtml(text);
-        var el = document.getElementById('chatMessages');
-        el.appendChild(div);
-        el.scrollTop = el.scrollHeight;
-    }
-
-    function sendDemoMessage() {
-        var input = document.getElementById('chatInput');
-        var text = input.value.trim();
-        if (!text) return;
-        var me = getDemoChatId();
-        var now = Date.now();
-        appendDemoChatRow(me.name, me.color, text, now);
-        var stored = JSON.parse(sessionStorage.getItem('demoChat') || '[]');
-        stored.push({ nickname: me.name, color: me.color, text: text, ts: now });
-        sessionStorage.setItem('demoChat', JSON.stringify(stored));
-        input.value = '';
-    }
-
-    // On load: convert seed chat msgs' data-chat-ts to data-tip, render stored chat
-    (function() {
-        document.querySelectorAll('.win-chat-msg[data-chat-ts]').forEach(function(el) {
-            var d = new Date(parseInt(el.getAttribute('data-chat-ts'), 10));
-            var pad = function(n){ return String(n).padStart(2,'0'); };
-            el.title = pad(d.getMonth()+1)+'-'+pad(d.getDate())+'-'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-        });
-        try {
-            var stored = JSON.parse(sessionStorage.getItem('demoChat') || '[]');
-            stored.forEach(function(m) { appendDemoChatRow(m.nickname, m.color, m.text, m.ts); });
-        } catch (e) {}
-        var el = document.getElementById('chatMessages');
-        if (el) el.scrollTop = el.scrollHeight;
-    })();
-</script>
-</g:if>
-<g:if test="${!isDemo && session.userId}">
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stompjs@2/lib/stomp.min.js"></script>
-<script>
-    (function() {
-        var win = document.getElementById('chatWindow');
-        var header = document.getElementById('chatTitlebar');
-        var isDragging = false;
-        var offsetX, offsetY;
-
-        header.addEventListener('mousedown', function(e) {
-            if (e.target.closest('.win-titlebar-btn')) return;
-            if (window.innerWidth <= 768) return;
-            isDragging = true;
-            var rect = win.getBoundingClientRect();
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
-            win.style.left = rect.left + 'px';
-            win.style.top = rect.top + 'px';
-            win.style.right = 'auto';
-            win.style.bottom = 'auto';
-            header.style.cursor = 'grabbing';
-        });
-
-        document.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            var x = e.clientX - offsetX;
-            var y = e.clientY - offsetY;
-            var rect = win.getBoundingClientRect();
-            x = Math.max(0, Math.min(x, window.innerWidth - rect.width));
-            y = Math.max(0, Math.min(y, window.innerHeight - rect.height));
-            win.style.left = x + 'px';
-            win.style.top = y + 'px';
-        });
-
-        document.addEventListener('mouseup', function() {
-            isDragging = false;
-            header.style.cursor = 'grab';
-        });
-    })();
-
-    var stompClient = null;
-
-    function escapeHtml(text) {
-        var div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    function appendMessage(content, timestamp, nickname, color) {
-        var el = document.getElementById('chatMessages');
-        var d = new Date(timestamp);
-        var mm = String(d.getMonth() + 1).padStart(2, '0');
-        var dd = String(d.getDate()).padStart(2, '0');
-        var yyyy = d.getFullYear();
-        var hh = String(d.getHours()).padStart(2, '0');
-        var min = String(d.getMinutes()).padStart(2, '0');
-        var timeStr = mm + '-' + dd + '-' + yyyy + ' ' + hh + ':' + min;
-        var nick = nickname || 'Anonymous';
-        var col = color || '#CCCCCC';
-        var div = document.createElement('div');
-        div.className = 'win-chat-msg';
-        div.title = timeStr;
-        div.innerHTML = '<span class="win-chat-nick" style="color:' + col + '">' + escapeHtml(nick) + '</span>: '
-            + escapeHtml(content);
-        el.appendChild(div);
-        el.scrollTop = el.scrollHeight;
-    }
-
-    function connectChat() {
-        var socket = new SockJS('/ws/chat');
-        stompClient = Stomp.over(socket);
-        stompClient.debug = null;
-        stompClient.connect({}, function() {
-            stompClient.subscribe('/topic/chat', function(msg) {
-                var data = JSON.parse(msg.body);
-                appendMessage(data.content, data.timestamp, data.nickname, data.color);
-            });
-        }, function() {
-            setTimeout(connectChat, 5000);
-        });
-    }
-
-    function sendChatMessage() {
-        var input = document.getElementById('chatInput');
-        var text = input.value.trim();
-        if (!text || !stompClient || !stompClient.connected) return;
-        stompClient.send('/app/chat.send', {}, JSON.stringify({ content: text }));
-        input.value = '';
-    }
-
-    function toggleChat() {
-        var win = document.getElementById('chatWindow');
-        var body = document.getElementById('chatBody');
-        var btn = document.querySelector('#chatWindow .win-titlebar-btn');
-        var collapsed = body.style.display !== 'none';
-        body.style.display = collapsed ? 'none' : '';
-        win.style.minHeight = collapsed ? '0' : '';
-        win.style.height = collapsed ? 'auto' : '';
-        win.style.resize = collapsed ? 'none' : '';
-        btn.innerHTML = collapsed ? '+' : '&minus;';
-        btn.title = collapsed ? 'Restore' : 'Minimize';
-    }
-
-    fetch('/chat/recent').then(function(r) { return r.json(); }).then(function(msgs) {
-        msgs.forEach(function(m) { appendMessage(m.content, m.timestamp, m.nickname, m.color); });
-    }).catch(function() {}).finally(function() { connectChat(); });
-</script>
-</g:if>
-
-<div id="spinner" style="display:none;">Loading...</div>
 <asset:javascript src="application.js"/>
 <script>
 if ('serviceWorker' in navigator) {

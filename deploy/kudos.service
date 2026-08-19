@@ -1,0 +1,29 @@
+[Unit]
+Description=Kudos peer recognition app
+# The app needs its database up first; Liquibase runs during startup.
+After=network-online.target postgresql.service
+Wants=network-online.target
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=spark
+Group=spark
+WorkingDirectory=/home/spark/dev/mobileit-kudos
+
+# systemd parses KEY=VALUE, honours quotes, and ignores blank/# lines, so the
+# same .env used by run.sh works here unchanged.
+EnvironmentFile=/home/spark/dev/mobileit-kudos/.env
+
+ExecStart=/home/spark/dev/mobileit-kudos/serve.sh
+
+# Survive crashes and VM reboots.
+Restart=always
+RestartSec=5
+
+SyslogIdentifier=kudos
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

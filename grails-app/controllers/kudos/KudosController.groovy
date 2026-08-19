@@ -1,0 +1,77 @@
+package kudos
+
+class KudosController {
+
+    static allowedMethods = [send: 'POST', reset: 'POST']
+
+    KudosService kudosService
+    BadgeService badgeService
+
+    def send() {
+        Long receiverId = params.long('id')
+        String message = params.message
+
+        try {
+            Kudos kudos = kudosService.sendKudos(session.userId as Long, receiverId, message)
+            if (!kudos) {
+                flash.error = "Invalid user"
+            } else {
+                flash.message = "Kudos sent to ${kudos.receiver.name.capitalize()}!"
+
+                // Both sides can cross a threshold on one kudo. Announcing is not
+                // this controller's job: whatever is awarded here lands unseen and
+                // the badge panel claims it on the holder's next page, which is
+                // the only path that also works for the receiver.
+                badgeService.evaluate(kudos.sender)
+                badgeService.evaluate(kudos.receiver)
+            }
+        } catch (KudosLimitException e) {
+            flash.warning = e.message
+        }
+
+        redirect(controller: "user", action: "list")
+    }
+
+    def reset() {
+        User currentUser = request.currentUser
+        if (!currentUser.admin) {
+            flash.error = "Access denied"
+            redirect(controller: "user", action: "list")
+            return
+        }
+
+        if (kudosService.countKudosSinceLastReset() == 0) {
+            flash.warning = "Nothing to reset, no kudos since the last reset."
+            redirect(controller: "user", action: "list")
+            return
+        }
+
+        kudosService.markKudosReset(currentUser)
+        flash.message = "All kudos have been reset."
+        redirect(controller: "user", action: "list")
+    }
+
+    private Map paginate(Map result, int max, int offset) {
+        int total = result.total
+        int totalPages = total ? (int) Math.ceil((double) total / max) : 0
+        int currentPage = (int)(offset / max) + 1
+        [kudosList: result.list, total: total, resetDates: result.resetDates,
+         max: max, offset: offset, totalPages: totalPages, currentPage: currentPage]
+    }
+
+    def list() {
+        int max = 15
+        int offset = Math.max(0, params.int('offset', 0))
+        User currentUser = request.currentUser
+        Map result = kudosService.listKudos(currentUser, max, offset)
+        paginate(result, max, offset) + [currentUser: currentUser]
+    }
+
+    def myKudos() {
+        int max = 15
+        int offset = Math.max(0, params.int('offset', 0))
+        User currentUser = request.currentUser
+        Map result = kudosService.listReceivedKudos(currentUser, max, offset)
+        paginate(result, max, offset)
+    }
+}

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>My Kudos | ZelifKudos</title>
+    <title>My Kudos | <app:name/></title>
 </head>
 
 <body>

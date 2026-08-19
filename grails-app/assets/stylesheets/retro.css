@@ -1,5 +1,5 @@
 /* ===========================================
-   ZELIFKUDOS - WINDOWS 95/98 RETRO UI
+   KUDOS - WINDOWS 95/98 RETRO UI
    Chunky, boxy, nostalgic desktop aesthetic
    =========================================== */
 
@@ -394,6 +394,15 @@ a:hover {
     border-color: #808080 #ffffff #ffffff #808080;
     background: #ffffff;
     width: 120px;
+    /* It's a <textarea> so the bottom-right handle can drag it taller. Width
+       stays fixed: a field that fills the row loses the compact bordered box
+       the layout is built around. */
+    resize: vertical;
+    min-height: 18px;
+    height: 20px;
+    line-height: 14px;
+    overflow-x: hidden;
+    vertical-align: middle;
 }
 
 .win-log-date {
@@ -410,6 +419,12 @@ a:hover {
     align-items: center;
     gap: 4px;
     margin: 0;
+}
+
+/* Keep the Kudos! button level with the field's first line when the textarea
+   has been dragged taller. */
+.win-listview .win-inline-form {
+    align-items: flex-start;
 }
 
 /* --- TAG LABEL --- */
@@ -540,6 +555,7 @@ body {
         align-items: flex-start;
         gap: 4px;
     }
+
 }
 
 /* --- PAGER --- */
@@ -650,7 +666,8 @@ body {
 
 .win-feeling-form {
     display: inline-flex;
-    align-items: center;
+    /* Keep Set level with the field's first line once it has been dragged taller. */
+    align-items: flex-start;
     gap: 4px;
     margin-left: 6px;
     vertical-align: middle;
@@ -664,6 +681,14 @@ body {
     border-color: #808080 #ffffff #ffffff #808080;
     background: #ffffff;
     width: 140px;
+    /* A <textarea> so the bottom-right handle drags it taller, like the kudos
+       message field. Width stays fixed so the row keeps its shape. */
+    resize: vertical;
+    min-height: 18px;
+    height: 20px;
+    line-height: 14px;
+    overflow-x: hidden;
+    vertical-align: middle;
 }
 
 .win-listview li:hover .win-feeling {
@@ -678,83 +703,8 @@ body {
     position: relative;
 }
 
-.win-desktop-layout > .win-window:not(.win-chat-window) {
+.win-desktop-layout > .win-window {
     margin: 0;
-}
-
-/* --- CHAT WINDOW --- */
-.win-chat-window {
-    position: fixed;
-    left: 8px;
-    top: 20px;
-    width: calc((100vw - 640px) / 2 - 22px);
-    height: 460px;
-    min-width: 200px;
-    min-height: 200px;
-    max-width: 90vw;
-    max-height: calc(100vh - 60px);
-    z-index: 100;
-    margin: 0;
-    resize: both;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.win-chat-window .win-titlebar {
-    background: linear-gradient(90deg, #808080, #a0a0a0);
-}
-
-.win-chat-body {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    background: #1a1a2e;
-}
-
-.win-chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 6px;
-    font-size: 12px;
-    min-height: 0;
-    background: #0d0d1a;
-    color: #d0d0d0;
-    border: 2px solid;
-    border-color: #000000 #333333 #333333 #000000;
-    margin: 4px;
-}
-
-.win-chat-msg {
-    padding: 2px 0;
-    word-break: break-word;
-}
-
-.win-chat-time {
-    color: #666699;
-    font-size: 11px;
-}
-
-.win-chat-nick {
-    color: #00cc99;
-    font-weight: bold;
-    font-size: 12px;
-}
-
-.win-chat-input-area {
-    display: flex;
-    gap: 2px;
-    padding: 4px;
-    border-top: 2px solid;
-    border-color: #808080 #ffffff #ffffff #808080;
-    background: #c0c0c0;
-}
-
-.win-chat-input-area input {
-    flex: 1;
-    font-size: 12px;
 }
 
 .win-titlebar-btn {
@@ -776,36 +726,256 @@ body {
     border-color: #808080 #ffffff #ffffff #808080;
 }
 
-/* --- MOBILE: chat on top --- */
 @media (max-width: 768px) {
-    .win-chat-window {
-        position: static !important;
-        width: 100% !important;
-        max-width: 640px;
-        height: auto !important;
-        left: auto !important;
-        top: auto !important;
-        right: auto !important;
-        margin-bottom: 8px;
-        resize: none;
-        overflow: visible;
-    }
-
-    .win-chat-window .win-titlebar {
-        cursor: default !important;
-    }
-
-    .win-chat-body {
-        height: 200px;
-        flex: none;
-    }
-
     .win-desktop-layout {
         margin: 10px auto;
     }
 }
 
-/* --- HIDE BOOTSTRAP DEFAULTS --- */
-.navbar, .bg-body-tertiary, footer.border-top {
-    display: none !important;
+/* --- BADGES --- */
+.win-badge-progress {
+    display: inline-block;
+    margin-top: 4px;
+    border: 1px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    background: #ffffff;
+    padding: 1px 8px;
+    font-size: 11px;
+}
+
+.win-badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.win-badge {
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    background: #c0c0c0;
+    padding: 8px 4px 6px;
+    text-align: center;
+    cursor: default;
+    /* Two blocks per tile: identity on top, meter at the bottom. Grid rows
+       already stretch tiles to equal height, so pushing the meter down with
+       auto margin lines every bar up across the row regardless of how long the
+       description above it runs. */
+    display: flex;
+    flex-direction: column;
+}
+
+.win-badge-meter {
+    margin-top: auto;
+    padding-top: 6px;
+}
+
+.win-badge-icon {
+    display: block;
+    margin: 0 auto 6px;
+    /* Nearest-neighbour: these are 32px pixel art scaled up, and smoothing them
+       would sand off the whole point. */
+    image-rendering: pixelated;
+}
+
+/* A locked badge still shows its shape and its requirement — the goal is the
+   motivating part. Greyscale reads as "not yet" on flat pixel art the way a
+   dimmed colour icon never does. */
+.win-badge-locked .win-badge-icon {
+    filter: grayscale(1) brightness(1.15);
+    opacity: 0.4;
+}
+
+.win-badge-locked .win-badge-name {
+    color: #808080;
+}
+
+.win-badge-name {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 2px;
+}
+
+.win-badge-desc {
+    font-size: 10px;
+    line-height: 1.25;
+    color: #404040;
+}
+
+@media (max-width: 480px) {
+    .win-badge-grid {
+        grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+    }
+}
+
+/* --- BADGE PANEL (beside the roster) ---
+   Same geometry the chat window used: pinned in the gutter next to the centred
+   640px column, and stacked above it once the gutter is too thin to hold it. */
+.win-badge-panel {
+    position: fixed;
+    left: 8px;
+    top: 20px;
+    width: calc((100vw - 640px) / 2 - 22px);
+    min-width: 200px;
+    max-width: 90vw;
+    max-height: calc(100vh - 60px);
+    margin: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.win-badge-panel .win-titlebar {
+    background: linear-gradient(90deg, #000080, #1084d0);
+}
+
+.win-badge-panel-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    background: #c0c0c0;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.win-badge-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 4px;
+    font-size: 11px;
+    color: #000000;
+    cursor: default;
+}
+
+.win-badge-chip .win-badge-icon {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.win-badge-chip-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.win-badge-chip.win-badge-locked .win-badge-chip-name {
+    color: #808080;
+}
+
+@media (max-width: 1100px) {
+    .win-badge-panel {
+        position: static;
+        width: 100%;
+        max-width: 640px;
+        max-height: none;
+        margin: 0 auto 8px;
+        overflow: visible;
+    }
+
+    /* Horizontal strip on narrow screens: a vertical list would push the roster
+       off the first screen, which is the thing people actually came for. */
+    .win-badge-panel-body {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .win-badge-chip-name {
+        display: none;
+    }
+}
+
+/* --- PROGRESS GAUGE ---
+   Windows 98 drew progress as discrete blue blocks in a sunken trough, not a
+   smooth bar. The repeating gradient is what produces the segments. */
+.win-gauge {
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    background: #ffffff;
+    height: 12px;
+    margin-top: 5px;
+    padding: 1px;
+    overflow: hidden;
+}
+
+.win-gauge-fill {
+    height: 100%;
+    background: repeating-linear-gradient(90deg,
+                #000080 0, #000080 6px,
+                #ffffff 6px, #ffffff 8px);
+    transition: none;
+}
+
+.win-gauge-label {
+    font-size: 10px;
+    color: #404040;
+    margin-top: 2px;
+}
+
+/* --- SCROLLBAR: stop the page scrolling when there is nothing to scroll ---
+   The layout's 20px top margin collapsed out through body and added itself to
+   body's 100vh minimum, so every page overflowed the viewport by exactly that
+   margin. flow-root contains it instead.
+   Taskbar clearance is already handled by the padding-bottom rule above. */
+body {
+    display: flow-root;
+}
+
+
+/* --- MODAL ---
+   Window chrome comes from .win-window; only the backdrop and centring are new.
+   Above the taskbar's 9999 so nothing overlaps it. */
+.win-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.win-modal {
+    width: 100%;
+    max-width: 300px;
+    margin: 0;
+    box-shadow: 2px 2px 0 #000000;
+}
+
+.win-modal-body {
+    background: #c0c0c0;
+    padding: 16px;
+    text-align: center;
+    /* Several badges can land at once. Cap the stack and scroll rather than
+       letting the window run off the screen with the OK button below the fold. */
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+}
+
+.win-modal-badge + .win-modal-badge {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #808080;
+}
+
+.win-modal-badge-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000080;
+}
+
+.win-modal-badge-desc {
+    font-size: 11px;
+    color: #404040;
+    margin-top: 2px;
+}
+
+.win-modal-actions {
+    margin-top: 16px;
 }

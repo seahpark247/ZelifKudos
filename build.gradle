@@ -13,8 +13,8 @@ buildscript {
     }
 }
 
-version = "3.4"
-group = "zelifkudos"
+version = "4.3"
+group = "kudos"
 
 apply plugin:"eclipse"
 apply plugin:"idea"
@@ -57,7 +57,6 @@ dependencies {
     implementation "org.apache.grails:grails-gsp"
     implementation "org.apache.groovy:groovy-dateutil"
     implementation "org.springframework.boot:spring-boot-starter-mail"
-    implementation "org.springframework.boot:spring-boot-starter-websocket"
     implementation 'org.apache.grails:grails-quartz:4.0.1'
     implementation "org.springframework.session:spring-session-jdbc"
     implementation "org.liquibase:liquibase-core"
@@ -67,9 +66,6 @@ dependencies {
     runtimeOnly "org.postgresql:postgresql"
     runtimeOnly "com.zaxxer:HikariCP"
     runtimeOnly "cloud.wondrify:asset-pipeline-grails"
-    testAndDevelopmentOnly "org.webjars.npm:bootstrap"
-    testAndDevelopmentOnly "org.webjars.npm:bootstrap-icons"
-    testAndDevelopmentOnly "org.webjars.npm:jquery"
     testImplementation "org.apache.grails:grails-testing-support-datamapping"
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.apache.grails:grails-testing-support-web"
@@ -86,19 +82,4 @@ tasks.withType(GroovyCompile).configureEach {
     groovyOptions.optimizationOptions.indy = false
 }
 
-
-assets {
-    excludes = [
-            'webjars/jquery/**',
-            'webjars/bootstrap/**',
-            'webjars/bootstrap-icons/**'
-    ]
-    includes = [
-            'webjars/jquery/*/dist/jquery.js',
-            'webjars/bootstrap/*/dist/js/bootstrap.bundle.js',
-            'webjars/bootstrap/*/dist/css/bootstrap.css',
-            'webjars/bootstrap-icons/*/font/bootstrap-icons.css',
-            'webjars/bootstrap-icons/*/font/fonts/*',
-    ]
-}
 

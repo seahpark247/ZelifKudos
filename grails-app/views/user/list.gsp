@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>Users | ZelifKudos</title>
+    <title>Users | <app:name/></title>
     <script>
         function confirmKudos(name, formName) {
             if(confirm('Send kudos to ' + name + '?')) {
@@ -80,8 +80,8 @@
                             <span class="win-feeling win-feeling-mine" onclick="editFeeling(this)" title="${feelings[u.id].encodeAsHTML()}"><span class="win-feeling-text">${feelings[u.id].encodeAsHTML()}</span></span>
                         </g:if>
                         <g:form controller="${isDemo ? 'demo' : 'user'}" action="updateFeeling" method="POST" class="win-feeling-form" style="${feelings[u.id] ? 'display:none' : ''}">
-                            <input type="text" name="feeling" placeholder="What's on your mind?" maxlength="50" class="win-feeling-input"
-                                   value="${(feelings[u.id] ?: '').encodeAsHTML()}" />
+                            <textarea name="feeling" placeholder="What's on your mind?" maxlength="50" rows="1" class="win-feeling-input"
+                                      onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();this.form.submit();}">${(feelings[u.id] ?: '').encodeAsHTML()}</textarea>
                             <button type="submit" class="win-btn win-btn-sm">Set</button>
                         </g:form>
                     </g:if>
@@ -92,7 +92,8 @@
                 <g:if test="${currentUserId != u.id}">
                     <g:form controller="${isDemo ? 'demo' : 'kudos'}" action="send" method="POST" class="win-inline-form" name="kudos-form-${u.id}">
                         <input type="hidden" name="id" value="${u.id}" />
-                        <input type="text" name="message" placeholder="Why..." maxlength="200" class="win-input-sm" />
+                        <textarea name="message" placeholder="Why..." maxlength="200" rows="1" class="win-input-sm"
+                                  onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();confirmKudos('${u.name.capitalize().encodeAsJavaScript()}', 'kudos-form-${u.id}');}"></textarea>
                         <button type="button"
                                 class="win-btn win-btn-sm"
                                 onclick="confirmKudos('${u.name.capitalize().encodeAsJavaScript()}', 'kudos-form-${u.id}')">
