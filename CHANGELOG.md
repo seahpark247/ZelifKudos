@@ -10,6 +10,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 5. Fixed
 6. Security
 
+## [4.3] - 2026-08-19
+
+### Added
+- Surface badges in the app: a panel beside the roster, and a modal when one lands.
+- Seed the weekly email's rotating messages.
+
+### Changed
+- Rename the Cofounder badge to Founder, and `COFOUNDER_EMAILS` to `FOUNDER_EMAILS`.
+
+### Removed
+- Drop jQuery and Bootstrap.
+
 ## [4.2] - 2026-08-17
 
 ### Added
