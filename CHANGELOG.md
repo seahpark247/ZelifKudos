@@ -17,11 +17,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Add `SERVER_BIND` to close the plain-HTTP port to everything but the proxy.
 - Add `SERVER_FORWARD_HEADERS` to honour `X-Forwarded-*` only behind a trusted proxy.
 
+### Changed
+- Make the weekly email's footer link say what it does instead of printing the URL.
+
 ### Removed
 - Drop the hourglass emoji from the login waiting page; the progress bar already says it.
 
+### Fixed
+- Stop the login email claiming the app is reachable only from the company network.
+- Point the README's admin bootstrap SQL at `app_user`, the table that exists.
+
 ### Security
 - Ignore `.env.bak.*` so a backup of `.env` cannot be committed.
+- Cap what one `/demo` session accumulates; the page takes no login.
 
 ## [4.3] - 2026-08-19
 

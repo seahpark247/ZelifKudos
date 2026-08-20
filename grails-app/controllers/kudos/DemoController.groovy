@@ -4,6 +4,15 @@ class DemoController {
 
     static final long DEMO_ME_ID = -1L
 
+    /**
+     * Caps on what one session may accumulate. /demo takes no login, so without
+     * them a crawler grows its session row without bound — and Spring Session
+     * keeps that row in Postgres for thirty days. Both sit far above what the
+     * paged views ever show, so nobody demoing the app reaches them.
+     */
+    static final int MAX_SENT = 50
+    static final int MAX_RESETS = 20
+
     static final List<Map> DEMO_USERS = [
         [id: DEMO_ME_ID, name: 'you'],
         [id: -2L, name: 'alice'],
@@ -205,12 +214,15 @@ class DemoController {
             Map state = demoState
             ((Map<Long, Integer>) state.kudosCountDelta)[receiverId] = ((state.kudosCountDelta as Map<Long, Integer>)[receiverId] ?: 0) + 1
             ((Map<Long, Integer>) state.sentCountDelta)[DEMO_ME_ID] = ((state.sentCountDelta as Map<Long, Integer>)[DEMO_ME_ID] ?: 0) + 1
-            ((List<Map>) state.sentKudos) << [
+            List<Map> sent = state.sentKudos as List<Map>
+            sent << [
                 senderId: DEMO_ME_ID,
                 receiverId: receiverId,
                 message: message ?: null,
                 ts: System.currentTimeMillis(),
             ]
+            // Oldest first, so dropping from the front keeps the newest.
+            if (sent.size() > MAX_SENT) state.sentKudos = sent.drop(sent.size() - MAX_SENT)
             session.demoState = state
             flash.message = "Kudos sent to ${SEED_NAME[receiverId].capitalize()}!"
         }
@@ -233,7 +245,9 @@ class DemoController {
     def reset() {
         Map state = demoState
         if (state.resetAts == null) state.resetAts = []
-        ((List<Long>) state.resetAts) << System.currentTimeMillis()
+        List<Long> resets = state.resetAts as List<Long>
+        resets << System.currentTimeMillis()
+        if (resets.size() > MAX_RESETS) state.resetAts = resets.drop(resets.size() - MAX_RESETS)
         // Counts reset to 0 (since last reset) — but keep sentKudos so history is preserved
         ((Map) state.kudosCountDelta).clear()
         ((Map) state.sentCountDelta).clear()
