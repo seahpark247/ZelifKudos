@@ -94,6 +94,22 @@ body::before {
     color: #ffffff !important;
 }
 
+/* Windows 98 drew a dead menu entry in grey over a white highlight, which is what
+   made it read as engraved into the bar rather than merely faint. */
+.win-menubar span.disabled {
+    color: #808080;
+    text-shadow: 1px 1px 0 #ffffff;
+    padding: 2px 8px;
+    font-size: 13px;
+    cursor: default;
+    user-select: none;
+}
+
+/* Start keeps its face while it has nowhere to go; only the hand goes away. */
+span.win-start-btn {
+    cursor: default;
+}
+
 /* --- HEADER (taskbar-style) --- */
 .win-taskbar {
     position: fixed;

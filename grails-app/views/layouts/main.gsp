@@ -30,26 +30,31 @@
         <div class="win-titlebar">
             <span class="win-titlebar-text"><app:name/> - Employee Recognition System</span>
         </div>
-        <%-- No menu before you are in. Every entry needs a session, so on the
-             login and waiting pages they all led back to the login form — and
-             from the waiting page that meant leaving the poll behind and being
-             refused a fresh link for the next two minutes. --%>
-        <g:if test="${isDemo}">
-            <div class="win-menubar">
+        <div class="win-menubar">
+            <g:if test="${isDemo}">
                 <a href="${createLink(controller:'demo', action:'list')}" class="${actionName == 'list' ? 'active' : ''}">Users</a>
                 <a href="${createLink(controller:'demo', action:'history')}" class="${actionName == 'history' ? 'active' : ''}">History</a>
                 <a href="${createLink(controller:'demo', action:'myKudos')}" class="${actionName == 'myKudos' ? 'active' : ''}">My Kudos</a>
                 <a href="${createLink(controller:'demo', action:'badges')}" class="${actionName == 'badges' ? 'active' : ''}">Badges</a>
-            </div>
-        </g:if>
-        <g:elseif test="${session.userId}">
-            <div class="win-menubar">
+            </g:if>
+            <g:elseif test="${session.userId}">
                 <a href="${createLink(controller:'user', action:'list')}" class="${controllerName == 'user' ? 'active' : ''}">Users</a>
                 <a href="${createLink(controller:'kudos', action:'list')}" class="${controllerName == 'kudos' && actionName == 'list' ? 'active' : ''}">History</a>
                 <a href="${createLink(controller:'kudos', action:'myKudos')}" class="${controllerName == 'kudos' && actionName == 'myKudos' ? 'active' : ''}">My Kudos</a>
                 <a href="${createLink(controller:'badge', action:'list')}" class="${controllerName == 'badge' ? 'active' : ''}">Badges</a>
-            </div>
-        </g:elseif>
+            </g:elseif>
+            <g:else>
+                <%-- Signed out, every entry leads back to the login form, and from
+                     the waiting page a stray click costs the poll and two minutes
+                     before another link can be sent. Greyed rather than gone:
+                     Windows 98 kept a menu it could not act on, and so does the
+                     window keep its shape between the login form and the app. --%>
+                <span class="disabled">Users</span>
+                <span class="disabled">History</span>
+                <span class="disabled">My Kudos</span>
+                <span class="disabled">Badges</span>
+            </g:else>
+        </div>
         <div class="win-body">
             <g:if test="${isDemo}">
                 <div style="background:#fffacd; border:1px solid #d4b800; padding:6px 10px; margin-bottom:8px; font-size:12px; display:flex; align-items:center; justify-content:space-between;">

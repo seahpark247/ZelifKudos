@@ -21,7 +21,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ### Changed
 - Make the weekly email's footer link say what it does instead of printing the URL.
 - Tell people to check their inbox on the waiting page, rather than claiming to check it for them.
-- Hide the menu bar and unlink Start until you are signed in; from the waiting page they only led away from it.
+- Grey out the menu bar and unlink Start until you are signed in; from the waiting page they only led away from it.
 - Focus OK on the new-badge dialog, so Enter dismisses it.
 
 ### Removed
