@@ -22,6 +22,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Make the weekly email's footer link say what it does instead of printing the URL.
 - Tell people to check their inbox on the waiting page, rather than claiming to check it for them.
 - Stop the menu bar and Start from answering until you are signed in; from the waiting page they only led away from it.
+- Let the kudos message field fill the row on narrow screens, where it already has one to itself.
 - Focus OK on the new-badge dialog, so Enter dismisses it.
 
 ### Removed

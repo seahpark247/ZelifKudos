@@ -415,8 +415,9 @@ a:hover {
     background: #ffffff;
     width: 120px;
     /* It's a <textarea> so the bottom-right handle can drag it taller. Width
-       stays fixed: a field that fills the row loses the compact bordered box
-       the layout is built around. */
+       stays fixed while the field shares a row with the name: one that fills the
+       row loses the compact bordered box the layout is built around. Narrow
+       enough to stack, it takes the row it now has to itself. */
     resize: vertical;
     min-height: 18px;
     height: 20px;
@@ -562,6 +563,22 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
+    }
+
+    /* Stacked, the form has the row to itself and a 120px field leaves most of
+       it blank. The compact box that width protects is what keeps the field from
+       swallowing the name beside it — a concern that ends when they stop sharing
+       a line. */
+    .win-listview .win-inline-form {
+        width: 100%;
+    }
+
+    .win-listview .win-inline-form .win-input-sm {
+        flex: 1;
+        width: auto;
+        /* A textarea's intrinsic column width is a floor on flex-shrink without
+           this, so the button would be pushed off a narrow screen. */
+        min-width: 0;
     }
 
 }
