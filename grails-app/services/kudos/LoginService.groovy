@@ -49,11 +49,6 @@ class LoginService {
             </a>
 
             <p>This link expires in 15 minutes.</p>
-
-            <p style="color:#666; font-size:13px;">
-            Open this on your work laptop — ${appName} is only reachable from the
-            company network, so the link will not load on a phone.
-            </p>
             """, true)
         javaMailSender.send(message)
     }
