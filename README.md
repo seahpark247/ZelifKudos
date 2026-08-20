@@ -107,7 +107,7 @@ be closed, since it is now reachable only from the proxy on loopback.
 Admin is a flag on the `user` table. Two ways to get the first one:
 
 - Set `SUPER_ADMIN_EMAIL` to your address, log in, and use the toggle in the UI.
-- Or set the flag directly: `UPDATE "user" SET admin = true WHERE email = '...';`
+- Or set the flag directly: `UPDATE app_user SET admin = true WHERE email = '...';`
 
 Leaving `SUPER_ADMIN_EMAIL` empty in steady state is the safer default.
 
