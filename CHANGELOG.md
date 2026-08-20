@@ -20,6 +20,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 - Make the weekly email's footer link say what it does instead of printing the URL.
+- Tell people to check their inbox on the waiting page, rather than claiming to check it for them.
 
 ### Removed
 - Drop the hourglass emoji from the login waiting page; the progress bar already says it.

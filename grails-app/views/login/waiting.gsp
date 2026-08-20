@@ -20,8 +20,11 @@
             <div class="win-progress-bar"></div>
         </div>
 
+        <%-- An instruction, not a status: the app cannot see anyone's mailbox,
+             it is waiting on a click. Saying otherwise leaves people watching
+             the bar for something that is never going to happen here. --%>
         <p class="win-waiting-status" id="poll-status">
-            Checking mailbox...
+            Check your inbox and click the link...
         </p>
 
     </div>
@@ -29,7 +32,6 @@
 
 <hr class="win-divider"/>
 <p class="win-note">
-    * Check your email and click the login link.<br/>
     * This page will update automatically.<br/>
     * The link expires in 15 minutes.
 </p>
