@@ -5,7 +5,7 @@ import grails.core.GrailsApplication
 
 class LoginController {
 
-    static allowedMethods = [sendLink: 'POST', checkToken: 'POST', confirm: 'POST']
+    static allowedMethods = [sendLink: 'POST', checkToken: 'POST']
 
     LoginService loginService
     GrailsApplication grailsApplication
@@ -94,27 +94,7 @@ class LoginController {
         render([status: result.status] as JSON)
     }
 
-    /**
-     * The page the emailed link opens. It shows a button and nothing else.
-     *
-     * Logging in from this GET handed the session to whatever opened the mail
-     * first: scanners fetch every URL in a message during delivery, which spent
-     * the link before it reached the inbox and left the scanner authenticated.
-     * A GET now changes nothing; the POST behind the button does the work.
-     */
     def verify() {
-        LoginToken lt = loginService.peekToken(params.token)
-
-        if (!lt) {
-            flash.error = "Invalid or expired token"
-            redirect(action: "index")
-            return
-        }
-
-        [token: lt.token, email: lt.email]
-    }
-
-    def confirm() {
         User user = loginService.markTokenVerified(params.token)
 
         if (!user) {

@@ -80,20 +80,6 @@ class LoginService {
     }
 
     /**
-     * Is this token still usable? Read-only on purpose.
-     *
-     * Mail security scanners open every URL in a message before delivering it,
-     * so the GET that lands on the confirmation page must consume nothing — or
-     * the link is spent before it reaches the inbox, and whatever opened it
-     * holds a session.
-     */
-    @Transactional(readOnly = true)
-    LoginToken peekToken(String token) {
-        LoginToken lt = token ? LoginToken.findByToken(token) : null
-        (lt && lt.expiryDate > new Date()) ? lt : null
-    }
-
-    /**
      * Mark token as verified (called when user clicks email link).
      * Returns the User if valid, null otherwise.
      */

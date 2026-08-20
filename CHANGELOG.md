@@ -16,9 +16,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Serve over HTTPS behind a TLS-terminating proxy; `deploy/Caddyfile` holds the config.
 - Add `SERVER_BIND` to close the plain-HTTP port to everything but the proxy.
 - Add `SERVER_FORWARD_HEADERS` to honour `X-Forwarded-*` only behind a trusted proxy.
-
-### Added
-- Give the demo a Badges page, so the tour no longer skips the feature.
+- Give the demo a Badges page and its badge panel, so the tour no longer skips them.
 
 ### Changed
 - Make the weekly email's footer link say what it does instead of printing the URL.
@@ -31,8 +29,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Point the README's admin bootstrap SQL at `app_user`, the table that exists.
 
 ### Security
-- Require a button press to finish a magic-link login; opening the link no longer
-  signs anyone in, so a scanner or prefetch cannot spend it.
 - Log requests in Caddy, so who opened a login link is answerable.
 - Ignore `.env.bak.*` so a backup of `.env` cannot be committed.
 - Cap what one `/demo` session accumulates; the page takes no login.
