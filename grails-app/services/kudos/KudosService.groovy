@@ -75,12 +75,17 @@ class KudosService {
 
     /**
      * Returns list of [receiverId, count] pairs since last reset, ordered by count desc.
+     *
+     * Activated receivers only. Deactivation is how someone who has left is taken
+     * out of the app — the roster hides them and All Hands stops counting them —
+     * and a leaver topping the week's ranking in everyone's Friday email is the
+     * one place that was still spelling their name.
      */
     List<Map> getTopReceivers() {
         Date lastReset = getLastResetDate()
         List results = lastReset
-            ? Kudos.executeQuery("select k.receiver.id, count(k) from Kudos k where k.dateCreated > :reset group by k.receiver.id order by count(k) desc", [reset: lastReset])
-            : Kudos.executeQuery("select k.receiver.id, count(k) from Kudos k group by k.receiver.id order by count(k) desc")
+            ? Kudos.executeQuery("select k.receiver.id, count(k) from Kudos k where k.dateCreated > :reset and k.receiver.activated = true group by k.receiver.id order by count(k) desc", [reset: lastReset])
+            : Kudos.executeQuery("select k.receiver.id, count(k) from Kudos k where k.receiver.activated = true group by k.receiver.id order by count(k) desc")
         results.collect { [userId: it[0], count: it[1] as int] }
     }
 

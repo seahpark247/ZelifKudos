@@ -19,7 +19,12 @@
 
 <div class="win-desktop-layout">
 
-    <g:if test="${session.userId && !isDemo}"><badge:panel/></g:if>
+    <%-- Demo passes its panel in the model: BadgeTagLib reads request.currentUser
+         and the real tables, and the demo has neither. --%>
+    <g:if test="${isDemo}">
+        <g:if test="${demoPanel?.catalog}"><g:render template="/badge/panel" model="${demoPanel}"/></g:if>
+    </g:if>
+    <g:elseif test="${session.userId}"><badge:panel/></g:elseif>
 
     <div class="win-window">
         <div class="win-titlebar">
@@ -30,12 +35,24 @@
                 <a href="${createLink(controller:'demo', action:'list')}" class="${actionName == 'list' ? 'active' : ''}">Users</a>
                 <a href="${createLink(controller:'demo', action:'history')}" class="${actionName == 'history' ? 'active' : ''}">History</a>
                 <a href="${createLink(controller:'demo', action:'myKudos')}" class="${actionName == 'myKudos' ? 'active' : ''}">My Kudos</a>
+                <a href="${createLink(controller:'demo', action:'badges')}" class="${actionName == 'badges' ? 'active' : ''}">Badges</a>
             </g:if>
-            <g:else>
+            <g:elseif test="${session.userId}">
                 <a href="${createLink(controller:'user', action:'list')}" class="${controllerName == 'user' ? 'active' : ''}">Users</a>
                 <a href="${createLink(controller:'kudos', action:'list')}" class="${controllerName == 'kudos' && actionName == 'list' ? 'active' : ''}">History</a>
                 <a href="${createLink(controller:'kudos', action:'myKudos')}" class="${controllerName == 'kudos' && actionName == 'myKudos' ? 'active' : ''}">My Kudos</a>
                 <a href="${createLink(controller:'badge', action:'list')}" class="${controllerName == 'badge' ? 'active' : ''}">Badges</a>
+            </g:elseif>
+            <g:else>
+                <%-- Signed out, every entry leads back to the login form, and from
+                     the waiting page a stray click costs the poll and two minutes
+                     before another link can be sent. Greyed rather than gone:
+                     Windows 98 kept a menu it could not act on, and so does the
+                     window keep its shape between the login form and the app. --%>
+                <span class="disabled">Users</span>
+                <span class="disabled">History</span>
+                <span class="disabled">My Kudos</span>
+                <span class="disabled">Badges</span>
             </g:else>
         </div>
         <div class="win-body">
@@ -55,10 +72,21 @@
 </div>
 
 <div class="win-taskbar">
-    <a href="${request.contextPath}/" class="win-start-btn">
-        <span class="win-start-icon"></span>
-        Start
-    </a>
+    <%-- Start goes home, and home is the login form. Logged out that is either a
+         no-op or, on the waiting page, an exit from the poll — so it only links
+         once there is somewhere to go back to. --%>
+    <g:if test="${isDemo || session.userId}">
+        <a href="${request.contextPath}/" class="win-start-btn">
+            <span class="win-start-icon"></span>
+            Start
+        </a>
+    </g:if>
+    <g:else>
+        <span class="win-start-btn">
+            <span class="win-start-icon"></span>
+            Start
+        </span>
+    </g:else>
     <span class="win-taskbar-clock" id="win-clock" onclick="onClockClick()"></span>
 </div>
 

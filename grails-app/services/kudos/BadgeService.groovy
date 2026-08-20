@@ -125,13 +125,7 @@ class BadgeService {
         int sent = Kudos.countBySender(user)
         int received = Kudos.countByReceiver(user)
 
-        int teammates = User.executeQuery(
-            "select count(u) from User u where u.activated = true and u.id != :id",
-            [id: user.id])[0] as int
-        int reached = Kudos.executeQuery(
-            "select count(distinct k.receiver.id) from Kudos k " +
-            "where k.sender = :u and k.receiver.activated = true",
-            [u: user])[0] as int
+        def (int reached, int teammates) = allHandsCounts(user)
 
         [
             first_sent    : [current: Math.min(sent, 1),     target: 1],
@@ -177,17 +171,27 @@ class BadgeService {
      * or a shrinking roster would hand it out for work nobody did.
      */
     private boolean hasSentToEveryone(User user) {
+        def (int reached, int teammates) = allHandsCounts(user)
+        teammates >= 1 && reached >= teammates
+    }
+
+    /**
+     * [reached, teammates] for All Hands: how many activated teammates there are
+     * besides you, and how many of them you have ever sent a kudo to.
+     *
+     * Asked for in one place because both callers run on a single page load —
+     * the award check and the progress bar — and spelled twice they would drift
+     * on what "everyone" means.
+     */
+    private List<Integer> allHandsCounts(User user) {
         int teammates = User.executeQuery(
             "select count(u) from User u where u.activated = true and u.id != :id",
             [id: user.id])[0] as int
-        if (teammates < 1) return false
-
         int reached = Kudos.executeQuery(
             "select count(distinct k.receiver.id) from Kudos k " +
             "where k.sender = :u and k.receiver.activated = true",
             [u: user])[0] as int
-
-        reached >= teammates
+        [reached, teammates]
     }
 
     private Set<String> founderEmails() {

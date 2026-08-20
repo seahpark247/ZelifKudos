@@ -11,6 +11,8 @@ out/
 .settings
 .classpath
 .env
+# Timestamped copies made before editing .env. Same credentials, same danger.
+.env.bak.*
 # Runtime logs — they record user email addresses. systemd logs to journald
 # instead; this directory only appears when running serve.sh by hand.
 logs/

@@ -10,6 +10,35 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 5. Fixed
 6. Security
 
+## [4.4] - 2026-08-20
+
+### Added
+- Serve over HTTPS behind a TLS-terminating proxy; `deploy/Caddyfile` holds the config.
+- Add `SERVER_BIND` to close the plain-HTTP port to everything but the proxy.
+- Add `SERVER_FORWARD_HEADERS` to honour `X-Forwarded-*` only behind a trusted proxy.
+- Give the demo a Badges page and its badge panel, so the tour no longer skips them.
+
+### Changed
+- Make the weekly email's footer link say what it does instead of printing the URL.
+- Tell people to check their inbox on the waiting page, rather than claiming to check it for them.
+- Stop the menu bar and Start from answering until you are signed in; from the waiting page they only led away from it.
+- Let the kudos message field fill the row on narrow screens, where it already has one to itself.
+- Focus OK on the new-badge dialog, so Enter dismisses it.
+
+### Removed
+- Drop the hourglass emoji from the login waiting page; the progress bar already says it.
+
+### Fixed
+- Stop the weekly email ranking teammates who have left; the roster and All Hands already skip them.
+- Stop the login email claiming the app is reachable only from the company network.
+- Point the README's admin bootstrap SQL at `app_user`, the table that exists.
+
+### Security
+- Stop a plain GET from spending a magic link, so a mail scanner cannot sign the recipient in before they click.
+- Log requests in Caddy, so who opened a login link is answerable.
+- Ignore `.env.bak.*` so a backup of `.env` cannot be committed.
+- Cap what one `/demo` session accumulates; the page takes no login.
+
 ## [4.3] - 2026-08-19
 
 ### Added

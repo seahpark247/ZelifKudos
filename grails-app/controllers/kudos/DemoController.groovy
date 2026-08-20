@@ -2,7 +2,18 @@ package kudos
 
 class DemoController {
 
+    BadgeService badgeService
+
     static final long DEMO_ME_ID = -1L
+
+    /**
+     * Caps on what one session may accumulate. /demo takes no login, so without
+     * them a crawler grows its session row without bound — and Spring Session
+     * keeps that row in Postgres for thirty days. Both sit far above what the
+     * paged views ever show, so nobody demoing the app reaches them.
+     */
+    static final int MAX_SENT = 50
+    static final int MAX_RESETS = 20
 
     static final List<Map> DEMO_USERS = [
         [id: DEMO_ME_ID, name: 'you'],
@@ -151,6 +162,7 @@ class DemoController {
             myKudosCount: received[DEMO_ME_ID] ?: 0,
             recentMessages: recentMessages,
             feelings: feelings,
+            demoPanel: demoPanelModel(),
             isDemo: true,
         ])
     }
@@ -173,6 +185,7 @@ class DemoController {
             totalPages: totalPages,
             currentPage: currentPage,
             currentUser: [name: 'you', admin: true],
+            demoPanel: demoPanelModel(),
             isDemo: true,
         ])
     }
@@ -194,6 +207,81 @@ class DemoController {
             offset: offset,
             totalPages: totalPages,
             currentPage: currentPage,
+            demoPanel: demoPanelModel(),
+            isDemo: true,
+        ])
+    }
+
+    /**
+     * Badge state for the demo, derived from the same fake numbers the other
+     * pages read so the wall agrees with the roster and History.
+     *
+     * Counts are all-time, matching the real BadgeService: a demo reset zeroes
+     * the weekly tallies but must not un-earn a badge, or the demo would teach
+     * the opposite of how badges behave. Seed tallies plus this session's sends
+     * give that, because sentKudos survives a reset and mergedSent does not.
+     */
+    private Map demoBadgeModel() {
+        int sent = (SEED_SENT[DEMO_ME_ID] ?: 0) +
+            (demoState.sentKudos as List<Map>).count { it.senderId == DEMO_ME_ID }
+        int received = SEED_RECEIVED[DEMO_ME_ID] ?: 0
+
+        // Who, not how many — the seed tallies cannot answer this one.
+        int reached = mergedKudosLog()
+            .findAll { it._senderId == DEMO_ME_ID }*._receiverId.unique().size()
+        int teammates = DEMO_USERS.size() - 1
+
+        // Staff stands in for the two granted badges: the demo user is shown as
+        // an admin, and holding one proves granted badges appear at all. Founder
+        // stays unheld, which is how the catalogue demonstrates hiding them.
+        Set<String> earned = ['staff'] as Set
+        if (sent >= 1) earned << 'first_sent'
+        if (sent >= 10) earned << 'generous'
+        if (sent >= 50) earned << 'patron'
+        if (received >= 1) earned << 'first_received'
+        if (received >= 10) earned << 'beloved'
+        if (received >= 50) earned << 'star'
+        if (teammates > 0 && reached >= teammates) earned << 'all_hands'
+
+        Date earnedAt = new Date(System.currentTimeMillis() - 3L * 24 * 60 * 60 * 1000)
+
+        [earned: earned,
+         earnedDates: earned.collectEntries { [(it): earnedAt] },
+         progress: [
+             first_sent    : [current: Math.min(sent, 1),       target: 1],
+             generous      : [current: Math.min(sent, 10),      target: 10],
+             patron        : [current: Math.min(sent, 50),      target: 50],
+             first_received: [current: Math.min(received, 1),   target: 1],
+             beloved       : [current: Math.min(received, 10),  target: 10],
+             star          : [current: Math.min(received, 50),  target: 50],
+             all_hands     : [current: Math.min(reached, teammates), target: Math.max(teammates, 1)],
+         ]]
+    }
+
+    /**
+     * The trophy-case panel beside every demo page, in the model rather than
+     * from BadgeTagLib: that taglib reads request.currentUser and the real
+     * tables, neither of which exists here.
+     *
+     * `fresh` is empty on purpose — the congratulation modal fires once when a
+     * badge lands, and a demo that reopens it on every page load would misread
+     * as a bug.
+     */
+    private Map demoPanelModel() {
+        Map badges = demoBadgeModel()
+        [catalog: BadgeService.CATALOG.findAll { it.code in badges.earned },
+         earnedDates: badges.earnedDates,
+         fresh: []]
+    }
+
+    def badges() {
+        Map badges = demoBadgeModel()
+        render(view: '/badge/list', model: [
+            catalog: badgeService.visibleCatalogue(badges.earned as Set),
+            earned: badges.earned,
+            earnedDates: badges.earnedDates,
+            progress: badges.progress,
+            demoPanel: demoPanelModel(),
             isDemo: true,
         ])
     }
@@ -205,12 +293,15 @@ class DemoController {
             Map state = demoState
             ((Map<Long, Integer>) state.kudosCountDelta)[receiverId] = ((state.kudosCountDelta as Map<Long, Integer>)[receiverId] ?: 0) + 1
             ((Map<Long, Integer>) state.sentCountDelta)[DEMO_ME_ID] = ((state.sentCountDelta as Map<Long, Integer>)[DEMO_ME_ID] ?: 0) + 1
-            ((List<Map>) state.sentKudos) << [
+            List<Map> sent = state.sentKudos as List<Map>
+            sent << [
                 senderId: DEMO_ME_ID,
                 receiverId: receiverId,
                 message: message ?: null,
                 ts: System.currentTimeMillis(),
             ]
+            // Oldest first, so dropping from the front keeps the newest.
+            if (sent.size() > MAX_SENT) state.sentKudos = sent.drop(sent.size() - MAX_SENT)
             session.demoState = state
             flash.message = "Kudos sent to ${SEED_NAME[receiverId].capitalize()}!"
         }
@@ -233,7 +324,9 @@ class DemoController {
     def reset() {
         Map state = demoState
         if (state.resetAts == null) state.resetAts = []
-        ((List<Long>) state.resetAts) << System.currentTimeMillis()
+        List<Long> resets = state.resetAts as List<Long>
+        resets << System.currentTimeMillis()
+        if (resets.size() > MAX_RESETS) state.resetAts = resets.drop(resets.size() - MAX_RESETS)
         // Counts reset to 0 (since last reset) — but keep sentKudos so history is preserved
         ((Map) state.kudosCountDelta).clear()
         ((Map) state.sentCountDelta).clear()

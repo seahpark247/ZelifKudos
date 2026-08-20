@@ -77,13 +77,37 @@ particular company is hardcoded. See `.env.example` for the full list.
 | `SERVER_PORT` | no | Port to listen on (default 7777). Keep it below 32768 so it never collides with the ephemeral port range, and keep `SERVER_URL`'s port in sync |
 | `SUPER_ADMIN_EMAIL` | no | The single account allowed to grant itself admin. Leave empty to disable self-promotion |
 | `SMTP_*` | no | Without these the app still runs, but magic links and weekly emails won't send |
+| `SERVER_BIND` | no | Address to bind (default `0.0.0.0`). Set `127.0.0.1` behind a TLS proxy |
+| `SERVER_FORWARD_HEADERS` | no | `NATIVE` behind a reverse proxy so `X-Forwarded-*` is honoured, otherwise `NONE` (default) |
+
+### Serving over HTTPS
+
+The app speaks plain HTTP only; there is no TLS inside the JVM. That is fine
+locally, but in production the magic link is a bearer token sent by email — over
+HTTP anyone who observes the link can use it, so a deployment reachable outside a
+trusted network needs TLS in front.
+
+Let's Encrypt will not certify a bare IP address on ordinary terms, so a
+hostname comes first. `deploy/Caddyfile` is the reverse proxy that obtains and
+renews the certificate on its own. It is a template — the hostname belongs in `/etc/caddy/Caddyfile`, not in this repo.
+
+The hostname currently comes from DuckDNS and its record is set by hand, so a
+change of public IP does not heal itself: the site keeps resolving to the old
+address until someone updates the record. Certificate renewal fails with it,
+which turns a silent DNS drift into a site-wide expiry weeks later.
+
+Once TLS is in front, three settings change together: `SERVER_URL` becomes the
+`https://` hostname (magic links are built from it), `SERVER_BIND` becomes
+`127.0.0.1`, and `SERVER_FORWARD_HEADERS` becomes `NATIVE`. Ports 80 and 443 must
+be open to the internet — 80 carries the certificate validation — and 7777 should
+be closed, since it is now reachable only from the proxy on loopback.
 
 ### Bootstrapping the first admin
 
 Admin is a flag on the `user` table. Two ways to get the first one:
 
 - Set `SUPER_ADMIN_EMAIL` to your address, log in, and use the toggle in the UI.
-- Or set the flag directly: `UPDATE "user" SET admin = true WHERE email = '...';`
+- Or set the flag directly: `UPDATE app_user SET admin = true WHERE email = '...';`
 
 Leaving `SUPER_ADMIN_EMAIL` empty in steady state is the safer default.
 

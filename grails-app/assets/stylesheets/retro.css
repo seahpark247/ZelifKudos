@@ -94,6 +94,24 @@ body::before {
     color: #ffffff !important;
 }
 
+/* Signed out, the entries keep the face they have everywhere else and only stop
+   answering, so the window does not change shape between the login form and the
+   app. Matches Start, which does the same on the taskbar. */
+.win-menubar span.disabled {
+    color: #000000;
+    padding: 2px 8px;
+    font-size: 13px;
+    cursor: default;
+    user-select: none;
+}
+
+/* Start keeps its face while it has nowhere to go, but stops behaving like a
+   control: no hand, and no text selection from clicking at it repeatedly. */
+span.win-start-btn {
+    cursor: default;
+    user-select: none;
+}
+
 /* --- HEADER (taskbar-style) --- */
 .win-taskbar {
     position: fixed;
@@ -127,7 +145,9 @@ body::before {
     text-decoration: none !important;
 }
 
-.win-start-btn:active {
+/* Scoped to the link: the button keeps its face when signed out but must not
+   depress under the pointer, or it reports a press it is not going to act on. */
+a.win-start-btn:active {
     border-color: #808080 #ffffff #ffffff #808080;
 }
 
@@ -395,8 +415,9 @@ a:hover {
     background: #ffffff;
     width: 120px;
     /* It's a <textarea> so the bottom-right handle can drag it taller. Width
-       stays fixed: a field that fills the row loses the compact bordered box
-       the layout is built around. */
+       stays fixed while the field shares a row with the name: one that fills the
+       row loses the compact bordered box the layout is built around. Narrow
+       enough to stack, it takes the row it now has to itself. */
     resize: vertical;
     min-height: 18px;
     height: 20px;
@@ -474,18 +495,6 @@ a:hover {
     padding: 16px;
 }
 
-.win-hourglass {
-    font-size: 48px;
-    margin: 16px 0;
-    animation: hourglass-spin 2s steps(2) infinite;
-}
-
-@keyframes hourglass-spin {
-    0% { transform: rotate(0deg); }
-    50% { transform: rotate(180deg); }
-    100% { transform: rotate(360deg); }
-}
-
 .win-progress {
     border: 2px solid;
     border-color: #808080 #ffffff #ffffff #808080;
@@ -554,6 +563,22 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
+    }
+
+    /* Stacked, the form has the row to itself and a 120px field leaves most of
+       it blank. The compact box that width protects is what keeps the field from
+       swallowing the name beside it — a concern that ends when they stop sharing
+       a line. */
+    .win-listview .win-inline-form {
+        width: 100%;
+    }
+
+    .win-listview .win-inline-form .win-input-sm {
+        flex: 1;
+        width: auto;
+        /* A textarea's intrinsic column width is a floor on flex-shrink without
+           this, so the button would be pushed off a narrow screen. */
+        min-width: 0;
     }
 
 }
