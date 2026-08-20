@@ -18,7 +18,7 @@
                 </div>
             </g:each>
             <div class="win-modal-actions">
-                <button class="win-btn win-btn-primary" onclick="closeBadgeModal()">OK</button>
+                <button type="button" class="win-btn win-btn-primary" id="badgeModalOk" onclick="closeBadgeModal()">OK</button>
             </div>
         </div>
     </div>
@@ -34,6 +34,10 @@
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeBadgeModal();
     });
+    // Focus rather than a key handler of our own: a focused button already
+    // answers to Enter and to Space, and it puts the keyboard where the only
+    // action on the dialog is.
+    document.getElementById('badgeModalOk').focus();
 </script>
 </g:if>
 
