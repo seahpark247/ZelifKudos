@@ -89,7 +89,7 @@ trusted network needs TLS in front.
 
 Let's Encrypt will not certify a bare IP address on ordinary terms, so a
 hostname comes first. `deploy/Caddyfile` is the reverse proxy that obtains and
-renews the certificate on its own.
+renews the certificate on its own. It is a template — the hostname belongs in `/etc/caddy/Caddyfile`, not in this repo.
 
 The hostname currently comes from DuckDNS and its record is set by hand, so a
 change of public IP does not heal itself: the site keeps resolving to the old

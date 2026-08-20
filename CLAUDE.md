@@ -36,8 +36,9 @@ The app speaks plain HTTP on `SERVER_PORT`; there is no TLS inside the JVM. A
 browser that reaches it over `https://` fails with `ERR_SSL_PROTOCOL_ERROR` —
 that is the expected answer from a plaintext port, not a broken service.
 
-Production puts Caddy in front (`deploy/Caddyfile`) to terminate TLS, with the
-hostname supplied by DuckDNS. That DNS record is maintained by hand — nothing on
+Production puts Caddy in front to terminate TLS, with the hostname supplied by
+DuckDNS. `deploy/Caddyfile` is a template — this repo is public, so the real
+hostname lives only in `/etc/caddy/Caddyfile` and in `.env`. That DNS record is maintained by hand — nothing on
 this box updates it, so a new public IP has to be entered at duckdns.org or the
 site and its certificate renewal both fail. Behind the proxy three settings move
 together and are only correct as a set:
