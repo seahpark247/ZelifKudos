@@ -24,7 +24,7 @@
              it is waiting on a click. Saying otherwise leaves people watching
              the bar for something that is never going to happen here. --%>
         <p class="win-waiting-status" id="poll-status">
-            Check your inbox and click the link...
+            Check your inbox
         </p>
 
     </div>

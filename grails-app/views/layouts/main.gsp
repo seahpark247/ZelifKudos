@@ -30,20 +30,26 @@
         <div class="win-titlebar">
             <span class="win-titlebar-text"><app:name/> - Employee Recognition System</span>
         </div>
-        <div class="win-menubar">
-            <g:if test="${isDemo}">
+        <%-- No menu before you are in. Every entry needs a session, so on the
+             login and waiting pages they all led back to the login form — and
+             from the waiting page that meant leaving the poll behind and being
+             refused a fresh link for the next two minutes. --%>
+        <g:if test="${isDemo}">
+            <div class="win-menubar">
                 <a href="${createLink(controller:'demo', action:'list')}" class="${actionName == 'list' ? 'active' : ''}">Users</a>
                 <a href="${createLink(controller:'demo', action:'history')}" class="${actionName == 'history' ? 'active' : ''}">History</a>
                 <a href="${createLink(controller:'demo', action:'myKudos')}" class="${actionName == 'myKudos' ? 'active' : ''}">My Kudos</a>
                 <a href="${createLink(controller:'demo', action:'badges')}" class="${actionName == 'badges' ? 'active' : ''}">Badges</a>
-            </g:if>
-            <g:else>
+            </div>
+        </g:if>
+        <g:elseif test="${session.userId}">
+            <div class="win-menubar">
                 <a href="${createLink(controller:'user', action:'list')}" class="${controllerName == 'user' ? 'active' : ''}">Users</a>
                 <a href="${createLink(controller:'kudos', action:'list')}" class="${controllerName == 'kudos' && actionName == 'list' ? 'active' : ''}">History</a>
                 <a href="${createLink(controller:'kudos', action:'myKudos')}" class="${controllerName == 'kudos' && actionName == 'myKudos' ? 'active' : ''}">My Kudos</a>
                 <a href="${createLink(controller:'badge', action:'list')}" class="${controllerName == 'badge' ? 'active' : ''}">Badges</a>
-            </g:else>
-        </div>
+            </div>
+        </g:elseif>
         <div class="win-body">
             <g:if test="${isDemo}">
                 <div style="background:#fffacd; border:1px solid #d4b800; padding:6px 10px; margin-bottom:8px; font-size:12px; display:flex; align-items:center; justify-content:space-between;">
@@ -61,10 +67,21 @@
 </div>
 
 <div class="win-taskbar">
-    <a href="${request.contextPath}/" class="win-start-btn">
-        <span class="win-start-icon"></span>
-        Start
-    </a>
+    <%-- Start goes home, and home is the login form. Logged out that is either a
+         no-op or, on the waiting page, an exit from the poll — so it only links
+         once there is somewhere to go back to. --%>
+    <g:if test="${isDemo || session.userId}">
+        <a href="${request.contextPath}/" class="win-start-btn">
+            <span class="win-start-icon"></span>
+            Start
+        </a>
+    </g:if>
+    <g:else>
+        <span class="win-start-btn">
+            <span class="win-start-icon"></span>
+            Start
+        </span>
+    </g:else>
     <span class="win-taskbar-clock" id="win-clock" onclick="onClockClick()"></span>
 </div>
 
