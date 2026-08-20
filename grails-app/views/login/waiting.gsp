@@ -16,8 +16,6 @@
             <span class="win-highlight">${email}</span>
         </p>
 
-        <div class="win-hourglass">⏳</div>
-
         <div class="win-progress">
             <div class="win-progress-bar"></div>
         </div>
@@ -52,7 +50,7 @@
                     window.location.href = '${createLink(controller: "user", action: "list")}';
                 }, 1000);
             } else if (res.status === 'expired' || res.status === 'no_token') {
-                // Never leave the hourglass spinning on a link that can no
+                // Never leave the progress bar running on a link that can no
                 // longer verify — say so and send them back to request another.
                 clearInterval(pollInterval);
                 status.textContent = 'That link expired. Taking you back...';
