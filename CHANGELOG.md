@@ -17,6 +17,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Add `SERVER_BIND` to close the plain-HTTP port to everything but the proxy.
 - Add `SERVER_FORWARD_HEADERS` to honour `X-Forwarded-*` only behind a trusted proxy.
 
+### Added
+- Give the demo a Badges page, so the tour no longer skips the feature.
+
 ### Changed
 - Make the weekly email's footer link say what it does instead of printing the URL.
 

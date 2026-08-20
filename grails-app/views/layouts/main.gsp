@@ -30,6 +30,7 @@
                 <a href="${createLink(controller:'demo', action:'list')}" class="${actionName == 'list' ? 'active' : ''}">Users</a>
                 <a href="${createLink(controller:'demo', action:'history')}" class="${actionName == 'history' ? 'active' : ''}">History</a>
                 <a href="${createLink(controller:'demo', action:'myKudos')}" class="${actionName == 'myKudos' ? 'active' : ''}">My Kudos</a>
+                <a href="${createLink(controller:'demo', action:'badges')}" class="${actionName == 'badges' ? 'active' : ''}">Badges</a>
             </g:if>
             <g:else>
                 <a href="${createLink(controller:'user', action:'list')}" class="${controllerName == 'user' ? 'active' : ''}">Users</a>

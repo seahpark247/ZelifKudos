@@ -2,6 +2,8 @@ package kudos
 
 class DemoController {
 
+    BadgeService badgeService
+
     static final long DEMO_ME_ID = -1L
 
     /**
@@ -203,6 +205,59 @@ class DemoController {
             offset: offset,
             totalPages: totalPages,
             currentPage: currentPage,
+            isDemo: true,
+        ])
+    }
+
+    /**
+     * The badge wall, derived from the same fake log the other pages read so the
+     * numbers agree with what History shows.
+     *
+     * Counts are all-time, matching the real BadgeService: a demo reset zeroes
+     * the weekly tallies but must not un-earn a badge, or this page would teach
+     * the opposite of how badges actually behave.
+     */
+    def badges() {
+        // Seed tallies, not mergedSent/mergedReceived: those zero on a demo reset,
+        // and a reset must not un-earn a badge. Session sends are added back on
+        // top because sentKudos survives resets, so the count only ever climbs —
+        // which is what "all-time" means on the real badge wall.
+        int sent = (SEED_SENT[DEMO_ME_ID] ?: 0) +
+            (demoState.sentKudos as List<Map>).count { it.senderId == DEMO_ME_ID }
+        int received = SEED_RECEIVED[DEMO_ME_ID] ?: 0
+
+        // Who, not how many — the seed tallies cannot answer this one.
+        List<Map> log = mergedKudosLog()
+        int reached = log.findAll { it._senderId == DEMO_ME_ID }*._receiverId.unique().size()
+        int teammates = DEMO_USERS.size() - 1
+
+        // Staff stands in for the two granted badges: the demo user is shown as
+        // an admin, and holding one proves granted badges appear at all. Founder
+        // stays unheld, which is how the catalogue demonstrates hiding them.
+        Set<String> earned = ['staff'] as Set
+        if (sent >= 1) earned << 'first_sent'
+        if (sent >= 10) earned << 'generous'
+        if (sent >= 50) earned << 'patron'
+        if (received >= 1) earned << 'first_received'
+        if (received >= 10) earned << 'beloved'
+        if (received >= 50) earned << 'star'
+        if (teammates > 0 && reached >= teammates) earned << 'all_hands'
+
+        Date earnedAt = new Date(System.currentTimeMillis() - 3L * 24 * 60 * 60 * 1000)
+
+        render(view: '/badge/list', model: [
+            catalog: badgeService.visibleCatalogue(earned),
+            earned: earned,
+            earnedDates: earned.collectEntries { [(it): earnedAt] },
+            progress: [
+                first_sent    : [current: Math.min(sent, 1),       target: 1],
+                generous      : [current: Math.min(sent, 10),      target: 10],
+                patron        : [current: Math.min(sent, 50),      target: 50],
+                first_received: [current: Math.min(received, 1),   target: 1],
+                beloved       : [current: Math.min(received, 10),  target: 10],
+                star          : [current: Math.min(received, 50),  target: 50],
+                all_hands     : [current: Math.min(reached, teammates), target: Math.max(teammates, 1)],
+            ],
             isDemo: true,
         ])
     }
