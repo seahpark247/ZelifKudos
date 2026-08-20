@@ -42,16 +42,22 @@ class WeeklyEmailService {
 
         String fromEmail = grailsApplication.config.getProperty('spring.mail.username')
 
+        // One definition of what a weekly email is, used by the first pass and
+        // the retry alike. Spelled twice, the two drift the moment one is edited.
+        Closure sendTo = { User user ->
+            int userKudos = kudosCounts[user.id] ?: 0
+            List<String> messages = userKudos > 0
+                ? kudosService.getMessagesForUser(user.id, lastReset)
+                : []
+            String html = buildEmailHtml(user, top3, userKudos, messages, anyKudos, selfEsteemMessage)
+            sendEmail(fromEmail, user.email, "Your Weekly Kudos Report", html)
+        }
+
         // Send emails, track failures
         List<User> failed = []
         for (User user : recipients) {
             try {
-                int userKudos = kudosCounts[user.id] ?: 0
-                List<String> messages = userKudos > 0
-                    ? kudosService.getMessagesForUser(user.id, lastReset)
-                    : []
-                String html = buildEmailHtml(user, top3, userKudos, messages, anyKudos, selfEsteemMessage)
-                sendEmail(fromEmail, user.email, "Your Weekly Kudos Report", html)
+                sendTo(user)
                 log.info("Sent weekly email to ${user.email}")
             } catch (Exception e) {
                 log.error("Failed to send weekly email to ${user.email}", e)
@@ -65,12 +71,7 @@ class WeeklyEmailService {
             List<User> stillFailed = []
             for (User user : failed) {
                 try {
-                    int userKudos = kudosCounts[user.id] ?: 0
-                    List<String> messages = userKudos > 0
-                        ? kudosService.getMessagesForUser(user.id, lastReset)
-                        : []
-                    String html = buildEmailHtml(user, top3, userKudos, messages, anyKudos, selfEsteemMessage)
-                    sendEmail(fromEmail, user.email, "Your Weekly Kudos Report", html)
+                    sendTo(user)
                     log.info("Retry succeeded for ${user.email}")
                 } catch (Exception e) {
                     log.error("Retry failed for ${user.email}", e)
@@ -196,7 +197,7 @@ class WeeklyEmailService {
 """)
         if (siteUrl) {
             sb.append("""
-        <a href="${siteUrl}" style="color: #4a90d9; font-size: 13px;">${siteUrl}</a>
+        <a href="${siteUrl}" style="color: #4a90d9; font-size: 13px;">Send some kudos &rarr;</a>
 """)
         }
         sb.append("""
