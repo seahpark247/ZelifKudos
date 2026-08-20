@@ -29,6 +29,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Drop the hourglass emoji from the login waiting page; the progress bar already says it.
 
 ### Fixed
+- Stop the weekly email ranking teammates who have left; the roster and All Hands already skip them.
 - Stop the login email claiming the app is reachable only from the company network.
 - Point the README's admin bootstrap SQL at `app_user`, the table that exists.
 
