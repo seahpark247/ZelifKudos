@@ -162,6 +162,7 @@ class DemoController {
             myKudosCount: received[DEMO_ME_ID] ?: 0,
             recentMessages: recentMessages,
             feelings: feelings,
+            demoPanel: demoPanelModel(),
             isDemo: true,
         ])
     }
@@ -184,6 +185,7 @@ class DemoController {
             totalPages: totalPages,
             currentPage: currentPage,
             currentUser: [name: 'you', admin: true],
+            demoPanel: demoPanelModel(),
             isDemo: true,
         ])
     }
@@ -205,30 +207,28 @@ class DemoController {
             offset: offset,
             totalPages: totalPages,
             currentPage: currentPage,
+            demoPanel: demoPanelModel(),
             isDemo: true,
         ])
     }
 
     /**
-     * The badge wall, derived from the same fake log the other pages read so the
-     * numbers agree with what History shows.
+     * Badge state for the demo, derived from the same fake numbers the other
+     * pages read so the wall agrees with the roster and History.
      *
      * Counts are all-time, matching the real BadgeService: a demo reset zeroes
-     * the weekly tallies but must not un-earn a badge, or this page would teach
-     * the opposite of how badges actually behave.
+     * the weekly tallies but must not un-earn a badge, or the demo would teach
+     * the opposite of how badges behave. Seed tallies plus this session's sends
+     * give that, because sentKudos survives a reset and mergedSent does not.
      */
-    def badges() {
-        // Seed tallies, not mergedSent/mergedReceived: those zero on a demo reset,
-        // and a reset must not un-earn a badge. Session sends are added back on
-        // top because sentKudos survives resets, so the count only ever climbs —
-        // which is what "all-time" means on the real badge wall.
+    private Map demoBadgeModel() {
         int sent = (SEED_SENT[DEMO_ME_ID] ?: 0) +
             (demoState.sentKudos as List<Map>).count { it.senderId == DEMO_ME_ID }
         int received = SEED_RECEIVED[DEMO_ME_ID] ?: 0
 
         // Who, not how many — the seed tallies cannot answer this one.
-        List<Map> log = mergedKudosLog()
-        int reached = log.findAll { it._senderId == DEMO_ME_ID }*._receiverId.unique().size()
+        int reached = mergedKudosLog()
+            .findAll { it._senderId == DEMO_ME_ID }*._receiverId.unique().size()
         int teammates = DEMO_USERS.size() - 1
 
         // Staff stands in for the two granted badges: the demo user is shown as
@@ -245,19 +245,43 @@ class DemoController {
 
         Date earnedAt = new Date(System.currentTimeMillis() - 3L * 24 * 60 * 60 * 1000)
 
+        [earned: earned,
+         earnedDates: earned.collectEntries { [(it): earnedAt] },
+         progress: [
+             first_sent    : [current: Math.min(sent, 1),       target: 1],
+             generous      : [current: Math.min(sent, 10),      target: 10],
+             patron        : [current: Math.min(sent, 50),      target: 50],
+             first_received: [current: Math.min(received, 1),   target: 1],
+             beloved       : [current: Math.min(received, 10),  target: 10],
+             star          : [current: Math.min(received, 50),  target: 50],
+             all_hands     : [current: Math.min(reached, teammates), target: Math.max(teammates, 1)],
+         ]]
+    }
+
+    /**
+     * The trophy-case panel beside every demo page, in the model rather than
+     * from BadgeTagLib: that taglib reads request.currentUser and the real
+     * tables, neither of which exists here.
+     *
+     * `fresh` is empty on purpose — the congratulation modal fires once when a
+     * badge lands, and a demo that reopens it on every page load would misread
+     * as a bug.
+     */
+    private Map demoPanelModel() {
+        Map badges = demoBadgeModel()
+        [catalog: BadgeService.CATALOG.findAll { it.code in badges.earned },
+         earnedDates: badges.earnedDates,
+         fresh: []]
+    }
+
+    def badges() {
+        Map badges = demoBadgeModel()
         render(view: '/badge/list', model: [
-            catalog: badgeService.visibleCatalogue(earned),
-            earned: earned,
-            earnedDates: earned.collectEntries { [(it): earnedAt] },
-            progress: [
-                first_sent    : [current: Math.min(sent, 1),       target: 1],
-                generous      : [current: Math.min(sent, 10),      target: 10],
-                patron        : [current: Math.min(sent, 50),      target: 50],
-                first_received: [current: Math.min(received, 1),   target: 1],
-                beloved       : [current: Math.min(received, 10),  target: 10],
-                star          : [current: Math.min(received, 50),  target: 50],
-                all_hands     : [current: Math.min(reached, teammates), target: Math.max(teammates, 1)],
-            ],
+            catalog: badgeService.visibleCatalogue(badges.earned as Set),
+            earned: badges.earned,
+            earnedDates: badges.earnedDates,
+            progress: badges.progress,
+            demoPanel: demoPanelModel(),
             isDemo: true,
         ])
     }

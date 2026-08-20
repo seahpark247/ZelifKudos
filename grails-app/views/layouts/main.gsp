@@ -19,7 +19,12 @@
 
 <div class="win-desktop-layout">
 
-    <g:if test="${session.userId && !isDemo}"><badge:panel/></g:if>
+    <%-- Demo passes its panel in the model: BadgeTagLib reads request.currentUser
+         and the real tables, and the demo has neither. --%>
+    <g:if test="${isDemo}">
+        <g:if test="${demoPanel?.catalog}"><g:render template="/badge/panel" model="${demoPanel}"/></g:if>
+    </g:if>
+    <g:elseif test="${session.userId}"><badge:panel/></g:elseif>
 
     <div class="win-window">
         <div class="win-titlebar">
