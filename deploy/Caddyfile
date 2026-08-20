@@ -7,5 +7,15 @@
 # The app itself keeps speaking plain HTTP on loopback. Nothing about TLS reaches
 # the JVM, which is why SERVER_PORT stays 7777 and only SERVER_URL changes.
 KUDOS_HOSTNAME {
+	# Access log. Without it a magic link opened by a mail scanner looks exactly
+	# like one the recipient clicked — the User-Agent and IP on /login/verify are
+	# the only things that tell the two apart.
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+	}
+
 	reverse_proxy 127.0.0.1:7777
 }
