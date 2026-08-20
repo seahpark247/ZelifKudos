@@ -32,9 +32,18 @@ info:
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
 server:
+    # Address to bind. Behind the Caddy reverse proxy set SERVER_BIND=127.0.0.1
+    # so the plain-HTTP port cannot be reached from outside and every visitor is
+    # forced through TLS. The default keeps the app directly reachable.
+    address: ${SERVER_BIND:0.0.0.0}
     # Keep SERVER_URL's port in sync with this, or magic links will point at the
     # wrong port.
     port: ${SERVER_PORT:7777}
+    # X-Forwarded-* headers are only trustworthy when a proxy we control sets
+    # them. NATIVE is correct behind Caddy: client IPs and request.secure then
+    # describe the original request rather than the loopback hop. Directly
+    # exposed, those headers are attacker-controlled, so the default ignores them.
+    forward-headers-strategy: ${SERVER_FORWARD_HEADERS:NONE}
     servlet:
         session:
             timeout: 30d

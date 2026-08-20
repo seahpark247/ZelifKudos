@@ -1,0 +1,11 @@
+# Kudos — TLS termination in front of the Grails app.
+#
+# Caddy obtains and renews the Let's Encrypt certificate for this name by itself.
+# Validation arrives on :80, so that port must stay reachable from the internet
+# even though real traffic is served on :443; Caddy also redirects :80 to :443.
+#
+# The app itself keeps speaking plain HTTP on loopback. Nothing about TLS reaches
+# the JVM, which is why SERVER_PORT stays 7777 and only SERVER_URL changes.
+KUDOS_HOSTNAME {
+	reverse_proxy 127.0.0.1:7777
+}
