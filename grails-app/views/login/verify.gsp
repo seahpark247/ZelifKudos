@@ -25,9 +25,7 @@
 
 <hr class="win-divider"/>
 <p class="win-note">
-    * The link expires 15 minutes after you asked for it.<br/>
-    * Opening this page does not log anyone in on its own.<br/>
-    * If you did not request this, close the page and nothing happens.
+    * The link expires 15 minutes after you asked for it.
 </p>
 
 </body>
