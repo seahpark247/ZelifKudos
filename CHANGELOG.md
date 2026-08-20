@@ -10,6 +10,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 5. Fixed
 6. Security
 
+## [4.4] - 2026-08-20
+
+### Added
+- Serve over HTTPS behind a TLS-terminating proxy; `deploy/Caddyfile` holds the config.
+- Add `SERVER_BIND` to close the plain-HTTP port to everything but the proxy.
+- Add `SERVER_FORWARD_HEADERS` to honour `X-Forwarded-*` only behind a trusted proxy.
+
+### Removed
+- Drop the hourglass emoji from the login waiting page; the progress bar already says it.
+
+### Security
+- Ignore `.env.bak.*` so a backup of `.env` cannot be committed.
+
 ## [4.3] - 2026-08-19
 
 ### Added
