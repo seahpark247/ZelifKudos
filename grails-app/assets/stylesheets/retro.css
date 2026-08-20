@@ -94,11 +94,11 @@ body::before {
     color: #ffffff !important;
 }
 
-/* Windows 98 drew a dead menu entry in grey over a white highlight, which is what
-   made it read as engraved into the bar rather than merely faint. */
+/* Signed out, the entries keep the face they have everywhere else and only stop
+   answering, so the window does not change shape between the login form and the
+   app. Matches Start, which does the same on the taskbar. */
 .win-menubar span.disabled {
-    color: #808080;
-    text-shadow: 1px 1px 0 #ffffff;
+    color: #000000;
     padding: 2px 8px;
     font-size: 13px;
     cursor: default;
