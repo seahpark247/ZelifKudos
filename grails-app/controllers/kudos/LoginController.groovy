@@ -5,7 +5,7 @@ import grails.core.GrailsApplication
 
 class LoginController {
 
-    static allowedMethods = [sendLink: 'POST', checkToken: 'POST']
+    static allowedMethods = [sendLink: 'POST', checkToken: 'POST', confirm: 'POST']
 
     LoginService loginService
     GrailsApplication grailsApplication
@@ -94,7 +94,29 @@ class LoginController {
         render([status: result.status] as JSON)
     }
 
+    /**
+     * The page the emailed link opens. It reads the token and changes nothing.
+     *
+     * Mail providers fetch every URL in a message to scan it, and once the app
+     * had a public hostname theirs could reach this one — spending the link and
+     * signing the recipient in before they had touched it. That fetch takes the
+     * HTML and stops; it does not run scripts. So the page posts itself, which
+     * keeps the click-and-you-are-in flow for a browser and leaves the token
+     * untouched for everything else.
+     */
     def verify() {
+        LoginToken lt = loginService.peekToken(params.token)
+
+        if (!lt) {
+            flash.error = "Invalid or expired token"
+            redirect(action: "index")
+            return
+        }
+
+        [token: lt.token, email: lt.email]
+    }
+
+    def confirm() {
         User user = loginService.markTokenVerified(params.token)
 
         if (!user) {

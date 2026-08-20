@@ -80,6 +80,19 @@ class LoginService {
     }
 
     /**
+     * Is this token still usable? Read-only on purpose.
+     *
+     * A mail provider's scanner fetches the link before the recipient sees it,
+     * so the GET behind that fetch must consume nothing — otherwise the link is
+     * spent, and whoever was waiting gets signed in by the scan.
+     */
+    @Transactional(readOnly = true)
+    LoginToken peekToken(String token) {
+        LoginToken lt = token ? LoginToken.findByToken(token) : null
+        (lt && lt.expiryDate > new Date()) ? lt : null
+    }
+
+    /**
      * Mark token as verified (called when user clicks email link).
      * Returns the User if valid, null otherwise.
      */

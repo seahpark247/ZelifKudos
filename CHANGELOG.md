@@ -29,6 +29,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Point the README's admin bootstrap SQL at `app_user`, the table that exists.
 
 ### Security
+- Stop a plain GET from spending a magic link, so a mail scanner reaching the new
+  public hostname can no longer sign the recipient in before they click.
 - Log requests in Caddy, so who opened a login link is answerable.
 - Ignore `.env.bak.*` so a backup of `.env` cannot be committed.
 - Cap what one `/demo` session accumulates; the page takes no login.
